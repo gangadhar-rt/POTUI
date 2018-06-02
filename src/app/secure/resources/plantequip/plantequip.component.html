@@ -1,0 +1,1186 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+
+  <div class="row">
+    <div class="col col-sm-3">
+      <h2 class="ttl2">Plant Equipment - Register</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.eps" required placeholder="epsname">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="projName">
+      </div>
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button title="Search" (click)="getPlantRegisters()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button title="Refresh">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th rowspan="2">Select</th>
+        <th rowspan="2">Asset ID</th>
+        <th rowspan="2">Registration Number</th>
+        <th rowspan="2">Classification Name</th>
+
+        <th colspan="8" class="text-center" *ngIf="!plantDatamoreFlag">Asset Particulars
+          <span class="fa fa-caret-right" style="float: right; font-size: 25px; color: #ffff !important;" (click)="plantDatamoreFlag=true"></span>
+        </th>
+        <th colspan="8" class="text-center" *ngIf="plantDatamoreFlag">
+          <span class="fa fa-caret-left" style="float: left; font-size: 25px; color: #ffff !important;" (click)="plantDatamoreFlag=false"></span>
+          Current Status</th>
+      </tr>
+      <tr *ngIf="!plantDatamoreFlag">
+
+        <th>Description</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Existing or New Asset</th>
+        <th>Plant Supplier Name</th>
+        <th>Plant Owner Name</th>
+        <th>Purchase Category</th>
+        <th>Unit Of Measure</th>
+      </tr>
+      <tr *ngIf="plantDatamoreFlag">
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Current Status</th>
+        <th>Purchase/
+          <br>Commissioning Date
+        </th>
+        <th>Mobilisation
+          <br>Date
+        </th>
+        <th>Anticipated Demobilistaion
+          <br>Date
+        </th>
+        <th>Demobilistaion
+          <br>Date
+        </th>
+        <th>Current OdoMeter Reading</th>
+      </tr>
+    </thead>
+
+  </table>
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let plant of plantRegisterDtlTOs" (click)="selectedPlant=plant;getLedger()" [class.active_row]="selectedPlant.id=== plant.id">
+            <td>
+              <input type="checkbox">
+            </td>
+            <td>{{plant.assertId}}</td>
+            <td>{{plant.regNumber}}</td>
+            <td>{{plantClassMstrMap[plant.plantClassMstrId].name}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plant.desc}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plant.manfacture}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plant.model}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plant.assetType}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plantCompanyMap[plant.cmpId]?plantCompanyMap[plant.cmpId].name:'-'}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plantCompanyMap[plant.ownerCmpId]?plantCompanyMap[plant.ownerCmpId].name:'-'}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{procureCatgMap[plant.procurecatgId]?procureCatgMap[plant.procurecatgId].name:'-'}}</td>
+            <td *ngIf="!plantDatamoreFlag">{{plantClassMstrMap[plant.plantClassMstrId].displayNamesMap['UnitOfMeasure']}}</td>
+            <td *ngIf="plantDatamoreFlag">{{userProjMap[plant.plantRegProjTO.projId].displayNamesMap['ParentName']}}</td>
+            <td *ngIf="plantDatamoreFlag">{{userProjMap[plant.plantRegProjTO.projId].name}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.plantRegProjTO.postDeMobStatus}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.plantRegProjTO.commissionDate}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.plantRegProjTO.mobDate}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.plantRegProjTO.anticipatedDeMobDate}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.plantRegProjTO.deMobDate}}</td>
+            <td *ngIf="plantDatamoreFlag">{{plant.currentOdoMeter}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+
+<!-- fixed footer layout -->
+
+
+<!-- fixed footer layout -->
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" (click)="getLedger()">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true">Procurement & Delivery Details</a>
+          </li>
+          <li class="nav-item" (click)="DeliverySupply()">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false">Deployment History</a>
+          </li>
+          <li class="nav-item" (click)="Dockets()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false">Charge out Rates</a>
+          </li>
+          <li class="nav-item" (click)="storeMaterials()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="contact" aria-selected="false">Utilization Records</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="contact" aria-selected="false">Log Book Records</a>
+          </li>
+          <li class="nav-item" (click)="serviceHistory()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="contact" aria-selected="false">Service History & Repairs</a>
+          </li>
+          <li class="nav-item" (click)="Deprication()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab7" role="tab" aria-controls="contact" aria-selected="false">Depreciation and Salvage Value</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab8" role="tab" aria-controls="contact" aria-selected="false">Request For Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab9" role="tab" aria-controls="contact" aria-selected="false">Approval For Transfer</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                  <col style="width:11.111%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>EPS Name</th>
+                    <th>Project Name</th>
+                    <th>Purchase Order Number</th>
+                    <th>PO Schedule Item ID</th>
+                    <th>PO Schedule Item Description</th>
+                    <th>Docket Details</th>
+                    <th>Commissioning Date</th>
+                    <th>First Odo Meter Reading</th>
+                    <th>Records of Deliver Dockets& Other Plant Records</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                      <col style="width:11.111%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let plantProjPODtlTO of plantProjPODtlTOs">
+
+                        <td>{{procdeluserProjMap[plantProjPODtlTO.plantRegProjTO.projId].displayNamesMap['ParentName']}}</td>
+                        <td>{{procdeluserProjMap[plantProjPODtlTO.plantRegProjTO.projId].name}}</td>
+                        <td>{{plantProjPODtlTO.purchaseLabelKeyTO.code}}</td>
+                        <td>{{plantProjPODtlTO.purchaseSchLabelKeyTO.code}}</td>
+                        <td>{{plantProjPODtlTO.purchaseSchLabelKeyTO.name}}</td>
+
+                        <td>
+                          <input type="button" class="btn btn-brown btn-sm" *ngIf="procdelshowEditButton==true" (click)="addplantpoList('Edit')" value="View/Edit">
+                        </td>
+
+                        <td>{{plantProjPODtlTO.plantRegProjTO.commissionDate}}</td>
+                        <td class="text-right">{{plantProjPODtlTO.plantDocketDtlTOs[0].odoMeter}}</td>
+                        <td>
+                          <input type="button" class="btn btn-brown  btn-sm" value="View Document" style="width: 115px !important;">
+                        </td>
+
+
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <div class="pull-right">
+                        <button type="button" (click)="addplantpoList('Add')" class="btn  btn-default">Create</button>
+                      </div>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                  <col style="width:7.14%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Select</th>
+                    <th rowspan="2">Project
+                      <br>Deployment#
+                    </th>
+                    <th rowspan="2">EPS Name</th>
+                    <th rowspan="2">Project Name</th>
+                    <th rowspan="2">Commission Date of New Asset</th>
+                    <th rowspan="2">Asset ID</th>
+                    <th rowspan="2">Project Plant Id</th>
+                    <th rowspan="2">Mobilization Date</th>
+                    <th rowspan="2">Anticipated
+                      <br>De-Mobilization Date
+                    </th>
+                    <th rowspan="2">De-Mobilization Date</th>
+                    <th rowspan="2">Post De-Mobilization Status</th>
+                    <th class="text-center" colspan="2">Odo Meter Reading</th>
+                    <th rowspan="2">Notes</th>
+                  </tr>
+                  <tr>
+                    <th>Mobilization</th>
+                    <th>De-Mobilization</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                      <col style="width:7.14%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let deployment of plantRegProjTOs">
+                        <td>
+                          <input type="checkbox">
+                        </td>
+                        <td class="text-right">{{deployment.deploymentId}}</td>
+                        <td>{{delhisuserProjMap[deployment.projId].displayNamesMap['ParentName']}}</td>
+                        <td>{{delhisuserProjMap[deployment.projId].name}}</td>
+                        <td>{{deployment.commissionDate|date}}</td>
+                        <td>{{selectedPlant.assertId}}</td>
+                        <td>{{plantClassMstrMap[selectedPlant.plantClassMstrId].name}}</td>
+                        <td>{{deployment.mobDate}}</td>
+                        <td>{{deployment.anticipatedDeMobDate}}</td>
+                        <td>{{deployment.deMobDate}}</td>
+                        <td>{{deployment.postDeMobStatus}}</td>
+                        <td class="text-right" *ngIf="deployment.deploymentId==2">{{plantRegProjTOs[1].deMobOdoMeter}}</td>
+                        <td class="text-right" *ngIf="deployment.deploymentId==1">{{deployment.odoMeter}}</td>
+                        <td class="text-right">{{deployment.deMobOdoMeter}}</td>
+                        <td class="text-left">
+                          {{deployment.comments}}
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <div class="pull-left">
+                        <button type="button" class="btn btn-brown btn-sm">Edit</button>
+                      </div>
+                      <div class="pull-right">
+                        <button type="button" *ngIf="dephisshowCreateButton" class="btn  btn-brown btn-sm">Add</button>
+                      </div>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                  <col style="width:5%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Select</th>
+                    <th rowspan="2">Project
+                      <br> Deployment#
+                    </th>
+                    <th rowspan="2">Effective-From</th>
+                    <th rowspan="2">EPS Name</th>
+                    <th rowspan="2">Project Name</th>
+                    <th rowspan="2">Asset ID</th>
+                    <th rowspan="2">Project Plant ID</th>
+                    <th rowspan="2">Charge Out Unit</th>
+                    <th rowspan="2">Currency</th>
+                    <th rowspan="2">Plant Charge Out
+                      <br> Category
+                    </th>
+                    <th class="text-center" colspan="2">Normal Shift</th>
+
+                    <th class="text-center" colspan="2">Double Shift</th>
+
+                    <th rowspan="2">Plant Idle Time
+                      <br> Charge Out Rate
+                    </th>
+                    <th class="text-center" colspan="2">Plant Mobilization</th>
+                    <th class="text-center" colspan="2">Plant De-Mobilization</th>
+
+                    <th rowspan="2">Notes</th>
+                  </tr>
+
+                  <tr>
+                    <th>Rates With Fuel</th>
+                    <th>Rates Without Fuel</th>
+                    <th>Rates With Fuel</th>
+                    <th>Rates Without Fuel</th>
+                    <th>Cost Code ID</th>
+                    <th>Rate</th>
+                    <th>Cost Code ID</th>
+                    <th>Rate</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                      <col style="width:5%;" />
+                    </colgroup>
+                    <tbody *ngIf="plantChargeOutRatesTOs.length>0">
+                      <tr *ngFor="let chargeOutRatesTO of plantChargeOutRatesTOs">
+                        <td>
+                          <input type="checkbox" *ngIf=" chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged' && chargeOutRatesTO.latest">
+                        </td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.plantRegProjTO.deploymentId}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{chargeOutRatesTO.effectiveFrom}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{coruserProjMap[chargeOutRatesTO.plantRegProjTO.projId].displayNamesMap['ParentName']}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{coruserProjMap[chargeOutRatesTO.plantRegProjTO.projId].name}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{selectedPlant.assertId}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantClassMstrMap[selectedPlant.plantClassMstrId]?plantClassMstrMap[selectedPlant.plantClassMstrId].name:'--'}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantClassMstrMap[selectedPlant.plantClassMstrId]?plantClassMstrMap[selectedPlant.plantClassMstrId].displayNamesMap['UnitOfMeasure']:'--'}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{projGeneralLabelKeyTO.name}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{chargeOutRatesTO.category}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.rateWithFualNRShift}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.rateWithOutFualNRShift}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.rateWithFualDBShift}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.rateWithoutFualDBShift}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.idleChargeOutRate}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{projCostItemMap[chargeOutRatesTO.projMobCostItemId]?projCostItemMap[chargeOutRatesTO.projMobCostItemId].code:''}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.mobChargeOutRate}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{projCostItemMap[chargeOutRatesTO.projDeMobCostItemId].code}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-right">{{chargeOutRatesTO.deMobChargeOutRate}}</td>
+                        <td *ngIf="chargeOutRatesTO.plantRegProjTO.postDeMobStatus!='Salveged'" class="text-left">{{chargeOutRatesTO.commentes}}</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <!-- <input type="button" 
+                        ng-if="editButtonDisable" ng-click="addPlantChargeCode()"
+                        value="Edit"> -->
+                      <button type="button" class="btn btn-brown btn-sm" *ngIf="coreditButtonDisable"></button>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                  <col style="width:6.66%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th class="text-center" rowspan="2">Project
+                      <br> Deployment#
+                    </th>
+                    <th class="text-center" rowspan="2">EPS Name</th>
+                    <th class="text-center" rowspan="2">Project Name</th>
+                    <th class="text-center" rowspan="2">Asset ID</th>
+                    <th class="text-center" rowspan="2">Project plant ID</th>
+                    <th class="text-center" rowspan="2">Unit of Measure</th>
+                    <th class="text-center" rowspan="2">Mobilization Date</th>
+                    <th class="text-center" rowspan="2">De-mobilization Date</th>
+                    <th class="text-center" colspan="2">Project Wise</th>
+                    <th class="text-center" colspan="2">Cumulative</th>
+                    <th class="text-center" colspan="2">Odo meter reading-on</th>
+                    <th class="text-center" rowspan="2">Project wise Units of
+                      <br> Usage-as Per Meter
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-center">Used Units</th>
+                    <th class="text-center">Idle Units</th>
+                    <th class="text-center">Used Units</th>
+                    <th class="text-center">Idle Units</th>
+                    <th class="text-center">Mobilization</th>
+                    <th class="text-center">De-Mobilization</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                      <col style="width:6.66%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let labelKeyTO of labelKeyTOs">
+
+                        <td>{{labelKeyTO.displayNamesMap.DEPLOYMENT_ID}}</td>
+                        <td>{{utiluserProjMap[labelKeyTO.displayNamesMap.projId].displayNamesMap['ParentName']}}</td>
+                        <td>{{utiluserProjMap[labelKeyTO.displayNamesMap.projId].name}}</td>
+                        <td>{{selectedPlant.assertId}}</td>
+                        <td>{{procureCatgMap[selectedPlant.procurecatgId].name}}</td>
+                        <td>{{plantClassMstrMap[selectedPlant.plantClassMstrId].displayNamesMap['UnitOfMeasure']}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.MOB_DATE}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.DEMOB_DATE}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.USED_TIME}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.IDLE_TIME}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.USED_TOTAL_TIME}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.IDLE_TOTAL_TIME}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.MOB_ODO_METER}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.DEMOB_ODO_METER}}</td>
+                        <td>{{labelKeyTO.displayNamesMap.DEMOB_ODO_METER}}-{{labelKeyTO.displayNamesMap.MOB_ODO_METER}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" (click)="getLog()">
+                    <a class="nav-link active" id="home-tab1" data-toggle="tab" href="#home2" role="tab" aria-controls="home" aria-selected="true">Log Book</a>
+                  </li>
+                  <li class="nav-item" (click)="getPlantWork()">
+                    <a class="nav-link" id="profile-tab1" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile" aria-selected="false">Plant Working Days</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails">
+                      <section id="layout_header">
+
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+                            </div>
+                          </div>
+                          <div class="col search_btn text-right col-2">
+                            <button>
+                              <i class="fa fa-search" (click)="getLog()"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <table class="table tbl_head">
+                          <colgroup>
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                            <col style="width:9.09%;" />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th rowspan="2">Select</th>
+                              <th rowspan="2">Date</th>
+                              <th rowspan="2">Asset ID</th>
+                              <th rowspan="2">EPS</th>
+                              <th rowspan="2">Project</th>
+                              <th class="text-center" colspan="2">Driver or Operator</th>
+                              <th rowspan="2">Start Meter Reading</th>
+                              <th rowspan="2">End Meter Reading</th>
+                              <th rowspan="2">Net Unit Used</th>
+                              <th rowspan="2">Purpose</th>
+                            </tr>
+                            <tr>
+                              <th>ID</th>
+                              <th>Name</th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </section>
+                      <section id="main_content">
+                        <div class="slimScroll">
+                          <div class="table-responsive text-center">
+                            <table class="table-striped table tbl_body">
+                              <colgroup>
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                                <col style="width:9.09%;" />
+                              </colgroup>
+                              <tbody>
+                                <tr *ngFor="let plantLogBookTO of plantLogRecordsTOs">
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">
+                                    <input type="checkbox">
+                                  </td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.fromDate}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{selectedPlant.assertId}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{loguserProjMap[plantLogBookTO.plantRegProjTO.projId].displayNamesMap['ParentName']}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{loguserProjMap[plantLogBookTO.plantRegProjTO.projId].name}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.empLabelKeyTO.code}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.empLabelKeyTO.name}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.startMeter}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.endMeter}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.netUnits}}</td>
+                                  <td *ngIf="plantLogBookTO.plantRegProjTO.postDeMobStatus!='Salveged'">{{plantLogBookTO.comments}}</td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+                                <button type="button" class="btn btn-brown btn-sm">Edit</button>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <section id="layout_header">
+                        <table class="table tbl_head">
+                          <colgroup>
+                            <col style="width:16.6%;" />
+                            <col style="width:16.6%;" />
+                            <col style="width:16.6%;" />
+                            <col style="width:16.6%;" />
+                            <col style="width:16.6%;" />
+                            <col style="width:16.6%;" />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th>Period</th>
+                              <th>Unit</th>
+                              <th>Working</th>
+                              <th>Non Working</th>
+                              <th>Idle</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </section>
+                      <section id="main_content">
+                        <div class="slimScroll">
+                          <div class="table-responsive text-center">
+                            <table class="table-striped table tbl_body">
+                              <colgroup>
+                                <col style="width:16.6%;" />
+                                <col style="width:16.6%;" />
+                                <col style="width:16.6%;" />
+                                <col style="width:16.6%;" />
+                                <col style="width:16.6%;" />
+                                <col style="width:16.6%;" />
+                              </colgroup>
+                              <tbody>
+                                <tr *ngFor="let plantWokringDayTO of plantWorkingDaysTOs">
+                                  <td>{{plantWokringDayTO.displayNamesMap.PLANT_YEAR}}</td>
+                                  <td>Days</td>
+                                  <td>{{plantWokringDayTO.displayNamesMap.WORKING_DAYS}}</td>
+                                  <td>{{plantWokringDayTO.displayNamesMap.NONWORKING_DAYS}}</td>
+                                  <td>{{plantWokringDayTO.displayNamesMap.IDLE_DAYS}}</td>
+                                  <td>{{plantWokringDayTO.displayNamesMap.WORKING_DAYS}}--{{plantWokringDayTO.displayNamesMap.NONWORKING_DAYS}}--{{plantWokringDayTO.displayNamesMap.IDLE_DAYS}}
+                                  </td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" (click)="serviceHistory()">
+                    <a class="nav-link active" id="home-tab1" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Service History</a>
+                  </li>
+                  <li class="nav-item" (click)="recordRepair()">
+                    <a class="nav-link" id="profile-tab1" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Records Of Repair</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails">
+                      <section id="layout_header">
+                        <table class="table tbl_head">
+                          <colgroup>
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                            <col style="width:12.5%;" />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th colspan="4" class="text-center">Current or Last Service carried out</th>
+                              <th colspan="3" class="text-center">Next Service Due</th>
+                              <th rowspan="2" class="text-center">Notes</th>
+                            </tr>
+                            <tr>
+                              <th class="text-center">Date</th>
+                              <th class="text-center">Odo Meter Reading</th>
+                              <th class="text-center">Service Category</th>
+                              <th class="text-center">Service Sub Category</th>
+                              <th class="text-center">Odo Meter Reading Reaches</th>
+                              <th class="text-center">Service Category</th>
+                              <th class="text-center">Service Sub Category</th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </section>
+                      <section id="main_content">
+                        <div class="slimScroll">
+                          <div class="table-responsive text-center">
+                            <table class="table-striped table tbl_body">
+                              <colgroup>
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                                <col style="width:12.5%;" />
+                              </colgroup>
+                              <tbody>
+                                <tr *ngFor="let servicehistory of plantServiceHistoryTOs">
+                                  <td>{{servicehistory.date}}</td>
+                                  <td class="text-right">{{servicehistory.currentOdoMeter}}</td>
+                                  <td>{{plantServiceClassMap[servicehistory.currentPlantServiceId].displayNamesMap['ParentName']}}</td>
+                                  <td>{{plantServiceClassMap[servicehistory.currentPlantServiceId].name}}</td>
+                                  <td class="text-right">{{servicehistory.prevOdoMeter}}</td>
+                                  <td>{{plantServiceClassMap[servicehistory.prevPlantServiceId].displayNamesMap['ParentName']}}</td>
+                                  <td>{{plantServiceClassMap[servicehistory.prevPlantServiceId].name}}</td>
+                                  <!-- <td>{{servicehistory.commonts}}</td> -->
+                                  <td class="text-left">{{servicehistory.comments}}</td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+                                <button type="button" class="btn btn-brown btn-sm">Edit</button>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <section id="layout_header">
+                        <table class="table tbl_head">
+                          <colgroup>
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                            <col style="width:11.11%;" />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th class="text-center">Date</th>
+                              <th class="text-center">Odo Meter Reading</th>
+                              <th class="text-center">Repair Category</th>
+                              <th class="text-center">Item of Repair</th>
+                              <th class="text-center">Major Spare Part Items Replaced</th>
+                              <th class="text-center">Unit of Measure</th>
+                              <th class="text-center">Quantity</th>
+                              <th class="text-center">Project Docket</th>
+                              <th class="text-center">Notes</th>
+                          </thead>
+                        </table>
+                      </section>
+                      <section id="main_content">
+                        <div class="slimScroll">
+                          <div class="table-responsive text-center">
+                            <table class="table-striped table tbl_body">
+                              <colgroup>
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                                <col style="width:11.11%;" />
+                              </colgroup>
+                              <tbody>
+                                <tr *ngFor="let plantRepairsTO of plantRepairsTOs">
+                                  <td>{{plantRepairsTO.date}}</td>
+                                  <td class="text-right">{{plantRepairsTO.odoMeter}}</td>
+                                  <td>{{serviceClassMap[plantRepairsTO.serviceId].displayNamesMap['ParentName']}}</td>
+                                  <td>{{serviceClassMap[plantRepairsTO.serviceId].name}}</td>
+                                  <td>{{materialMap[plantRepairsTO.materialId].name}}</td>
+                                  <td>{{materialMap[plantRepairsTO.materialId].unitOfMeasure}}</td>
+                                  <td class="text-right">{{plantRepairsTO.quantity}}</td>
+                                  <td>{{plantRepairsTO.projDocket}}</td>
+                                  <td class="text-left">{{plantRepairsTO.comments}}</td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                  <col style="width:5.26%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan=2>Select</th>
+                    <th rowspan=2>Project Deployment#</th>
+                    <th rowspan=2>Effective From</th>
+                    <th rowspan=2>EPS Name</th>
+                    <th rowspan=2>Project Name</th>
+                    <th rowspan=2>Asset ID</th>
+                    <th rowspan=2>Commissioning Date</th>
+                    <th rowspan=2>Mobilization Date</th>
+                    <th rowspan=2>De-mobilization Date</th>
+                    <th class="text-center" colspan=4>Plants Life Status</th>
+                    <th class="text-center" colspan=5>Asset Value Status</th>
+                    <th rowspan=2>Notes</th>
+                  </tr>
+                  <tr>
+                    <th>Unit of Measure</th>
+                    <th>Estimated Use Full Life</th>
+                    <th>Upto Date Usage</th>
+                    <th>Remaining Use Full Life</th>
+                    <th>Currency</th>
+                    <th>Plant Original Value</th>
+                    <th>Salvage Value</th>
+                    <th>Depreciation Value</th>
+                    <th>Remaining Use Full Life</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                      <col style="width:5.26%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let depreciation of depreciationData">
+                        <td>
+                          <input type="checkbox">
+                        </td>
+                        <td class="text-right">{{depreciation.plantRegProjTO.deploymentId}}</td>
+                        <td>{{depreciation.effectiveFrom}}</td>
+                        <td>{{depruserProjMap[depreciation.plantRegProjTO.projId].displayNamesMap['ParentName']}}</td>
+                        <td>{{depruserProjMap[depreciation.plantRegProjTO.projId].name}}</td>
+                        <td>{{selectedPlant.assertId}}</td>
+                        <td>{{depreciation.plantRegProjTO.commissionDate}}</td>
+                        <td>{{depreciation.plantRegProjTO.mobDate}}</td>
+                        <td>{{depreciation.plantRegProjTO.deMobDate}}</td>
+                        <td>{{plantClassMstrMap[selectedPlant.plantClassMstrId].displayNamesMap['UnitOfMeasure']}}</td>
+                        <td class="text-right">{{depreciation.estimateLife}}</td>
+                        <td class="text-right">{{depreciation.endMeterReading}}</td>
+                        <td class="text-right">{{depreciation.remainingLife}}</td>
+                        <td>{{projGenCurrencyLabelKeyTO.code}}</td>
+                        <td class="text-right">{{depreciation.orginalValue}}</td>
+                        <td class="text-right">{{depreciation.salvageValue}}</td>
+                        <td class="text-right">{{depreciation.depriciationValue }}</td>
+                        <td class="text-right">{{depreciation.remaining}}</td>
+                        <td class="text-left">{{depreciation.comments}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+                  </div>
+                </div>
+                <div class="col ">
+                  <input type="radio" name="request" [(ngModel)]="userType1" [value]="true">Login User Records
+                  <input type="radio" name="request" [(ngModel)]="userType1" [value]="false">All User Records
+                </div>
+                <div class="col search_btn text-right col-2">
+                  <button>
+                    <i class="fa fa-search" (click)="getTransfer()"></i>
+                  </button>
+
+                </div>
+              </div>
+
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Date of Request</th>
+                    <th>Requester</th>
+                    <th>Approver</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Requisition ID</th>
+                    <th>Notification ID</th>
+                    <th>Approval Status</th>
+                    <th>More Details</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let request of materialTransferReqApprTOs">
+                        <td>{{request.reqDate}}</td>
+                        <td>{{request.reqUserTO.empCode}}</td>
+                        <td>{{request.apprUserTO.empCode}}</td>
+                        <td>{{materialDataMap.userProjMap[request.fromProjId].name}}</td>
+                        <td>{{materialDataMap.userProjMap[request.toProjId].name}}</td>
+                        <td>{{request.reqCode}}</td>
+                        <td>{{request.notifyCode}}</td>
+                        <td>{{request.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View More" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+                  </div>
+                </div>
+                <div class="col ">
+                  <input type="radio" name="request" [(ngModel)]="userType2" [value]="true">Login User Records
+                  <input type="radio" name="request" [(ngModel)]="userType2" [value]="false">All User Records
+                </div>
+                <div class="col search_btn text-right col-2">
+                  <button>
+                    <i class="fa fa-search" (click)="approvalMaterial()"></i>
+                  </button>
+                </div>
+              </div>
+
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Date of Request </th>
+                    <th>Requester</th>
+                    <th>Approver</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Requisition ID</th>
+                    <th>Requisition Notification</th>
+                    <th>Approval Status</th>
+                    <th>More Details</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let request of materialTransferReqApprTOs1">
+                        <td>{{request.reqDate}}</td>
+                        <td>{{request.reqUserTO.empCode}}</td>
+                        <td>{{request.apprUserTO.empCode}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.fromProjId].name}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.toProjId].name}}</td>
+                        <td>{{request.reqCode}}</td>
+                        <td>{{request.notifyCode}}</td>
+                        <td>{{request.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View More" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

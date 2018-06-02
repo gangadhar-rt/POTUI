@@ -1,0 +1,95 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Project Posting#</th>
+        <th>Effective From</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Parent Company Name</th>
+        <th>Employee Tax File Number</th>
+        <th>Currency</th>
+        <th>Unit of Pay Rate</th>
+        <th>Credit Cycle
+          <span style="color: red; font-size: '60px'">*</span>
+        </th>
+        <th>Pay Roll Status</th>
+        <th>Employee Declarations & Tax payDeduction Codes</th>
+        <th>Employee Documents</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let payDeduction of empPayDeductionTOs ">
+            <td>{{payDeduction.projEmpRegisterTO.deploymentId}}</td>
+            <td>{{payDeduction.projEmpRegisterTO.enrollmentDate | date}}</td>
+            <td>{{empDropDown.userProjMap[payDeduction.projEmpRegisterTO.projId]?empDropDown.userProjMap[payDeduction.projEmpRegisterTO.projId].displayNamesMap['ParentName']:''}}</td>
+            <td>{{empDropDown.userProjMap[payDeduction.projEmpRegisterTO.projId]?empDropDown.userProjMap[payDeduction.projEmpRegisterTO.projId].name:''}}</td>
+            <td>{{empDropDown.empCompanyMap[empDropDown.cmpId]?empDropDown.empCompanyMap[empDropDown.cmpId].name:''}}</td>
+            <td>{{payDeduction.projEmpRegisterTO.taxFileNum}}</td>
+            <td>{{projGeneralLabelTO.displayNamesMap['currency']}}</td>
+            <td>
+              <select [(ngModel)]="payDeduction.unitPayRate" [disabled]="!payDeduction.latest && payDeduction.id!=null">
+                <option *ngFor="let unitPayRate of unitPayRates" [value]="unitPayRate">{{unitPayRate}}</option>
+              </select>
+            </td>
+            <td>
+              <select [(ngModel)]="payDeduction.payCycle" ng-change="changePayCycle(payCycle.name) " [disabled]="!payDeduction.latest && payDeduction.id!=null">
+                <option value="" disabled selected>Select</option>
+                <option *ngFor="let payCycle of payCycles" [value]="payCycle">{{payCycle}}</option>
+              </select>
+            </td>
+            <td>{{payDeduction.projEmpRegisterTO.empStatus}}</td>
+            <td>
+              <input type="button" class="btn btn-brown btn-sm" (click)="getEmpPayDeductionsDetails(payDeduction)" value="Edit" *ngIf="payDeduction.latest || payDeduction.id==null">
+              <input type="button" class="btn btn-brown btn-sm" ng-click="getEmpPayDeductionsDetails(payDeduction)" value="View" *ngIf="!payDeduction.latest || payDeduction.id==null">
+            </td>
+            <td>
+              <input type="file" name="doc" [(ngModel)]="payDeduction.doc" tabindex="-1" placeholder="Doc" style="display: inline !important;"
+                [disabled]="!payDeduction.latest && payDeduction.id!=null">
+            </td>
+
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn  btn-default">Edit</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

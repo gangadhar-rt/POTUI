@@ -1,0 +1,142 @@
+<app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+<section id="layout_header">
+
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Project Documents</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input type="search" class="request.eps" (click)="getpop=true" class="form-control cust-input" [(ngModel)]="request.eps"
+          placeholder="EPS Name">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input type="search" class="request.project" (click)="getpop=true" class="form-control cust-input" [(ngModel)]="request.project"
+          placeholder="Project Name">
+      </div>
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button>
+        <i title="Search" class="fa fa-search" (click)="request.id && getList();"></i>
+      </button>
+      <button>
+        <i title="Refresh" class="fa fa-refresh" (click)="reset();"></i>
+      </button>
+    </div>
+  </div>
+
+
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="tree_table tbl_head">
+          <div class="tree_tbl_head row ml-0 mr-0">
+            <div class="col _th col-sm-4"> Select </div>
+            <div class="col _th col-sm-8"> Folder Name</div>
+          </div>
+        </div>
+        <div>
+          <section id="main_content">
+            <div class="slimScroll">
+
+              <table>
+                <tr *ngFor="let item of List |array:itemid:expsnad " class="abc{{item.level}}">
+                  <!-- <td>
+                    <input type="checkbox" [(ngModel)]="item.select" (click)="selectedRecords(item);" style="padding-left: 30px;" />
+                  </td> -->
+
+                  <td>
+                    <span *ngIf="item.level > 0" class="xyz" style="padding-left: 30px;"></span>
+                    <span *ngIf="item.level > 1" class="xyz" style="padding-left: 30px;"></span>
+                    <span *ngIf="item.level > 2" class="xyz" style="padding-left: 30px;"></span>
+                    <span *ngIf="((item.expand) || (!item.leaf  && item.childProjDocFolderTOs.length <= 0))" (click)="itemid=item.id;expsnad=!item.expand"
+                      class="fa fa-minus"></span>
+                    <span *ngIf="(!item.expand && item.childProjDocFolderTOs.length > 0)" (click)="itemid=item.id;expsnad=!item.expand" class="fa fa-plus"></span>
+
+                    <span *ngIf="((!item.leaf && item.expand) || (!item.leaf  && item.childProjDocFolderTOs.length <= 0 ))" (click)="getDocumentDetails(item);"
+                      class="fa fa-folder-open"></span>
+                    <span *ngIf="(!item.leaf && !item.expand && item.childProjDocFolderTOs.length > 0 )" (click)="getDocumentDetails(item);"
+                      class="fa fa-folder-open">
+                    </span>
+                    <input type="text" placeholder="FOLDER ITEM ID" class="folderId" maxlength="20" size="8" [(ngModel)]="item.name" ng-required="true"
+                      ng-class="{coloumnHighlightColor:(item.duplicateFlag||item.childProjDocFolderTOs.duplicateFlag) }">
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="col-md-8" style="border-left: 1px solid black">
+        <div class="tree_table tbl_head">
+          <div class="tree_tbl_head row ml-0 mr-0">
+
+          </div>
+        </div>
+        <table class="table tbl_head">
+          <tr>
+            <th style="width:8%;"> Select </th>
+            <th style="width:12%;"> Document Id</th>
+            <th style="width:12%;"> Document Category </th>
+            <th style="width:12%;"> Version </th>
+            <th style="width:12%;"> Document Status </th>
+            <th style="width:12%;"> Upload/View File </th>
+            <th style="width:12%;"> File Name </th>
+            <th style="width:12%;"> File Type </th>
+            <th style="width:8%;"> Size </th>
+          </tr>
+        </table>
+        <table>
+          <tr *ngFor="let item of documentsList ">
+            <td style="width:4%;">
+              <input type="checkbox" [(ngModel)]="item.select" (click)="selectedRecords(item);" style="padding-left: 30px;" />
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" placeholder="Auto Generate" [(ngModel)]="item.code" readonly>
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.category">
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.version">
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.fileStatus">
+            </td>
+            <td style="width:12%;">
+              <input type="file" class="form-control">
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.name" readonly>
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.fileType" readonly>
+            </td>
+            <td style="width:12%;">
+              <input type="text" class="form-control" [(ngModel)]="item.fileSize" readonly>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <button type="button" class="btn btn-primary" [disabled]="documentrequest.id<=0" (click)="addNewDocument()">Add New</button>
+          <button type="button" class="btn btn-danger" [disabled]="documentrequest.id<=0" (click)="saveData()">Save</button>
+          <!-- <button type="button" class="btn btn-success" [disabled]="documentrequest.id<=0">Allow Users</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:2%;" />
+      <col style="width:5%;" />
+      <col style="width:10%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:13%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Purchase Order Number</th>
+        <th>PO Schedule Item ID</th>
+        <th>Resource Classification Name</th>
+        <th>New Employee Enrollment Date</th>
+        <th>Enrollment Place/Location</th>
+        <th>Reporting to-Employee ID and Name</th>
+        <th>Employee Contract Date</th>
+        <th>Employee Contract Number</th>
+        <th>Employee Contract Document</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:2%;" />
+          <col style="width:5%;" />
+          <col style="width:10%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:13%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let promotion of employeeProjDtlTOs">
+            <td>
+              <input type="checkbox" value="id" [(ngModel)]="promotion.selected" [disabled]="promotion.latest !='Y'" (click)="poRowSelect(promotion)">
+            </td>
+            <td>{{promotion.empLabelKeyTO.code}}</td>
+            <td>{{promotion.empLabelKeyTO.name}}</td>
+            <td>{{empDropDown.userProjMap[promotion.projId]?empDropDown.userProjMap[promotion.projId].displayNamesMap['ParentName']:''}}</td>
+            <td>{{empDropDown.userProjMap[promotion.projId].name}}</td>
+            <td>{{promotion.projectPOTO.purchaseLabelKeyTO.code}}</td>
+            <td>{{promotion.projectPOTO.purchaseSchLabelKeyTO.code}}</td>
+            <td>{{empDropDown.empClassMap[promotion.empClassId]?empDropDown.empClassMap[promotion.empClassId].name:''}}</td>
+            <td>{{promotion.effectiveFrom}}</td>
+            <td>{{promotion.empLocation}}</td>
+            <td>{{promotion.reportingManagerLabelKeyTO.code}} {{promotion.reportingManagerLabelKeyTO.name}}
+            </td>
+            <td>{{promotion.contractDate | date}}</td>
+            <td>{{promotion.contractNumber}}</td>
+            <td>{{promotion.docId}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn  btn-default">Create</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

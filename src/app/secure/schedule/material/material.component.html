@@ -1,0 +1,109 @@
+<section id="layout_header">
+    <table class="table tbl_head">
+        <colgroup>
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+            <col style="width:8.333%;" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Measure</th>
+                <th>Original Budget</th>
+                <th>Revised Budget</th>
+                <th>Actual Quantity</th>
+                <th>Remaining Quantitiy</th>
+                <th>Estimate TO Complete</th>
+                <th>Estimate at Completion Quantity</th>
+                <th>Schedule Start</th>
+                <th>Schedule Finish</th>
+                <th>Resource Curve</th>
+
+            </tr>
+        </thead>
+
+    </table>
+</section>
+<section id="main_content">
+    <div class="slimScroll">
+        <div class="table-responsive text-center">
+            <table class="table-striped table tbl_body">
+                <colgroup>
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                    <col style="width:8.333%;" />
+                </colgroup>
+                <tbody>
+                    <tr [class.active_row]="selectedid==coc.id" (click)="selectedid=coc.id" *ngFor="let coc of List.projectMaterialDtlTOs| paginate: {id:'materialsch', itemsPerPage: records, currentPage: p } ;let i=index;"
+                        (click)="setChartData(coc)">
+                        <td>{{getVal(coc.materialClassId,'code')}}</td>
+                        <td>{{getVal(coc.materialClassId,'name')}}</td>
+                        <td>{{getVal(coc.materialClassId,'unitOfMeasure')}}</td>
+                        <td>{{coc.originalQty}}</td>
+                        <td>{{coc.revisedQty}}</td>
+                        <td>{{coc.actualQty}}</td>
+                        <td>{{coc.remainingQty}}</td>
+                        <td>{{coc.estimateComplete}}</td>
+                        <td>{{coc.estimateCompletion}}</td>
+                        <td>{{coc.startDate}}</td>
+                        <td>{{coc.finishDate}}</td>
+                        <!-- <td>{{'Triangular'}}</td> -->
+                        <td>
+                            <input type="Text" value="Triangular" class="form-control form-input " />
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+    <div class="row ml-0 mr-0 pagination_block">
+        <div class="col col-sm-4 text-left">
+            <label>Total No OF Records :</label>
+            <select [(ngModel)]="records">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col col-sm-8 text-right" style="display: inline-block">
+            <div class="row">
+                <div class="col col-sm-12 text-right">
+                    <pagination-controls id="materialsch" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+                </div>
+                <!-- <div class="col col-sm-6 text-right">
+                    <button type="button" class="btn btn-primary" [disabled]="!(selectedlist.length>0&&selectedlist.length<2)" (click)="edit()">Edit</button>
+                    <button type="button" class="btn btn-danger">Deactivate</button>
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cccreate">Create</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,290 @@
+<section id="layout_header">
+    <div class="row">
+        <div class="col col-sm-4">
+            <h2 class="ttl2">Scope of Works</h2>
+        </div>
+        <div class="col">
+            <div class="form-group" style="position:relative">
+                <select class="form-control cust-input" [(ngModel)]="selectedProj">
+                    <ng-container *ngFor="let pro of ProjectList">
+                        <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
+                            <ng-container *ngFor="let spro of pro.childProjs">
+                                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
+                                    <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
+                                </ng-container>
+                                <ng-container #opt1 *ngIf="spro.proj">
+                                    <option [value]="spro.projId">{{spro.projCode}}</option>
+                                </ng-container>
+                            </ng-container>
+                        </optgroup>
+                        <ng-container #opt *ngIf="pro.proj">
+                            <option [value]="pro.projId"> {{pro.projCode}}</option>
+                        </ng-container>
+                    </ng-container>
+                </select>
+
+            </div>
+        </div>
+        <div class="col search_btn text-right col-2">
+            <button (click)="getData()">
+                <i class="fa fa-search"></i>
+            </button>
+            <button>
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <div class="tree_table tbl_head">
+        <div class="tree_tbl_head row ml-0 mr-0">
+            <div class="col _th col-sm-1"> Select </div>
+            <div class="col _th col-sm-1"> SOW Item Id </div>
+            <div class="col _th col-sm-1"> SOW Item Desc </div>
+            <div class="col _th col-sm-1"> Unit Of Measure </div>
+            <div class="col _th col-sm-1"> SOE Item Id </div>
+            <div class="col _th col-sm-1"> SOR Item Id </div>
+            <div class="col _th col-sm-1"> Cost Item Id </div>
+            <div class="col _th col-sm-1"> Start Date </div>
+            <div class="col _th col-sm-1"> Finish Date </div>
+            <div class="col _th col-sm-1"> Original Estimation </div>
+            <!-- <div class="col _th col-sm-1"> Revised Estimation </div> -->
+            <!-- <div class="col _th col-sm-1"> Actual Quantity </div> -->
+            <!-- <div class="col _th col-sm-1"> Balance </div> -->
+            <div class="col _th col-sm-2"> SOW Comments </div>
+        </div>
+    </div>
+</section>
+
+<!-- fixed content layout -->
+
+<section id="main_content">
+    <div class="slimScroll">
+        <div class="table-responsive">
+            <div class="tree_table">
+
+                <ul class="tree">
+                    <li class="parent" *ngFor="let ScopeWorks of List | paginate: {id:'Scope', itemsPerPage: records, currentPage: p } ;let i=index">
+                        <header class="row" *ngIf="ScopeWorks.projName!==null">
+                            <!-- <div class="cust-check col col-sm-1" (click)="selectedRecords(COC,$event)">
+                                <input type="checkbox" [checked]="COC.checked==true">
+                                <label></label>
+                            </div> -->
+                            <span class="col addicon col col-sm-2">
+                                <i class="fa  icon "></i> {{ScopeWorks.code}}</span>
+                            <span class="col col-sm-3"> {{ScopeWorks.name}}</span>
+                            <span class="col col-sm-2"> </span>
+                            <span class="col col-sm-2"> </span>
+                            <span class="col col-sm-2"> </span>
+
+                        </header>
+                        <!-- level 1 -->
+                        <ul *ngFor=" let sub1 of ScopeWorks.childSOWItemTOs">
+                            <li *ngIf="sub1.childSOWItemTOs.length>0">
+                                <header class="row">
+                                    <div class="cust-check col col-sm-1">
+
+                                    </div>
+                                    <span class="col addicon col-sm-4">
+                                        <i class="fa icon "></i> {{sub1.code}}</span>
+                                    <span class="col col-sm-4">{{sub1.name}}</span>
+                                </header>
+                                <!-- level 2 -->
+
+                                <ul *ngFor="let sub2 of sub1.childSOWItemTOs">
+                                    <li *ngIf="sub2.childSOWItemTOs.length>0">
+                                        <header class="row">
+                                            <div class="cust-check col col-sm-1">
+
+                                            </div>
+                                            <span class="col addicon col-sm-4">
+                                                <i class="fa icon "></i> {{sub2.code}}</span>
+                                            <span class="col col-sm-4">{{sub2.name}}</span>
+                                        </header>
+                                        <!-- level 3 -->
+
+                                        <ul *ngFor="let sub3 of sub2.childSOWItemTOs">
+                                            <li *ngIf="sub3.childSOWItemTOs.length>0">
+                                                <header class="row">
+                                                    <div class="cust-check col col-sm-1">
+
+                                                    </div>
+                                                    <span class="col addicon col-sm-4">
+                                                        <i class="fa icon "></i> {{sub3.code}}</span>
+                                                    <span class="col col-sm-2">{{sub3.name}}</span>
+                                                </header>
+                                                <!-- level 4 -->
+
+                                                <ul *ngFor="let sub4 of sub3.childSOWItemTOs">
+                                                    <li>
+                                                        <header class="row">
+                                                            <div class="cust-check col col-sm-1">
+
+                                                            </div>
+                                                            <span class="col addicon col-sm-3">
+                                                                <i class="fa fa-circle"></i> {{sub4.code}}</span>
+                                                            <span class="col col-sm-3"> {{sub4.name}}</span>
+                                                        </header>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li *ngIf="sub3.childSOWItemTOs.length===0">
+                                                <header class="row">
+                                                    <div class="cust-check col col-sm-1">
+
+                                                    </div>
+                                                    <span class="col addicon col-sm-2">
+                                                        <i class="fa fa-circle"></i>{{sub3.code}}</span>
+                                                    <span class="col col-sm-2"> {{sub3.name}}</span>
+                                                </header>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li *ngIf="sub2.childSOWItemTOs.length===0">
+                                        <header class="row">
+                                            <div class="cust-check col col-sm-1">
+
+                                            </div>
+                                            <span class="col addicon col-sm-2">
+                                                <i class="fa fa-circle"></i>{{sub2.code}}</span>
+                                            <span class="col col-sm-1"> {{sub2.name}}</span>
+                                            <span class="col col-sm-1"> {{sub2.measureUnitTO.name}}</span>
+                                            <span class="col col-sm-1"> {{sub2.projSOEItemTO.code}}</span>
+                                            <span class="col col-sm-2"> {{sub2.projSORItemTO.code}}</span>
+                                            <span class="col col-sm-2"> {{sub2.startDate}}</span>
+                                            <span class="col col-sm-2"> {{sub2.projCostItemTO.finishDate}}</span>
+                                        </header>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="sub1.childSOWItemTOs.length===0">
+                                <header class="row">
+                                    <div class="cust-check col col-sm-1">
+
+                                    </div>
+                                    <span class="col addicon col-sm-2">
+                                        <i class="fa fa-circle"></i>{{sub1.code}}</span>
+                                    <span class="col col-sm-2"> {{sub1.name}}</span>
+
+                                </header>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <!-- end li -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- fixed footer layout -->
+<div class="tbl_footer btns text-right" id="layout_footer">
+    <div class="row ml-0 mr-0 pagination_block">
+        <div class="col col-sm-3 text-left">
+            <label>Total No OF Records :</label>
+            <select [(ngModel)]="records">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="col col-sm-9 text-right" style="display: inline-block">
+            <div class="row">
+                <div class="col col-sm-6 text-right">
+                    <pagination-controls id="Scope" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+                </div>
+                <div class="col col-sm-6 text-right">
+                    <!-- <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+                      <button type="button" class="btn btn-danger">Deactivate</button>
+                      <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target="#empclasification">Create</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="row">
+    <div class="col col-sm-6">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    </div>
+    <div class="col col-sm-6">
+    </div>
+    </div> -->
+
+<!-- <div class="modal fade" id="empclasification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Employee Classification Create</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+              </div>
+              <form class="form_block" non-validate [formGroup]="Employee_creation" (ngSubmit)="saveDetails(); ">
+                  <div class="modal-body">
+                      <div class="tenantDetails">
+                          <div class="row">
+                              <div class="form-group col-md-6 col ">
+                                  <label for="companyid" class="form-label">Employee Classification Code</label>
+                                  <input type="text " formControlName="code" class="form-control form-input " (change)="verifyCode(code.value)" #code id="companyid" required>
+                                  <app-error-messages [control]="Employee_creation.controls[ 'code']"></app-error-messages>
+
+                              </div>
+                              <div class="form-group col-md-6 col">
+                                  <label for="companyname" class="form-label">employee Classification Name</label>
+                                  <input type="text " formControlName="name" class="form-control form-input " id="companyname" required>
+                                  <app-error-messages [control]="Employee_creation.controls[ 'name']"></app-error-messages>
+                              </div>
+
+                          </div>
+                          <div class="row">
+                              <div class="form-group col-md-6 col ">
+                                  <label for="businesscategory" class="form-label">Unit Of Messure</label>
+                                  <select class="form-control" id="businesscategory" formControlName="childSOWItemTOs">
+                  <option value="">--Select--</option>
+                  <option *ngFor="let measure of measuresList" [value]="measure.id">{{measure.name}}</option>
+                </select>
+                                  <app-error-messages [control]="Employee_creation.controls[ 'childSOWItemTOs']"></app-error-messages>
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary" [disabled]="Employee_creation.invalid || isUnique">Save</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+    </div> -->

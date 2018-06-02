@@ -1,0 +1,360 @@
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Enterprise Projects</h2>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+  <div class="tree_table tbl_head">
+    <div class="tree_tbl_head row ml-0 mr-0">
+      <div class="col _th col-sm-1"> Select </div>
+      <div class="col _th col-sm-5"> Project ID </div>
+      <div class="col _th col-sm-6"> Project Name </div>
+    </div>
+  </div>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive">
+      <div class="tree_table">
+
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'projectlist', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" *ngIf="material.projName!==null">
+              <div class="cust-check col col-sm-1" (click)="(material.proj  &&  material.assignedStatus !='Y') && selectedRecords(material,$event)">
+                <input type="checkbox" [disabled]="(!material.proj  ||  material.assignedStatus =='Y')" [checked]="material.checked==true">
+                <label></label>
+              </div>
+              <span class="col addicon col col-sm-4">
+                <i class="fa  icon "></i> {{material.projCode}}</span>
+              <span class="col col-sm-4"> {{material.projName}}</span>
+              <span class="col col-sm-3">
+                <a href="javascript:void(0)">
+                  <i class="fa fa-pencil-square-o" (click)="editRecord(material)"></i>
+                </a>
+              </span>
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.childProjs ">
+              <li *ngIf="!sub1.proj">
+                <header class="row">
+                  <div class="cust-check col col-sm-1" (click)="(sub1.proj  &&  sub1.assignedStatus !='Y') &&selectedRecords(sub1,$event)">
+                    <input type="checkbox" [disabled]="(!sub1.proj  ||  sub1.assignedStatus =='Y')" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.projCode}}</span>
+                  <span class="col col-sm-4">{{sub1.projName}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.childProjs">
+                  <li *ngIf="!sub2.proj">
+                    <header class="row">
+                      <div class="cust-check col col-sm-1" (click)="(sub2.proj  &&  sub2.assignedStatus !='Y') &&selectedRecords(sub2,$event)">
+                        <input type="checkbox" [disabled]="(!sub2.proj  ||  sub2.assignedStatus =='Y')" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.projCode}}</span>
+                      <span class="col col-sm-4">{{sub2.projName}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.childProjs">
+                      <li *ngIf="!sub3.proj">
+                        <header class="row">
+                          <div class="cust-check col col-sm-1" (click)="(sub3.proj  &&  sub3.assignedStatus !='Y') && selectedRecords(sub3,$event)">
+                            <input type="checkbox" [disabled]="(!sub3.proj  ||  sub3.assignedStatus =='Y')" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.projCode}}</span>
+                          <span class="col col-sm-4">{{sub3.projName}}</span>
+                        </header>
+                        <!-- level 4 -->
+
+                        <ul *ngFor="let sub4 of sub3.childProjs">
+                          <li *ngIf="!sub3.proj">
+                            <header class="row">
+                              <div class="cust-check col col-sm-1" (click)="(sub4.proj  &&  sub4.assignedStatus !='Y') && selectedRecords(sub4,$event)">
+                                <input type="checkbox" [disabled]="(!sub4.proj  ||  sub4.assignedStatus =='Y')" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div>
+                              <span class="col addicon col-sm-4">
+                                <i class="fa icon "></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-4">{{sub4.projName}}</span>
+                            </header>
+                            <!-- level 4 -->
+
+                            <ul *ngFor="let sub5 of sub4.childProjs">
+                              <li>
+                                <header class="row">
+                                  <div class="cust-check col col-sm-1" (click)="(sub5.proj  &&  sub5.assignedStatus !='Y') && selectedRecords(sub5,$event)">
+                                    <input type="checkbox" [disabled]="(!sub5.proj  ||  sub5.assignedStatus =='Y')" [checked]="sub5.checked==true">
+                                    <label></label>
+                                  </div>
+                                  <span class="col addicon col-sm-4">
+                                    <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                                  <span class="col col-sm-4"> {{sub4.projName}}</span>
+                                </header>
+                              </li>
+                            </ul>
+                          </li>
+                          <li *ngIf="sub4.proj">
+                            <header class="row">
+                              <div class="cust-check col col-sm-1" (click)="(sub4.proj  &&  sub4.assignedStatus !='Y') && selectedRecords(sub4,$event)">
+                                <input type="checkbox" [disabled]="(!sub4.proj  ||  sub4.assignedStatus =='Y')" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div>
+                              <span class="col addicon col-sm-4">
+                                <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-4"> {{sub4.projName}}</span>
+                            </header>
+                          </li>
+                        </ul>
+                      </li>
+                      <li *ngIf="sub3.proj">
+                        <header class="row">
+                          <div class="cust-check col col-sm-1" (click)="(sub3.proj  &&  sub3.assignedStatus !='Y') && selectedRecords(sub3,$event)">
+                            <input type="checkbox" [disabled]="(!sub3.proj  ||  sub3.assignedStatus =='Y')" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.projCode}}</span>
+                          <span class="col col-sm-4"> {{sub3.projName}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.proj">
+                    <header class="row">
+                      <div class="cust-check col col-sm-1" (click)="(sub2.proj  &&  sub2.assignedStatus !='Y') && selectedRecords(sub2,$event)">
+                        <input type="checkbox" [disabled]="(!sub2.proj  ||  sub2.assignedStatus =='Y')" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.projCode}}</span>
+                      <span class="col col-sm-4"> {{sub2.projName}}</span>
+                    </header>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="sub1.proj">
+                <header class="row">
+                  <div class="cust-check col col-sm-1" (click)="(sub1.proj  &&  sub1.assignedStatus !='Y') && selectedRecords(sub1,$event)">
+                    <input type="checkbox" [disabled]="(!sub1.proj  ||  sub1.assignedStatus =='Y')" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                  <span class="col col-sm-4"> {{sub1.projName}}</span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="projectlist" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <!-- <button type="button" class="btn btn-primary" (click)="editRecord()">
+            Edit</button> -->
+          <button type="button" class="btn btn-danger" [disabled]="selectedlist.length<0" (click)="deactive()">Deactivate</button>
+          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#projectCreate">Create new</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="projectCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create/Edit Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <div class="tree_table tree_edit">
+            <div class="tree_tbl_head row ml-0 mr-0">
+              <div class="col _th col-sm-6"> Project ID </div>
+              <div class="col _th col-sm-6"> Project Name </div>
+            </div>
+            <ul class="tree">
+              <li class="parent row ml-0 mr-0" *ngFor="let level0 of treeData.projs">
+                <div class="col col-sm-6">
+                  <input class="form-control" placeholder="Project ID" type="text" [disabled]="!level0.proj" [(ngModel)]="level0.projCode">
+                  <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level0.expand" (click)="treeJsonBuilder(level0.level,'addChild')">
+                    <i aria-hidden="true" class="fa fa-user-plus"></i>
+                  </a> -->
+                  <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level0.proj" (click)="treeJsonBuilder(level0.level||0,'addLeaf')">
+                    <i aria-hidden="true" class="fa fa-envira"></i>
+                  </a>
+                  <a class="delete" href="Javascript:void(0)" *ngIf="level0.deleteFlag">
+                    <i aria-hidden="true" class="fa fa-trash"></i>
+                  </a>
+                </div>
+                <div class="col col-sm-4">
+                  <input class="form-control" placeholder="Project Name" [disabled]="!level0.proj" [(ngModel)]="level0.projName" type="text">
+                </div>
+                <div class="col col-sm-2">
+
+                </div>
+                <ul class="child">
+                  <li class="row ml-0 mr-0" *ngFor="let level1 of level0.childProjs; let i=index">
+                    <div class="col col-sm-6">
+                      <input class="form-control" placeholder="Project ID" [disabled]="!level1.proj" type="text" [(ngModel)]="level1.projCode">
+                      <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level1.expand" (click)="treeJsonBuilder(level1.level,'addChild',i)">
+                        <i aria-hidden="true" class="fa fa-user-plus"></i>
+                      </a> -->
+                      <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level1.proj" (click)="treeJsonBuilder(level1.level||1,'addLeaf',i)">
+                        <i aria-hidden="true" class="fa fa-envira"></i>
+                      </a>
+                      <a class="delete" href="Javascript:void(0)" *ngIf="level1.deleteFlag" (click)="treeJsonBuilder(level1.level||1,'delete',i)">
+                        <i aria-hidden="true" class="fa fa-trash"></i>
+                      </a>
+                    </div>
+                    <div class="col col-sm-4">
+                      <input class="form-control" placeholder="Project Name" [disabled]="!level1.proj" [(ngModel)]="level1.projName" type="text">
+                    </div>
+                    <ul class="child">
+                      <li class="row ml-0 mr-0" *ngFor="let level2 of level1.childProjs;let j=index">
+                        <div class="col col-sm-6">
+                          <input class="form-control" placeholder="Project ID" type="text" [disabled]="!level2.proj" [(ngModel)]="level2.projCode">
+                          <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level2.expand" (click)="treeJsonBuilder(level2.level,'addChild',i,j)">
+                            <i aria-hidden="true" class="fa fa-user-plus"></i>
+                          </a> -->
+                          <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level2.proj" (click)="treeJsonBuilder(level2.level||2,'addLeaf',i,j)">
+                            <i aria-hidden="true" class="fa fa-envira"></i>
+                          </a>
+                          <a class="delete" href="Javascript:void(0)" *ngIf="level2.deleteFlag" (click)="treeJsonBuilder(level2.level||2,'delete',i,j)">
+                            <i aria-hidden="true" class="fa fa-trash"></i>
+                          </a>
+                        </div>
+                        <div class="col col-sm-4">
+                          <input class="form-control" placeholder="Project Name" [disabled]="!level2.proj" [(ngModel)]="level2.projName" type="text">
+                        </div>
+                        <ul class="child">
+                          <li class="row ml-0 mr-0" *ngFor="let level3 of level2.childProjs; let k=index">
+                            <div class="col col-sm-6">
+                              <input class="form-control" placeholder="Project ID" type="text" [disabled]="!level3.proj" [(ngModel)]="level3.projCode">
+                              <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level3.expand" (click)="treeJsonBuilder(level3.level,'addChild',i,j,k)">
+                                <i aria-hidden="true" class="fa fa-user-plus"></i>
+                              </a> -->
+                              <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level3.proj" (click)="treeJsonBuilder(level3.level||3,'addLeaf',i,j,k)">
+                                <i aria-hidden="true" class="fa fa-envira"></i>
+                              </a>
+                              <a class="delete" href="Javascript:void(0)" *ngIf="level3.deleteFlag" (click)="treeJsonBuilder(level3.level||3,'delete',i,j,k)">
+                                <i aria-hidden="true" class="fa fa-trash"></i>
+                              </a>
+                            </div>
+                            <div class="col col-sm-4">
+                              <input class="form-control" placeholder="Project Name" [disabled]="!level3.proj" [(ngModel)]="level3.projName" type="text">
+                            </div>
+                            <ul class="child">
+                              <li class="row ml-0 mr-0" *ngFor="let level4 of level3.childProjs; let l=index">
+                                <div class="col col-sm-6">
+                                  <input class="form-control" placeholder="Project ID" type="text" [disabled]="!level4.proj" [(ngModel)]="level4.projCode">
+                                  <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level3.expand" (click)="treeJsonBuilder(level4.level,i,j,k,l)">
+                                        <i aria-hidden="true" class="fa fa-user-plus"></i>
+                                      </a> -->
+                                  <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level4.proj" (click)="treeJsonBuilder(level4.level||4,'addLeaf',i,j,k,l)">
+                                    <i aria-hidden="true" class="fa fa-envira"></i>
+                                  </a>
+                                  <a class="delete" href="Javascript:void(0)" *ngIf="level4.deleteFlag" (click)="treeJsonBuilder(level4.level||4,'delete',i,j,k,l)">
+                                    <i aria-hidden="true" class="fa fa-trash"></i>
+                                  </a>
+                                </div>
+                                <div class="col col-sm-4">
+                                  <input class="form-control" placeholder="Project Name" [disabled]="!level4.proj" [(ngModel)]="level4.projName" type="text">
+                                </div>
+                                <ul class="child">
+                                  <li class="row ml-0 mr-0" *ngFor="let level5 of level4.childProjs; let m=index">
+                                    <div class="col col-sm-6">
+                                      <input class="form-control" placeholder="Project ID" type="text" [disabled]="!level5.proj" [(ngModel)]="level5.projCode">
+                                      <!-- <a class="addChild" href="Javascript:void(0)" *ngIf="level3.expand" (click)="treeJsonBuilder(level5.level,i,j,k,l)">
+                                        <i aria-hidden="true" class="fa fa-user-plus"></i>
+                                      </a> -->
+                                      <a class="addLeaf" href="Javascript:void(0)" *ngIf="!level5.proj" (click)="treeJsonBuilder(level5.level||5,'addLeaf',i,j,k,l,m)">
+                                        <i aria-hidden="true" class="fa fa-envira"></i>
+                                      </a>
+                                      <a class="delete" href="Javascript:void(0)" *ngIf="level5.deleteFlag" (click)="treeJsonBuilder(level5.level||5,'delete',i,j,k,l,m)">
+                                        <i aria-hidden="true" class="fa fa-trash"></i>
+                                      </a>
+                                    </div>
+                                    <div class="col col-sm-4">
+                                      <input class="form-control" placeholder="Project Name" [disabled]="!level5.proj" [(ngModel)]="level5.projName" type="text">
+                                    </div>
+                                    <ul class="child"></ul>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+
+
+                          </li>
+                          <!-- <li class="row ml-0 mr-0">
+                              <div class="col col-sm-6">
+                                <input class="form-control" placeholder="Project ID" type="text">
+                                <a class="addChild" href="Javascript:void(0)" style="display: none;">
+                                  <i aria-hidden="true" class="fa fa-user-plus"></i>
+                                </a>
+                                <a class="addLeaf" href="Javascript:void(0)" style="display: none;">
+                                  <i aria-hidden="true" class="fa fa-envira"></i>
+                                </a>
+                                <a class="delete" href="Javascript:void(0)">
+                                  <i aria-hidden="true" class="fa fa-trash"></i>
+                                </a>
+                              </div>
+                              <div class="col col-sm-4">
+                                <input class="form-control" placeholder="Project Name" type="text">
+                              </div>
+                              <ul class="child"></ul>
+                            </li> -->
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="SaveData()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

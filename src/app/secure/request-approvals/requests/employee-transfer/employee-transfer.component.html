@@ -1,0 +1,152 @@
+<section id="layout_header">
+
+  <div class="row">
+    <div class="col col-sm-3">
+      <h2 class="ttl2">Employee Request Transfer</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+      </div>
+    </div>
+    <div class="col ">
+      <input type="radio" name="request" [(ngModel)]="userType" [value]="true">Login User Records
+      <input type="radio" name="request" [(ngModel)]="userType" [value]="false">All User Records
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button>
+        <i class="fa fa-search" (click)="getData()"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Date of Request </th>
+        <th>Requester</th>
+        <th>Approver</th>
+        <th>Origin Project</th>
+        <th>Destination Project</th>
+        <th>Requisition ID</th>
+        <th>Requisition Notification</th>
+        <th>Approval Status</th>
+        <th>More Details</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <tbody>
+          <tr *ngFor="let measuring of MaterialList.empReqTransTOs | paginate: {id:'emptrn', itemsPerPage: records, currentPage: p };let i=index;"
+            (click)="viewRecord(measuring)">
+            <td>
+              <div class="cust-check">
+                <input type="checkbox" />
+                <label></label>
+              </div>
+            </td>
+            <td>{{measuring.reqDate}}</td>
+            <td>{{measuring.reqUserTO.empCode}}</td>
+            <td>{{measuring.apprUserTO.empCode}}</td>
+            <td>{{measuring.apprCurrentProj}}</td>
+            <td>{{measuring.reqCurrentProj}}</td>
+            <td>{{measuring.reqCode}}</td>
+            <td>{{measuring.reqNotifyCode}}</td>
+            <td>{{measuring.apprStatus}}</td>
+            <td>View</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+
+<!-- fixed footer layout -->
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="emptrn" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <button class="btn btn-primary pull-right" type="button" (click)="createPop()">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="cccreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add/Update</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="tenantDetails">
+          <div class="row">
+            <div class="form-group col-md-6 col ">
+              <label for="companyid" class="form-label">Cost Code ID</label>
+              <input type="text " formControlName="code" class="form-control form-input " (change)="verifyCode(code.value)" #code id="companyid"
+                required>
+              <app-error-messages [control]="cc_creation.controls[ 'code']"></app-error-messages>
+
+            </div>
+            <div class="form-group col-md-6 col">
+              <label for="companyname" class="form-label">Cost Code Name</label>
+              <input type="text " formControlName="name" class="form-control form-input " id="companyname" required>
+              <app-error-messages [control]="cc_creation.controls[ 'name']"></app-error-messages>
+            </div>
+
+          </div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

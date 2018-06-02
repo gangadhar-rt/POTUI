@@ -1,0 +1,107 @@
+<div class="tenantDetails">
+  <div class="row">
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Responsible Manager</label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.userId" name="manager" id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let user of users" [value]="user.id">{{user.name}}</option>
+      </select>
+    </div>
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Default Calender </label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.calenderTO.code" name="manager" id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let cal of calenders" [value]="cal.code">{{cal.code}}--{{cal.name}}</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Default Hours Per Day</label>
+      <input type="text " class="form-control form-input " [(ngModel)]="GeneralValues.defualtHrs">
+    </div>
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Maximum Hours Per Day</label>
+      <input type="text " class="form-control form-input " [(ngModel)]="GeneralValues.maxHrs">
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Country</label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.countryTO.code" name="manager" (change)="getCurrencycode()"
+        id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let con of countries" #conu [value]="con.code">{{con.code}}--{{con.name}}</option>
+      </select>
+
+    </div>
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Currency </label>
+      <input type="text " class="form-control form-input " [(ngModel)]="getCurrency" readonly>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Province/State</label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.countryTO.provisionTO.id" name="manager" (change)="getCurrencycode()"
+        id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let con of proviananceList" #conu [value]="con.id">{{con.code}}--{{con.name}}</option>
+      </select>
+    </div>
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Time Zone</label>
+      <input type="text " class="form-control form-input " [(ngModel)]="GeneralValues.countryTO.provisionTO.timeZoneTO.code" readonly
+        id="companyname" required>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Rexource Curve</label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.resourceCurveTO.id" name="manager" (change)="getCurrencycode()"
+        id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let con of resourceCurves" #conu [value]="con.id">{{con.curveType}}</option>
+      </select>
+
+    </div>
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Project Owner</label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.companyId" name="manager" (change)="getCurrencycode()"
+        id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let con of companies" #conu [value]="con.id">{{con.cmpName}}</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Contact Number</label>
+      <input type="text " [(ngModel)]="GeneralValues.contractNumber" class="form-control form-input " id="companyname" required>
+    </div>
+    <div class="form-group col-md-6 col ">
+      <label for="companyid" class="form-label">Project Address</label>
+      <textarea [(ngModel)]="GeneralValues.address" class="form-control form-input "></textarea>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6 col">
+      <label for="companyname" class="form-label">Profit Center </label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.profitCentreTO.id" name="manager" (change)="getCurrencycode()"
+        id="manager">
+        <option value="">--Select--</option>
+        <option *ngFor="let con of profitCenters" #conu [value]="con.id">{{con.id}}{{con.name}}</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="col col-sm-12 text-right">
+    <button class="btn btn-primary" [disabled]="!projid" (click)="saveDetails()">Save</button>
+  </div>
+</div>

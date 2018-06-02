@@ -1,0 +1,793 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-6">
+      <h2 class="ttl2">Projects</h2>
+    </div>
+    <div class="col col-sm-3">
+      <div class="form-group">
+        <input type="search" name="" class="form-control cust-input" value="" placeholder="Company ID">
+      </div>
+    </div>
+  </div>
+  <table class="table tbl_head text-left">
+    <colgroup>
+      <col style="width:16.66%;" />
+      <col style="width:33.33%;" />
+      <col style="width:50%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>EPS ID</th>
+        <th>EPS Name</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll ss_sm">
+    <div class="table-responsive">
+      <div class="tree_table">
+
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'projectlist', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" *ngIf="material.projName!==null">
+              <div class="cust-check col col-sm-2">
+                <input type="checkbox" [disabled]="material.assignedStatus!=='Y'" [checked]="material.checked==true">
+                <label></label>
+              </div>
+              <span class="col addicon col col-sm-4">
+                <i class="fa  icon "></i> {{material.projCode}}</span>
+              <span class="col col-sm-6"> {{material.projName}}</span>
+
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.childProjs ">
+              <li *ngIf="!sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.projCode}}</span>
+                  <span class="col col-sm-4">{{sub1.projName}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.childProjs">
+                  <li *ngIf="!sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.projCode}}</span>
+                      <span class="col col-sm-4">{{sub2.projName}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.childProjs">
+                      <li *ngIf="!sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.projCode}}</span>
+                          <span class="col col-sm-4">{{sub3.projName}}</span>
+                        </header>
+                        <!-- level 4 -->
+
+                        <ul *ngFor="let sub4 of sub3.childProjs">
+                          <li>
+                            <header class="row" [class.active_row]="selectedlist[0].projId==sub4.projId" (click)="sub4.proj && selectedRecords(sub4)">
+                              <div class="cust-check col col-sm-2" (click)="sub4.assignedStatus==='Y'?selectedRecords(sub4):false">
+                                <input type="checkbox" [disabled]="sub4.assignedStatus!=='Y'" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div>
+                              <span class="col addicon col-sm-4">
+                                <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-4"> {{sub4.projName}}</span>
+                            </header>
+                          </li>
+                        </ul>
+                      </li>
+                      <li *ngIf="sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.projCode}}</span>
+                          <span class="col col-sm-4"> {{sub3.projName}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.projCode}}</span>
+                      <span class="col col-sm-4"> {{sub2.projName}}</span>
+                    </header>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                  <span class="col col-sm-4"> {{sub1.projName}}</span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+
+<!-- fixed footer layout -->
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="projectlist" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <!-- <button type="button" class="btn btn-primary" (click)="editRecord()">
+            Edit</button> -->
+          <!-- <button type="button" class="btn btn-danger" [disabled]="selectedlist.length<0" (click)="deactive()">Deactivate</button> -->
+          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#projectCreate">Create new</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- fixed footer layout -->
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true"
+              (click)="getSow()">Progress Measure</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false"
+              (click)="getManPower()">Project SUmmary</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getProjDates();getStatus()">Project Status</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <section id="layout_header">
+              <div class="row">
+
+                <div class="col col-sm-12">
+                  <!-- <div class="form-group">
+                    <input type="search" name="" class="form-control cust-input" value="" placeholder="Company ID">
+                  </div> -->
+                </div>
+              </div>
+              <table class="table tbl_head">
+                <colgroup *ngIf="!sowexp">
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+
+                </colgroup>
+                <colgroup *ngIf="sowexp">
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+
+                </colgroup>
+                <thead>
+                  <tr *ngIf="!sowexp">
+                    <th>SOW Item ID</th>
+                    <th>SOW Item Description</th>
+                    <th>Unit Of Measure</th>
+                    <th>Original Estimated Quantity</th>
+                    <th>Revised Estimated Quantity</th>
+                    <th>Actual Quantity to Previous Period
+                      <span (click)="sowexp=true">
+                        <i class="fa fa-caret-right"></i>
+                      </span>
+                    </th>
+                  </tr>
+                  <tr *ngIf="sowexp">
+                    <th>
+                      <span (click)="sowexp=false">
+                        <i class="fa fa-caret-left"></i>
+                      </span>Actual Quantity to During the Period</th>
+                    <th>Actual Update Quantity</th>
+                    <th>Balance Quantity</th>
+                    <th>Schedule Start</th>
+                    <th>Schedule Finish</th>
+                    <th>Actual Start</th>
+                    <th>Actual Finish</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <!-- fixed header layout -->
+
+            <!-- fixed content layout -->
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive">
+                  <div class="tree_table">
+
+                    <ul class="tree">
+                      <li class="parent" *ngFor="let material of sowDetails ;let i=index">
+                        <header class="row" *ngIf="material.name!==null">
+
+                          <span class="col addicon col col-sm-2">
+                            <i class="fa  icon "></i> {{material.code}}</span>
+                          <span class="col col-sm-2"> {{material.name}}</span>
+                          <span class="col col-sm-2"> {{material.measureUnitTO}}</span>
+
+                        </header>
+                        <!-- level 1 -->
+                        <ul *ngFor=" let sub1 of material.childSOWItemTOs ">
+                          <li *ngIf="sub1.childSOWItemTOs.length>0">
+                            <header class="row">
+
+                              <span class="col addicon col-sm-2">
+                                <i class="fa icon "></i> {{sub1.code}}</span>
+                              <span class="col col-sm-2">{{sub1.name}}</span>
+                              <span class="col col-sm-2">{{sub1.measureUnitTO}}</span>
+                            </header>
+                            <!-- level 2 -->
+
+                            <ul *ngFor="let sub2 of sub1.childSOWItemTOs">
+                              <li *ngIf="sub2.childSOWItemTOs.length>0">
+                                <header class="row">
+
+                                  <span class="col addicon col-sm-2">
+                                    <i class="fa icon "></i> {{sub2.code}}</span>
+                                  <span class="col col-sm-2">{{sub2.name}}</span>
+                                  <span class="col col-sm-2">{{sub2.measureUnitTO}}</span>
+                                </header>
+                                <!-- level 3 -->
+
+                                <ul *ngFor="let sub3 of sub2.childSOWItemTOs">
+                                  <li *ngIf="sub3.childSOWItemTOs.length>0">
+                                    <header class="row">
+
+                                      <span class="col addicon col-sm-2">
+                                        <i class="fa icon "></i> {{sub3.code}}</span>
+                                      <span class="col col-sm-2">{{sub3.name}}</span>
+                                      <span class="col col-sm-2">{{sub3.measureUnitTO}}</span>
+                                    </header>
+                                    <!-- level 4 -->
+
+                                    <ul *ngFor="let sub4 of sub3.childSOWItemTOs">
+                                      <li>
+                                        <header class="row">
+
+                                          <span class="col addicon col-sm-2">
+                                            <i class="fa fa-circle"></i> {{sub4.code}}</span>
+                                          <span class="col col-sm-2"> {{sub4.name}}</span>
+                                          <span class="col col-sm-2"> {{sub4.measureUnitTO}}</span>
+                                        </header>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                  <li *ngIf="sub3.childSOWItemTOs.length===0">
+                                    <header class="row">
+
+                                      <span class="col addicon col-sm-2">
+                                        <i class="fa fa-circle"></i>{{sub3.code}}</span>
+                                      <span class="col col-sm-2"> {{sub3.name}}</span>
+                                      <span class="col col-sm-2"> {{sub3.measureUnitTO}}</span>
+                                    </header>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li *ngIf="sub2.childSOWItemTOs.length===0">
+                                <header class="row">
+
+                                  <span class="col addicon col-sm-2">
+                                    <i class="fa fa-circle"></i>{{sub2.code}}</span>
+                                  <span class="col col-sm-2"> {{sub2.name}}</span>
+                                  <span class="col col-sm-2"> {{sub2.measureUnitTO}}</span>
+                                </header>
+                              </li>
+                            </ul>
+                          </li>
+                          <li *ngIf="sub1.childSOWItemTOs.length===0">
+                            <header class="row">
+
+                              <span class="col addicon col-sm-2">
+                                <i class="fa fa-circle"></i>{{sub1.code}}</span>
+                              <span class="col col-sm-2"> {{sub1.name}}</span>
+                              <span class="col col-sm-2"> {{sub1.measureUnitTO}}</span>
+                            </header>
+                          </li>
+
+                        </ul>
+                      </li>
+                      <!-- end li -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home" aria-selected="true"
+                      (click)="getManPower()">Man Power</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile" aria-selected="false"
+                      (click)="getPlants()">Plants</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile" aria-selected="false"
+                      (click)="getCosts()">Costs</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false"
+                      (click)="getDates()">Date</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home1" role="tabpanel" aria-labelledby="home-tab">
+                    <section id="layout_header">
+                      <table class="table-striped tbl_head table  mb-0">
+                        <colgroup *ngIf="!projSummMP">
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:15%;" />
+                          <col style="width:5%;" />
+                        </colgroup>
+                        <colgroup *ngIf="projSummMP">
+                          <col style="width:5%;" />
+                          <col style="width:25%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:30%;" />
+                        </colgroup>
+                        <thead>
+                          <tr *ngIf="!projSummMP">
+                            <th>Category ID</th>
+                            <th>Budget Units</th>
+                            <th>Revised Units</th>
+                            <th>Actual Units</th>
+                            <th>Remaining Units</th>
+                            <th>
+                              <span (click)="projSummMP=true">
+                                <i class="fa fa-caret-right"></i>
+                              </span>
+                            </th>
+                          </tr>
+                          <tr *ngIf="projSummMP">
+                            <th>
+                              <span (click)="projSummMP=false">
+                                <i class="fa fa-caret-left"></i>
+                              </span>
+                            </th>
+                            <th>% Age Spent</th>
+                            <th>Estimate to Complete</th>
+                            <th>Estimate at Completion</th>
+                            <th>Completion Variance</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </section>
+                    <section id="main_content">
+                      <div class="slimScroll">
+                        <div class="table-responsive text-center">
+                          <table class="table-striped tbl_body table  mb-0">
+                            <colgroup *ngIf="!projSummMP">
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:15%;" />
+                              <col style="width:5%;" />
+                            </colgroup>
+                            <colgroup *ngIf="projSummMP">
+                              <col style="width:5%;" />
+                              <col style="width:25%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:30%;" />
+                            </colgroup>
+                            <tbody>
+                              <tr *ngFor="let mand of manDetails">
+                                <td *ngIf="!projSummMP">{{mand.empCatgName}}</td>
+                                <td *ngIf="!projSummMP">{{mand.originalQty}}</td>
+                                <td *ngIf="!projSummMP">{{mand.revisedQty}}</td>
+                                <td *ngIf="!projSummMP">{{mand.actualQty}}</td>
+                                <td colspan="2" *ngIf="!projSummMP">{{mand.remainingQty}}</td>
+                                <td colspan="2" *ngIf="projSummMP">{{mand.age||'0.0'}}</td>
+                                <td *ngIf="projSummMP">{{mand.estimateComplete}}</td>
+                                <td *ngIf="projSummMP">{{mand.estimateCompletion}}</td>
+                                <td *ngIf="projSummMP">{{mand.originalQty+mand.actualQty-mand.estimateCompletion}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile-tab">
+                    <section id="layout_header">
+                      <table class="table-striped tbl_head table  mb-0">
+                        <colgroup *ngIf="!projSummP">
+                          <col style="width:20%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:5%;" />
+                        </colgroup>
+                        <colgroup *ngIf="projSummP">
+                          <col style="width:5%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                        </colgroup>
+                        <thead>
+                          <tr *ngIf="!projSummP">
+                            <th>Resource ID</th>
+                            <th>Resource Name</th>
+                            <th>Unit of Measure</th>
+                            <th>Budget Units </th>
+                            <th>Revised Units</th>
+                            <th>Actual Units</th>
+                            <th>
+                              <span (click)="projSummP=true">
+                                <i class="fa fa-caret-right"></i>
+                              </span>
+                            </th>
+
+                          </tr>
+                          <tr *ngIf="projSummP">
+                            <th>
+                              <span (click)="projSummP=false">
+                                <i class="fa fa-caret-left"></i>
+                              </span>
+                            </th>
+                            <th>Remaining Units</th>
+                            <th>% Age Spent</th>
+                            <th>Estimate to Complete</th>
+                            <th>Estimate at Completion </th>
+                            <th>Completion Variance</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </section>
+                    <section id="main_content">
+                      <div class="slimScroll">
+                        <div class="table-responsive text-center">
+                          <table class="table-striped tbl_body table  mb-0">
+                            <colgroup *ngIf="!projSummP">
+                              <col style="width:20%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:5%;" />
+                            </colgroup>
+                            <colgroup *ngIf="projSummP">
+                              <col style="width:5%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                              <col style="width:15%;" />
+                            </colgroup>
+                            <tbody>
+                              <tr *ngFor="let plant of plantDetails">
+                                <td *ngIf="!projSummP">{{plant.plantsCode}}</td>
+                                <td *ngIf="!projSummP">{{plant.plantsName}}</td>
+                                <td *ngIf="!projSummP">{{plant.mesureName}}</td>
+                                <td *ngIf="!projSummP">{{plant.originalQty}}</td>
+                                <td *ngIf="!projSummP">{{plant.revisedQty}}</td>
+                                <td colspan="2" *ngIf="!projSummP">{{plant.actualQty}}</td>
+                                <td colspan="2" *ngIf="projSummP">{{plant.remainingQty}}</td>
+                                <td *ngIf="projSummP">{{plant.age||'0.0'}}</td>
+                                <td *ngIf="projSummP">{{plant.estimate}}</td>
+                                <td *ngIf="projSummP">{{plant.completion}}</td>
+                                <td *ngIf="projSummP">{{plant.originalQty+plant.remainingQty}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                    <section id="layout_header">
+                      <table class="table-striped tbl_head table  mb-0">
+                        <colgroup *ngIf="!projSummC">
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:15%;" />
+                          <col style="width:5%;" />
+                        </colgroup>
+                        <colgroup *ngIf="projSummC">
+                          <col style="width:5%;" />
+                          <col style="width:15%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                          <col style="width:20%;" />
+                        </colgroup>
+                        <thead>
+                          <tr *ngIf="!projSummC">
+                            <th>
+                              Cost Category Name</th>
+                            <th>Budget Units</th>
+                            <th>Revised Units</th>
+                            <th>Actual Units </th>
+                            <th>Remaining Units</th>
+                            <th>
+                              <span (click)="projSummC=true">
+                                <i class="fa fa-caret-right"></i>
+                              </span>
+                            </th>
+                          </tr>
+                          <tr *ngIf="projSummC">
+                            <th>
+                              <span (click)="projSummC=false">
+                                <i class="fa fa-caret-left"></i>
+                              </span>
+                            </th>
+                            <th>% Age Spent</th>
+                            <th>Estimate to Complete</th>
+                            <th>Estimate at Completion Quality</th>
+                            <th colspan="2">Completion Variance</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </section>
+                    <section id="main_content">
+                      <div class="slimScroll">
+                        <div class="table-responsive text-center">
+                          <table class="table-striped tbl_body table  mb-0">
+                            <colgroup *ngIf="!projSummC">
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:15%;" />
+                              <col style="width:5%;" />
+                            </colgroup>
+                            <colgroup *ngIf="projSummC">
+                              <col style="width:5%;" />
+                              <col style="width:15%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                              <col style="width:20%;" />
+                            </colgroup>
+                            <tbody>
+                              <tr *ngFor="let cost of costDetails">
+                                <td *ngIf="!projSummC">{{cost.catgType}}</td>
+                                <td *ngIf="!projSummC">{{cost.plantsName ||'0'}}</td>
+                                <td *ngIf="!projSummC">{{cost.mesureName||'0'}}</td>
+                                <td *ngIf="!projSummC">{{cost.originalQty||'0'}}</td>
+                                <td colspan="2" *ngIf="!projSummC">{{cost.revisedQty||'0'}}</td>
+                                <td colspan="2" *ngIf="projSummC">{{cost.actualQty||'0'}}</td>
+                                <td *ngIf="projSummC">{{cost.remainingQty||'0'}}</td>
+                                <td *ngIf="projSummC">{{(cost.projCostBugetTOs[0].cost ||0 + cost.projCostBugetTOs[1].cost||0 +cost.projCostBugetTOs[2].cost||0+cost.projCostBugetTOs[3].cost||0)*spentCost(cost.projCostBugetTOs)}}</td>
+                                <td *ngIf="projSummC">{{((cost.projCostBugetTOs[0].cost||0 + cost.projCostBugetTOs[1].cost||0 +cost.projCostBugetTOs[2].cost||0+cost.projCostBugetTOs[3].cost||0)/(cost.projCostBugetTOs[0].cost||0
+                                  + cost.projCostBugetTOs[1].cost||0+cost.projCostBugetTOs[2].cost||0+ cost.projCostBugetTOs[3].cost||0)*spentCost(cost.projCostBugetTOs))*100}}</td>
+
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab">
+                    <section id="layout_header">
+                      <table class="table-striped tbl_head table  mb-0">
+                        <colgroup>
+                          <col style="width:25%;" />
+                          <col style="width:25%;" />
+                          <col style="width:25%;" />
+                          <col style="width:25%;" />
+
+                        </colgroup>
+                        <thead>
+                          <tr>
+                            <th>Schedule</th>
+                            <th>Forecast</th>
+                            <th> Actual</th>
+                            <th> Variance</th>
+
+                          </tr>
+                        </thead>
+                      </table>
+                    </section>
+                    <section id="main_content">
+                      <div class="slimScroll">
+                        <div class="table-responsive text-center">
+                          <table class="table-striped tbl_body table  mb-0">
+                            <colgroup>
+                              <col style="width:25%;" />
+                              <col style="width:25%;" />
+                              <col style="width:25%;" />
+                              <col style="width:25%;" />
+
+                            </colgroup>
+                            <tbody>
+                              <tr *ngFor="let dates of dateDetails;let i =index">
+                                <td>{{i}}</td>
+                                <td>{{i}}</td>
+                                <td>{{i}}</td>
+                                <td>{{i}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="row">
+              <div class="col-md-4 col">
+                <div class="P_status_form">
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Suspended Date</label>
+                    <input type="text " class="form-control form-input " [(ngModel)]="statusDateDetails.suspendedDate" id="companyid" (click)="dp.toggleCalendar()"
+                      ngx-mydatepicker name="myDate" [options]="myOptions" #dp="ngx-mydatepicker">
+                  </div>
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Actual Start</label>
+                    <input type="text " class="form-control form-input " [(ngModel)]="statusDateDetails.startDate" id="companyid" (click)="dp1.toggleCalendar()"
+                      ngx-mydatepicker name="myDate" [options]="myOptions" #dp1="ngx-mydatepicker">
+                  </div>
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Actual Finish</label>
+                    <input type="text " class="form-control form-input " [(ngModel)]="statusDateDetails.finishDate" id="companyid" (click)="dp2.toggleCalendar()"
+                      ngx-mydatepicker name="myDate" [options]="myOptions" #dp2="ngx-mydatepicker">
+                  </div>
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Resume Date</label>
+                    <input type="text " class="form-control form-input " [(ngModel)]="statusDateDetails.resumeDate" id="companyid" (click)="dp3.toggleCalendar()"
+                      ngx-mydatepicker name="myDate" [options]="myOptions" #dp3="ngx-mydatepicker">
+                  </div>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="saveDates()">Save</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 col">
+                <section id="layout_header">
+                  <table class="table-striped tbl_head table  mb-0">
+                    <colgroup>
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:10%;" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Original Budget</th>
+                        <th>Revised Budget</th>
+                        <th>Actual </th>
+                        <th>Remaining Units</th>
+                        <th>% Spent</th>
+                        <th>Estimate at Complete</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </section>
+                <section id="main_content">
+                  <div class="slimScroll">
+                    <div class="table-responsive text-center">
+                      <table class="table-striped tbl_body table  mb-0">
+                        <colgroup>
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:15%;" />
+                          <col style="width:10%;" />
+                        </colgroup>
+                        <tbody>
+                          <tr *ngFor="let stat of statusListDetails">
+                            <td>{{stat.empCatgName}}</td>
+                            <td>{{stat.originalQty}}</td>
+                            <td>{{stat.revisedQty}}</td>
+                            <td>{{stat.actualQty}}</td>
+                            <td>{{stat.remainingQty}}</td>
+                            <td>{{stat.age||'0.0'}}</td>
+                            <td>{{stat.estimateComplete || 0 +stat.estimateCompletion||0 -stat.remainingQty|| 0}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

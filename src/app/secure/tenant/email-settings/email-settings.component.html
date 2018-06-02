@@ -1,0 +1,142 @@
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Email Settings</h2>
+    </div>
+  </div>
+
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:15%;" />
+      <col style="width:15%;" />
+      <col style="width:15%;" />
+      <col style="width:15%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Host</th>
+        <th>Port</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:15%;" />
+          <col style="width:15%;" />
+          <col style="width:15%;" />
+          <col style="width:15%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let record of settingList | paginate: { itemsPerPage: records, currentPage: p }">
+            <td>
+              <div class="cust-check">
+                <input type="checkbox" />
+                <label></label>
+              </div>
+            </td>
+            <td>{{ record.host }}</td>
+            <td>{{ record.port }}</td>
+            <td>{{ record.email }}</td>
+            <td>{{ record.username }}</td>
+            <td>{{ record.status }}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row  pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <button type="button" class="btn btn-primary" (click)="createEmail()">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="emailpop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tenant Create/Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="emailCreate" (ngSubmit)="saveDetails(); ">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-4 col ">
+                <label for="companyid" class="form-label">Email Host</label>
+                <input type="text " formControlName="host" class="form-control form-input " id="companyid">
+                <app-error-messages [control]="emailCreate.controls['host']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-4 col">
+                <label for="companyname" class="form-label">Port</label>
+                <input type="text " formControlName="port" class="form-control form-input " id="companyname">
+                <app-error-messages [control]="emailCreate.controls['port']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-4 col">
+                <label for="companyname" class="form-label">Email</label>
+                <input type="text " formControlName="email" class="form-control form-input " id="companyname">
+                <app-error-messages [control]="emailCreate.controls['email']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-4 col ">
+                <label for="companyid" class="form-label">User Name</label>
+                <input type="text " formControlName="username" class="form-control form-input ">
+                <app-error-messages [control]="emailCreate.controls['username']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-4 col">
+                <label for="companyname" class="form-label">Password</label>
+                <input type="password" formControlName="password" class="form-control form-input " id="companyname">
+                <app-error-messages [control]="emailCreate.controls['password']"></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="emailCreate.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

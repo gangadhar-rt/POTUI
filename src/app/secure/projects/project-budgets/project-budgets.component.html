@@ -1,0 +1,712 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-6">
+      <h2 class="ttl2">Projects</h2>
+    </div>
+    <div class="col col-sm-3">
+      <div class="form-group">
+        <input type="search" name="" class="form-control cust-input" value="" placeholder="Company ID">
+      </div>
+    </div>
+  </div>
+  <table class="table tbl_head text-left">
+    <colgroup>
+      <col style="width:16.66%;" />
+      <col style="width:33.33%;" />
+      <col style="width:50%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>EPS ID</th>
+        <th>EPS Name</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll ss_sm">
+    <div class="table-responsive">
+      <div class="tree_table">
+
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'projectlist', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" *ngIf="material.projName!==null">
+              <div class="cust-check col col-sm-2">
+                <input type="checkbox" [disabled]="material.assignedStatus!=='Y'" [checked]="material.checked==true">
+                <label></label>
+              </div>
+              <span class="col addicon col col-sm-4">
+                <i class="fa  icon "></i> {{material.projCode}}</span>
+              <span class="col col-sm-6"> {{material.projName}}</span>
+
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.childProjs ">
+              <li *ngIf="!sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.projCode}}</span>
+                  <span class="col col-sm-4">{{sub1.projName}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.childProjs">
+                  <li *ngIf="!sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.projCode}}</span>
+                      <span class="col col-sm-4">{{sub2.projName}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.childProjs">
+                      <li *ngIf="!sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.projCode}}</span>
+                          <span class="col col-sm-4">{{sub3.projName}}</span>
+                        </header>
+                        <!-- level 4 -->
+
+                        <ul *ngFor="let sub4 of sub3.childProjs">
+                          <li>
+                            <header class="row" [class.active_row]="selectedlist[0].projId==sub4.projId" (click)="sub4.proj && selectedRecords(sub4)">
+                              <div class="cust-check col col-sm-2" (click)="sub4.assignedStatus==='Y'?selectedRecords(sub4):false">
+                                <input type="checkbox" [disabled]="sub4.assignedStatus!=='Y'" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div>
+                              <span class="col addicon col-sm-4">
+                                <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-4"> {{sub4.projName}}</span>
+                            </header>
+                          </li>
+                        </ul>
+                      </li>
+                      <li *ngIf="sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.projCode}}</span>
+                          <span class="col col-sm-4"> {{sub3.projName}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.projCode}}</span>
+                      <span class="col col-sm-4"> {{sub2.projName}}</span>
+                    </header>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                  <span class="col col-sm-4"> {{sub1.projName}}</span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="projectlist" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <!-- <button type="button" class="btn btn-primary" (click)="editRecord()">
+            Edit</button> -->
+          <!-- <button type="button" class="btn btn-danger" [disabled]="selectedlist.length<0" (click)="deactive()">Deactivate</button> -->
+          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#projectCreate">Create new</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true"
+              (click)="getManPower()">Man Power</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false"
+              (click)="getPalnt()">Plant</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getMaterial()">Material</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getCost ()">Cost</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <section id="layout_header">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup *ngIf="!manPowerexpand">
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                  <col style="width:14.28%;" />
+                </colgroup>
+                <colgroup *ngIf="manPowerexpand">
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                  <col style="width:16.66%;" />
+                </colgroup>
+                <thead>
+                  <tr *ngIf="!manPowerexpand">
+                    <th>Select</th>
+                    <th>Resource ID</th>
+                    <th>Resource Name</th>
+                    <th>Employee Category</th>
+                    <th>Unit of Measure</th>
+                    <th>Original Budget Hours</th>
+                    <th (click)="manPowerexpand=true">Revised Budget Hours
+                      <span>
+                        <i class="fa fa-caret-right"></i>
+                      </span>
+                    </th>
+                  </tr>
+                  <tr *ngIf="manPowerexpand">
+                    <th (click)="manPowerexpand=false">
+                      <span>
+                        <i class="fa fa-caret-left"></i>
+                      </span>Actual Hours to Date</th>
+                    <th>Remaining Hours</th>
+                    <th>Estimate to Complete</th>
+                    <th>Estimation at Completion Hours</th>
+                    <th>Schedule Start</th>
+                    <th>Schedule Finish</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup *ngIf="!manPowerexpand">
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                      <col style="width:14.28%;" />
+                    </colgroup>
+                    <colgroup *ngIf="manPowerexpand">
+                      <col style="width:16.66%;" />
+                      <col style="width:16.66%;" />
+                      <col style="width:16.66%;" />
+                      <col style="width:16.66%;" />
+                      <col style="width:16.66%;" />
+                      <col style="width:16.66%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let mnpow of manPowerList">
+                        <td *ngIf="!manPowerexpand">
+                          <div class="cust-check" (click)="selectedRecords1(mnpow,$event)">
+                            <input type="checkbox" [checked]="mnpow.id==selectedMp.id" />
+                            <label></label>
+                          </div>
+                        </td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.empClassTO.code}}</td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.empClassTO.name}}</td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.projEmpCatgTO.name}}</td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.measureUnitTO.name}}</td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.originalQty}}</td>
+                        <td *ngIf="!manPowerexpand">{{mnpow.revisedQty}}</td>
+                        <td *ngIf="manPowerexpand">{{manpowerBudgetMap[mnpow.empClassTO.id]?manpowerBudgetMap[mnpow.empClassTO.id].code:''}}</td>
+                        <td *ngIf="manPowerexpand">{{mnpow.remainingQty}}</td>
+                        <td *ngIf="manPowerexpand">{{mnpow.estimateComplete||0}}</td>
+                        <td *ngIf="manPowerexpand">{{mnpow.actualQty + mnpow.estimateComplete}}</td>
+                        <td *ngIf="manPowerexpand">{{mnpow.startDate}}</td>
+                        <td *ngIf="manPowerexpand">{{mnpow.finishDate}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <section id="layout_footer" class="tbl_footer btns text-right">
+              <div class="row ml-0 mr-0 pagination_block">
+                <div class="col col-sm-12 text-right">
+                  <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="editMP()">Edit</button>
+                  <button class="btn btn-success" type="button" (click)="createMp()">Create</button>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+            <section id="layout_header">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                  <col style="width:8.3%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Resource ID</th>
+                    <th>Resource Name</th>
+                    <th>Unit of Measure</th>
+                    <th>Original Budget Hours</th>
+                    <th>Revised Budget Hours</th>
+                    <th>Actual Hours to Date</th>
+                    <th>Remaining Hours</th>
+                    <th>Estimate to Complete</th>
+                    <th>Estimation at Completion Hours</th>
+                    <th>Schedule Start</th>
+                    <th>Schedule Finish</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup>
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                      <col style="width:8.3%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let pllst of plantList">
+                        <td>
+                          <div class="cust-check" (click)="selectedRecords1(pllst,$event)">
+                            <input type="checkbox" [checked]="pllst.checked==true" />
+                            <label></label>
+                          </div>
+                        </td>
+                        <td>{{pllst.plantClassTO.code}}</td>
+                        <td>{{pllst.plantClassTO.name}}</td>
+                        <td>{{pllst.measureUnitTO.name}}</td>
+                        <td>{{pllst.originalQty}}</td>
+                        <td>{{pllst.revisedQty}}</td>
+                        <td>{{'0.00'}}</td>
+                        <td>{{pllst.remainingQty}}</td>
+                        <td>{{pllst.estimateComplete}}</td>
+                        <td>{{pllst.estimateCompletion}}</td>
+                        <td>{{pllst.startDate}}</td>
+                        <td>{{pllst.finishDate}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <!-- <section id="layout_footer" class="tbl_footer btns text-right">
+              <div class="row ml-0 mr-0 pagination_block">
+                <div class="col col-sm-3 text-left">
+
+                </div>
+                <div class="col col-sm-9 text-right">
+                  <div class="row">
+                    <div class="col col-sm-6 text-right">
+                      <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+                      <button class="btn btn-success" type="button" (click)="resetForm({})" data-toggle="modal" data-target="#cccreate">Create</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section> -->
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+                  <col style="width:7.6%;" />
+
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Resource ID</th>
+                    <th>Resource Name</th>
+                    <th>Unit of Measure</th>
+                    <th>Original Budget Hours</th>
+                    <th>Revised Budget Hours</th>
+                    <th>Actual Hours to Date</th>
+                    <th>Remaining Hours</th>
+                    <th>Estimate to Complete</th>
+                    <th>Estimation at Completion Hours</th>
+                    <th>Schedule Start</th>
+                    <th>Schedule Finish</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup>
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+                      <col style="width:7.6%;" />
+
+                    </colgroup>
+                    <tbody>
+                      <!-- <tr *ngFor="let mnpow of materialList">
+                        <td>
+                         S
+                        </td>
+                        <td>{{mnpow.empClassTO.code}}</td>
+                        <td>{{mnpow.empClassTO.name}}</td>
+                        <td>{{mnpow.projEmpCatgTO.name}}</td>
+                        <td>{{mnpow.measureUnitTO.name}}</td>
+                        <td>{{mnpow.originalQty}}</td>
+                        <td>{{mnpow.revisedQty}}</td>
+                        <td>{{'0.00'}}</td>
+                        <td>{{mnpow.remainingQty}}</td>
+                        <td>{{mnpow.estimateComplete}}</td>
+                        <td>{{mnpow.estimateCompletion}}</td>
+                        <td>{{mnpow.startDate}}</td>
+                        <td>{{mnpow.finishDate}}</td>
+                      </tr> -->
+                      <tr></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <!-- <section id="layout_footer" class="tbl_footer btns text-right">
+              <div class="row ml-0 mr-0 pagination_block">
+                <div class="col col-sm-3 text-left">
+
+                </div>
+                <div class="col col-sm-9 text-right">
+                  <div class="row">
+                    <div class="col col-sm-6 text-right">
+                      <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+                      <button class="btn btn-success" type="button" (click)="resetForm({})" data-toggle="modal" data-target="#cccreate">Create</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section> -->
+          </div>
+          <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Cost ID</th>
+                    <th>Cost Item Name</th>
+                    <th>Cost Code Classification Id</th>
+                    <th>Cost Code Classification Name</th>
+                    <th>Start Date</th>
+                    <th>Finish Date</th>
+                    <th>Original Duration</th>
+                    <th>Actual Start</th>
+                    <th>Actual Finish</th>
+                    <th>Actual Duration</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup>
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                      <col style="width:10%;" />
+                    </colgroup>
+                    <tbody>
+                      <!-- <tr *ngFor="let mnpow of costList">
+                            <td>
+                             S
+                            </td>
+                            <td>{{mnpow.empClassTO.code}}</td>
+                            <td>{{mnpow.empClassTO.name}}</td>
+                            <td>{{mnpow.projEmpCatgTO.name}}</td>
+                            <td>{{mnpow.measureUnitTO.name}}</td>
+                            <td>{{mnpow.originalQty}}</td>
+                            <td>{{mnpow.revisedQty}}</td>
+                            <td>{{'0.00'}}</td>
+                            <td>{{mnpow.remainingQty}}</td>
+                            <td>{{mnpow.estimateComplete}}</td>
+                            <td>{{mnpow.estimateCompletion}}</td>
+                            <td>{{mnpow.startDate}}</td>
+                            <td>{{mnpow.finishDate}}</td>
+                          </tr> -->
+                      <tr></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <!-- <section id="layout_footer" class="tbl_footer btns text-right">
+              <div class="row ml-0 mr-0 pagination_block">
+                <div class="col col-sm-3 text-left">
+
+                </div>
+                <div class="col col-sm-9 text-right">
+                  <div class="row">
+                    <div class="col col-sm-6 text-right">
+                      <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+                      <button class="btn btn-success" type="button" (click)="resetForm({})" data-toggle="modal" data-target="#cccreate">Create</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="manPowerpop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create/Edit ManPower</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="editmp = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="mpForm" (ngSubmit)="saveMp(); ">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Resource</label>
+                <select formControlName="empClassTO" class="form-control form-input " #resourceid id="ResourceId">
+                  <option value="">--select--</option>
+                  <option *ngFor="let resource of mpResources" [value]="resource.id">
+                    {{resource.dispName}}
+                  </option>
+                </select>
+                <app-error-messages [control]="mpForm.controls[ 'empClassTO']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <select formControlName="projEmpCatgTO" class="form-control form-input " id="categoryid">
+                  <option value="">--select--</option>
+                  <option *ngFor="let resource of mpResources" [value]="resource.id">
+                    {{resource.dispName}}
+                  </option>
+                </select>
+                <app-error-messages [control]="mpForm.controls[ 'projEmpCatgTO']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Unit of Measure</label>
+                <select formControlName="measureId" class="form-control form-input " id="measureid">
+                  <option *ngIf="!resourceid.value" value="">--select resource--</option>
+                  <option *ngIf="resourceid.value" value="">--select--</option>
+                  <option *ngFor="let resource of mpResources" [value]="resource.id">
+                    {{resource.dispName}}
+                  </option>
+                </select>
+                <app-error-messages [control]="mpForm.controls['measureId']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Original Budget Quantity</label>
+                <input type="text " formControlName="originalQty" class="form-control form-input " id="companyname" required>
+                <app-error-messages [control]="mpForm.controls[ 'originalQty']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Revised Budget Quantity</label>
+                <input type="text " formControlName="revisedQty" class="form-control form-input " (keyup)="verifyCode(code.value)" #code
+                  id="companyid" required>
+                <app-error-messages [control]="mpForm.controls[ 'revisedQty']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Actual Quantity to Date</label>
+                <input type="text " formControlName="actualQty" class="form-control form-input " id="companyname" required>
+                <app-error-messages [control]="mpForm.controls[ 'actualQty']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Remaining Quantity</label>
+                <input type="text " formControlName="remainingQty" class="form-control form-input " (keyup)="verifyCode(code.value)" #code
+                  id="companyid" required>
+                <app-error-messages [control]="mpForm.controls[ 'remainingQty']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Schedule Start</label>
+                <div class="row" style="padding:5px;">
+                  <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp.toggleCalendar()" ngx-mydatepicker
+                    name="myDate" formControlName="startDate" [options]="mpstartOpt" #dp="ngx-mydatepicker" (dateChanged)="disableMpDates('start',$event)"
+                  />
+                  <span class="col0-md-4 col " style="padding: 0px;">
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp.clearDate()">
+                      <i class="fa fa-times "></i>
+                    </button>
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+                <app-error-messages [control]="mpForm.controls[ 'startDate']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Schedule Finish</label>
+                <div class="row" style="padding:5px;">
+                  <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp1.toggleCalendar()" ngx-mydatepicker
+                    name="myDate" formControlName="finishDate" [options]="mpfinishOpt" #dp1="ngx-mydatepicker" (dateChanged)="disableMpDates('finish',$event)"
+                  />
+                  <span class="col0-md-4 col " style="padding: 0px;">
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp1.clearDate()">
+                      <i class="fa fa-times "></i>
+                    </button>
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp1.toggleCalendar()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+                <app-error-messages [control]="mpForm.controls[ 'finishDate']"></app-error-messages>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="mpForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1207 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-6">
+      <h2 class="ttl2">Projects</h2>
+    </div>
+    <div class="col col-sm-3">
+      <div class="form-group">
+        <!-- <input type="search" name="" class="form-control cust-input" value="" placeholder="Company ID"> -->
+      </div>
+    </div>
+  </div>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:10%;" />
+      <col style="width:40%;" />
+      <col style="width:50%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>EPS ID</th>
+        <th>EPS Name</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll ss_sm">
+    <div class="table-responsive">
+      <div class="tree_table">
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'projectlist', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" *ngIf="material.projName!==null" [class.active_row]="material.checked==true">
+              <div class="cust-check col col-sm-2">
+                <input type="checkbox" [disabled]="material.assignedStatus!=='Y'" [checked]="material.checked==true">
+                <label></label>
+              </div>
+              <span class="col addicon col col-sm-4">
+                <i class="fa  icon "></i> {{material.projCode}}</span>
+              <span class="col col-sm-6"> {{material.projName}}</span>
+
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.childProjs ">
+              <li *ngIf="sub1.childProjs.length>0">
+                <header class="row" [class.active_row]="sub1.checked==true">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.projCode}}</span>
+                  <span class="col col-sm-4">{{sub1.projName}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.childProjs">
+                  <li *ngIf="sub2.childProjs.length>0">
+                    <header class="row" [class.active_row]="sub2.checked==true">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.projCode}}</span>
+                      <span class="col col-sm-4">{{sub2.projName}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.childProjs">
+                      <li *ngIf="sub3.childProjs.length>0">
+                        <header class="row" [class.active_row]="sub3.checked==true">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.projCode}}</span>
+                          <span class="col col-sm-4">{{sub3.projName}}</span>
+                        </header>
+                        <!-- level 4 -->
+
+                        <ul *ngFor="let sub4 of sub3.childProjs">
+                          <li>
+                            <header class="row" [class.active_row]="sub4.checked==true">
+                              <div class="cust-check col col-sm-2" (click)="sub4.assignedStatus==='Y'?selectedRecords(sub4):false">
+                                <input type="checkbox" [disabled]="sub4.assignedStatus!=='Y'" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div>
+                              <span class="col addicon col-sm-4">
+                                <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-4"> {{sub4.projName}}</span>
+                            </header>
+                          </li>
+                        </ul>
+                      </li>
+                      <li *ngIf="sub3.childProjs.length===0">
+                        <header class="row" [class.active_row]="sub3.checked==true">
+                          <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.projCode}}</span>
+                          <span class="col col-sm-4"> {{sub3.projName}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.childProjs.length===0">
+                    <header class="row" [class.active_row]="sub2.checked==true">
+                      <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.projCode}}</span>
+                      <span class="col col-sm-4"> {{sub2.projName}}</span>
+                    </header>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="sub1.childProjs.length===0">
+                <header class="row" [class.active_row]="sub1.checked==true">
+                  <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                  <span class="col col-sm-4"> {{sub1.projName}}</span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+
+<!-- fixed footer layout -->
+
+
+<!-- fixed footer layout -->
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true">General Values</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" (click)="getEmpAttendance()"
+              aria-selected="false">Employee Attendance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" (click)="getPlantAttendence()"
+              aria-selected="false">Plant Attendance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getWorkDairy()">Work Dairy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="geTimeSheet()">Time Sheet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getProjProcure()">Procurement</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab7" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getEmpTrans()">Employee Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab8" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getPlantTrans()">Plant Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab9" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getMaterialTrans()">Material Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab10" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getEstimate()">Estimate to Complete</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab11" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getPerfomThre()">Performance Threshold</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab12" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getReport()">Reports</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab13" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getProgressClaims()">Progress Claims</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab14" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getPayroll()">Payroll Cycle</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab15" role="tab" aria-controls="contact" aria-selected="false"
+              (click)="getLeave()">Leave Approval</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <app-generate-values [projid]="selectedlist[0]?selectedlist[0].projId:''"></app-generate-values>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home1" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">Cut off Days</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="attendanceData.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut Off Time</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="attendanceData.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveEmpAttendance()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab1" data-toggle="tab" href="#home2" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab1" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">Cut off Days</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="plantData.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut Off Time</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="plantData.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="savePlantAttendence()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab2" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab2" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let work of workDairy">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{work.apprType}}</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="work.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="work.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveWorkDairy()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home4" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile4" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home4" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngIf="timeSheets.projTimeSheetWeekDtlTO">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">Week Commencing Day</label>
+                          <select class="form-control form-input " [(ngModel)]="timeSheets.projTimeSheetWeekDtlTO.weekStartDay" id="companyid">
+                            <option *ngFor="let week of weeks" [value]="week">{{week}}</option>
+                          </select>
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <select class="form-control form-input " [(ngModel)]="timeSheets.projTimeSheetWeekDtlTO.weekEndDay" id="companyid">
+                            <option *ngFor="let week of weeks" [value]="week">{{week}}</option>
+                          </select>
+                        </div>
+
+                      </div>
+                      <div class="row" *ngFor="let tim of timeSheets.projTimeSheetTOs">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{tim.type}}</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="tim.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="tim.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveTimeSheet()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile4" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab4" data-toggle="tab" href="#home5" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab4" data-toggle="tab" href="#profile5" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home5" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let pro of procureData">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{pro.procureType}}</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="pro.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="pro.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveProjProcure()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile5" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab5" data-toggle="tab" href="#home6" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab5" data-toggle="tab" href="#profile6" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home6" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let emp of empData">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{emp.emptransType}}-No Of Days</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="emp.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="emp.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveEmpTrans()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile6" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab6" data-toggle="tab" href="#home7" role="ta" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab6" data-toggle="tab" href="#profile7" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home7" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let plnt of planttrData">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{plnt.plantType}}-No Of Days</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="plnt.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="plnt.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="savePlantTrans()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile7" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab7" data-toggle="tab" href="#home8" role="ta" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab7" data-toggle="tab" href="#profile8" role="tab" aria-controls="profile" aria-selected="false">Additional Time</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home8" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let mate of materialtrData">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{mate.materialType}}-No Of Days</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="mate.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="mate.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveMaterialTrans()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile8" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Attendance Record Sheet Selection</h4>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Request Notification</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Crew Name</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                          <div class="form-group">
+                            <label for="companyid" class="form-label">Date Range</label>
+                            <input type="text " class="form-control form-input " id="companyid">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>Additional Time-From Approval Date</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Days</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Hours(24h)</label>
+                            <input type="text " class="form-control form-input " id="companyname" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab10" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:20%;" />
+                  <col style="width:15%;" />
+                  <col style="width:15%;" />
+                  <col style="width:15%;" />
+                  <col style="width:15%;" />
+                  <col style="width:15%;" />
+
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Formula Options</th>
+                    <th colspan="5">Resource Wise Formula Option Selection for Calculating ETC</th>
+                  </tr>
+                  <tr>
+                    <th>Cost</th>
+                    <th>Man Hours</th>
+                    <th>Plant Hours</th>
+                    <th>Materials</th>
+                    <th>Others</th>
+                  </tr>
+                </thead>
+
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup>
+                      <col style="width:20%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+                      <col style="width:15%;" />
+
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let estim of estimateData">
+
+                        <td>{{ estim.estimateType }}</td>
+                        <td>
+                          <div class="cust-check" *ngIf="estim.estimateCost!==2">
+                            <input type="checkbox" [(ngModel)]="estim.estimateCost" />
+                            <label></label>
+                          </div>
+                          <div *ngIf="estim.estimateCost==2">N/A</div>
+                        </td>
+                        <td>
+                          <div class="cust-check" *ngIf="estim.manHrs!==2">
+                            <input type="checkbox" [(ngModel)]="estim.manHrs" />
+                            <label></label>
+                          </div>
+                          <div *ngIf="estim.manHrs==2">N/A</div>
+                        </td>
+                        <td>
+                          <div class="cust-check" *ngIf="estim.plantHrs!==2">
+                            <input type="checkbox" [(ngModel)]="estim.plantHrs" />
+                            <label></label>
+                          </div>
+                          <div *ngIf="estim.plantHrs==2">N/A</div>
+                        </td>
+                        <td>
+                          <div class="cust-check" *ngIf="estim.materialHrs!==2">
+                            <input type="checkbox" [(ngModel)]="estim.materialHrs" />
+                            <label></label>
+                          </div>
+                          <div *ngIf="estim.materialHrs==2">N/A</div>
+                        </td>
+                        <td>
+                          <div class="cust-check" *ngIf="estim.otherHrs!==2">
+                            <input type="checkbox" [(ngModel)]="estim.otherHrs" />
+                            <label></label>
+                          </div>
+                          <div *ngIf="estim.otherHrs==2">N/A</div>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col col-sm-12 text-right">
+                <button type="button" class="btn btn-primary" (click)="saveEstimate()">Save</button>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab11" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <h2 class="ttl2">Performance Threshold</h2>
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:10%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                  <col style="width:9%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Formula Options</th>
+                    <th colspan="2">SV%(Schedule Variance %)</th>
+                    <th colspan="2">CV%(Cost Variance %)</th>
+                    <th colspan="2">SPI(Schedule Performance Index) </th>
+                    <th colspan="2">CPI(Cost Performance Index)</th>
+                    <th colspan="2">TCPI(To Complete Performance Index)</th>
+                  </tr>
+                  <tr>
+                    <th>Lower Limit</th>
+                    <th>Upper Limit</th>
+                    <th>Lower Limit</th>
+                    <th>Upper Limit</th>
+                    <th>Lower Limit</th>
+                    <th>Upper Limit</th>
+                    <th>Lower Limit</th>
+                    <th>Upper Limit</th>
+                    <th>Lower Limit</th>
+                    <th>Upper Limit</th>
+                  </tr>
+                </thead>
+
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped tbl_body table  mb-0">
+                    <colgroup>
+                      <col style="width:10%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                      <col style="width:9%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let perfomt of perfomThre" class="perf">
+                        <td>{{perfomt.category}}
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.svLowerLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.svUpperLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.cvLowerLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.cvUpperLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.spiLowerLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.spiUpperLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.cpiLowerLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.cpiUpperLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.tcpiLowerLimit" id="companyid">
+                        </td>
+                        <td>
+                          <input type="text " class="form-control form-input" [(ngModel)]="perfomt.tcpiUpperLimit" id="companyid">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col col-sm-12 text-right">
+                <button type="button" class="btn btn-primary" (click)="savePerfomThre(0)">Save</button>
+                <button type="button" class="btn btn-primary" (click)="savePerfomThre(1)">Restore Defaults</button>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab12" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="tenantDetails">
+              <h2>Reports - Period Cut Off selection</h2>
+              <div class="row">
+                <div class="col-md-6 col">
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Weekly</label>
+                    <select class="form-control form-input ">
+                      <option value="">--select--</option>
+                      <option *ngFor="let wek of reportData.weeakDays" [value]="wek">{{wek}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">Monthly</label>
+                    <select class="form-control form-input ">
+                      <option value="">--select--</option>
+                      <option *ngFor="let mon of reportData.monthly" [value]="mon">{{mon}}</option>
+                    </select>
+
+                  </div>
+
+                </div>
+                <div class="col-md-6 col">
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">First Quarter In year</label>
+                    <select class="form-control form-input ">
+                      <option value="">--select--</option>
+                      <option *ngFor="let year of reportData.years" [value]="year">{{year}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">First Half In year</label>
+                    <select class="form-control form-input ">
+                      <option value="">--select--</option>
+                      <option *ngFor="let year of reportData.years" [value]="year">{{year}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 col">
+                  <div class="form-group">
+                    <label for="companyid" class="form-label">year</label>
+                    <select class="form-control form-input ">
+                      <option value="">--select--</option>
+                      <option *ngFor="let year of reportData.years" [value]="year">{{year}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab13" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- inner tab -->
+            <div class="verticalTabs no-gutters row">
+              <div class="col" style="max-width:180px;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab8" data-toggle="tab" href="#home9" role="tab" aria-controls="home" aria-selected="true">Normal Time</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab8" data-toggle="tab" href="#profile9" role="tab" aria-controls="profile" aria-selected="false"
+                      (click)="getProgressCycle()">Period Cycle</a>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="col">
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home9" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tenantDetails" *ngIf="timeSheets">
+                      <h2>Normal Time Frame for Completion of Daily Attendance Records</h2>
+                      <div class="row" *ngFor="let pro of progessNormal">
+                        <div class="form-group col-md-6 col ">
+                          <label for="companyid" class="form-label">{{pro.claimType}}</label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="pro.cutOffDays" id="companyid">
+
+                        </div>
+                        <div class="form-group col-md-6 col">
+                          <label for="companyname" class="form-label">Cut off Time(24h) </label>
+                          <input type="text " class="form-control form-input " [(ngModel)]="pro.cutOffHours" id="companyname" required>
+                        </div>
+
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveProgressClaims()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="profile9" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tenantDetails">
+                      <h2>Additional Time Approval For Completion of Past Period Records</h2>
+                      <div class="row">
+                        <div class="col-md-6 col">
+                          <h4>Start day count or day or Month</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Start</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[0].startDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.weeakDays" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Start</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[1].startDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.weeakDays" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">Start</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[2].startDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.monthly" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col">
+                          <h4>FInish day count or day or Month</h4>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">End</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[0].finishDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.weeakDays" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">End</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[1].finishDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.weeakDays" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="companyname" class="form-label">End</label>
+                            <select class="form-control form-input " [(ngModel)]="saveprogessCycle[2].finishDay">
+                              <option value="">--select--</option>
+                              <option *ngFor="let wek of progessCycle.monthly" [value]="wek">{{wek}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col col-sm-12 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveProgressCycle()">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- inner tab -->
+          </div>
+          <div class="tab-pane fade" id="tab14" role="tabpanel" aria-labelledby="contact-tab">
+
+          </div>
+          <div class="tab-pane fade" id="tab15" role="tabpanel" aria-labelledby="contact-tab">Plant Transfer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

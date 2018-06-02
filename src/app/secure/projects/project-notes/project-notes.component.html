@@ -1,0 +1,282 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <div class="row">
+    <div class="col col-sm-6">
+      <h2 class="ttl2">Projects</h2>
+    </div>
+    <div class="col col-sm-3">
+      <div class="form-group">
+        <input type="search" name="" class="form-control cust-input" value="" placeholder="Company ID">
+      </div>
+    </div>
+  </div>
+  <table class="table tbl_head text-left">
+    <colgroup>
+      <!-- <col style="width:16.66%;" /> -->
+      <col style="width:33.33%;" />
+      <col style="width:66.66%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <!-- <th>Select</th> -->
+        <th>EPS ID</th>
+        <th>EPS Name</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive">
+      <div class="tree_table">
+
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'projectlist', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" [class.active_row]="selectedlist[0].projId==material.projId" (click)="material.proj && selectedRecords(material)"
+              *ngIf="material.projName!==null">
+              <!-- <div class="cust-check col col-sm-2">
+                <input type="checkbox" [disabled]="material.assignedStatus!=='Y'" [checked]="material.checked==true">
+                <label></label>
+              </div> -->
+              <span class="col addicon col col-sm-4">
+                <i class="fa  icon "></i> {{material.projCode}}</span>
+              <span class="col col-sm-8"> {{material.projName}}</span>
+
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.childProjs ">
+              <li *ngIf="!sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <!-- <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div> -->
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.projCode}}</span>
+                  <span class="col col-sm-6">{{sub1.projName}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.childProjs">
+                  <li *ngIf="!sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <!-- <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div> -->
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.projCode}}</span>
+                      <span class="col col-sm-6">{{sub2.projName}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.childProjs">
+                      <li *ngIf="!sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <!-- <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div> -->
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.projCode}}</span>
+                          <span class="col col-sm-6">{{sub3.projName}}</span>
+                        </header>
+                        <!-- level 4 -->
+
+                        <ul *ngFor="let sub4 of sub3.childProjs">
+                          <li>
+                            <header class="row" [class.active_row]="selectedlist[0].projId==sub4.projId" (click)="sub4.proj && selectedRecords(sub4)">
+                              <!-- <div class="cust-check col col-sm-2" (click)="sub4.assignedStatus==='Y'?selectedRecords(sub4):false">
+                                <input type="checkbox" [disabled]="sub4.assignedStatus!=='Y'" [checked]="sub4.checked==true">
+                                <label></label>
+                              </div> -->
+                              <span class="col addicon col-sm-4">
+                                <i class="fa fa-circle"></i> {{sub4.projCode}}</span>
+                              <span class="col col-sm-6"> {{sub4.projName}}</span>
+                            </header>
+                          </li>
+                        </ul>
+                      </li>
+                      <li *ngIf="sub3.proj">
+                        <header class="row" [class.active_row]="selectedlist[0].projId==sub3.projId" (click)="sub3.proj && selectedRecords(sub3)">
+                          <!-- <div class="cust-check col col-sm-2" (click)="sub3.assignedStatus==='Y'?selectedRecords(sub3):false">
+                            <input type="checkbox" [disabled]="sub3.assignedStatus!=='Y'" [checked]="sub3.checked==true">
+                            <label></label>
+                          </div> -->
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.projCode}}</span>
+                          <span class="col col-sm-6"> {{sub3.projName}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.proj">
+                    <header class="row" [class.active_row]="selectedlist[0].projId==sub2.projId" (click)="sub2.proj && selectedRecords(sub2)">
+                      <!-- <div class="cust-check col col-sm-2" (click)="sub2.assignedStatus==='Y'?selectedRecords(sub2):false">
+                        <input type="checkbox" [disabled]="sub2.assignedStatus!=='Y'" [checked]="sub2.checked==true">
+                        <label></label>
+                      </div> -->
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.projCode}}</span>
+                      <span class="col col-sm-6"> {{sub2.projName}}</span>
+                    </header>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="sub1.proj">
+                <header class="row" [class.active_row]="selectedlist[0].projId==sub1.projId" (click)="sub1.proj && selectedRecords(sub1)">
+                  <!-- <div class="cust-check col col-sm-2" (click)="sub1.assignedStatus==='Y'?selectedRecords(sub1):false">
+                    <input type="checkbox" [disabled]="sub1.assignedStatus!=='Y'" [checked]="sub1.checked==true">
+                    <label></label>
+                  </div> -->
+                  <span class="col addicon col-sm-4">
+                    <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                  <span class="col col-sm-6"> {{sub1.projName}}</span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="projectlist" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <!-- <button type="button" class="btn btn-primary" (click)="editRecord()">
+            Edit</button> -->
+          <!-- <button type="button" class="btn btn-danger" [disabled]="selectedlist.length<0" (click)="deactive()">Deactivate</button> -->
+          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#projectCreate">Create new</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fixed footer layout -->
+
+
+<!-- fixed footer layout -->
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <section id="layout_header">
+      <table class="table-striped tbl_head table  mb-0">
+        <colgroup>
+          <col style="width:15%;" />
+          <col style="width:50%;" />
+          <col style="width:35%;" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th rowspan="2">Select</th>
+            <th rowspan="2">Note Book Topic</th>
+            <th rowspan="2">Description</th>
+          </tr>
+        </thead>
+      </table>
+    </section>
+    <section id="main_content">
+      <div class="slimScroll">
+        <div class="table-responsive text-center">
+          <table class="table-striped tbl_body table  mb-0">
+            <colgroup>
+              <col style="width:15%;" />
+              <col style="width:50%;" />
+              <col style="width:35%;" />
+            </colgroup>
+            <tbody>
+              <tr *ngFor="let rescrve of noteList">
+                <td>
+                  <div class="cust-check" (click)="selectedRecords1(rescrve,$event)">
+                    <input type="checkbox" [checked]="rescrve.checked==true" />
+                    <label></label>
+                  </div>
+                </td>
+                <td>{{rescrve.topic}}</td>
+                <td>{{rescrve.description}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section id="layout_footer" class="tbl_footer btns text-right">
+      <div class="row ml-0 mr-0 pagination_block">
+        <div class="col col-sm-3 text-left">
+
+        </div>
+        <div class="col col-sm-9 text-right">
+          <div class="row">
+            <div class="col col-sm-6"></div>
+            <div class="col col-sm-6 text-right">
+              <button type="button" class="btn btn-primary" [disabled]="selectedlist1.length!==1" (click)="edit()">Edit</button>
+              <button class="btn btn-success" type="button" [disabled]="selectedlist.projId==0" (click)="resetForm({})" data-toggle="modal"
+                data-target="#cccreate">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<div class="modal fade" id="cccreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Project Notes Create/Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="cc_creation" (ngSubmit)="saveDetails(); " *ngIf="isForm">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Topic</label>
+                <input type="text " formControlName="topic" class="form-control form-input " #code id="companyid" required>
+                <app-error-messages [control]="cc_creation.controls[ 'topic']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Description</label>
+                <input type="text " formControlName="description" class="form-control form-input " id="companyname" required>
+                <app-error-messages [control]="cc_creation.controls[ 'description']"></app-error-messages>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="cc_creation.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,937 @@
+<!-- fixed header layout -->
+<section id="layout_header">
+  <app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+
+  <div class="row">
+    <div class="col col-sm-2">
+      <h2 class="ttl2">Material Register</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.eps" required placeholder="epsname">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="projName">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+      </div>
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button title="Search" (click)="getLedger()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button title="Refresh">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" (click)="getLedger()">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true">Ledger</a>
+          </li>
+          <li class="nav-item" (click)="DeliverySupply()">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false">Delivery/Supply Details</a>
+          </li>
+          <li class="nav-item" (click)="Dockets()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false">Project Dockets</a>
+          </li>
+          <li class="nav-item" (click)="storeMaterials()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="contact" aria-selected="false">Store/Materials Daily Issue Records</a>
+          </li>
+          <li class="nav-item" (click)="ConsumptionRecords()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="contact" aria-selected="false">Consumption Records</a>
+          </li>
+          <li class="nav-item" (click)="StoreItem()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="contact" aria-selected="false">Store Items Stock OnSite-Intransit</a>
+          </li>
+          <li class="nav-item" (click)="MaterialStock()">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab7" role="tab" aria-controls="contact" aria-selected="false">Materials Stock on Site-Stock Piled Items</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab8" role="tab" aria-controls="contact" aria-selected="false">Request For Material Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab9" role="tab" aria-controls="contact" aria-selected="false">Approval For Material Transfer</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                  <col *ngIf="!Ledgershow" style="width:9.09%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th *ngIf="Ledgershow">Date</th>
+                    <th *ngIf="Ledgershow">EPS Name</th>
+                    <th *ngIf="Ledgershow">Project Name</th>
+                    <th *ngIf="Ledgershow">Store Location</th>
+                    <th *ngIf="Ledgershow">Resource Sub Group</th>
+                    <th *ngIf="Ledgershow">Resource Material</th>
+                    <th *ngIf="Ledgershow">Suplier</th>
+                    <th *ngIf="Ledgershow">Purchase Order</th>
+                    <th *ngIf="Ledgershow">Schedule Item Id</th>
+                    <th *ngIf="Ledgershow">Docket Type</th>
+                    <th *ngIf="Ledgershow">Docket Number
+                      <i class="fa fa-caret-right" (click)=" Ledgershow = !Ledgershow"></i>
+                    </th>
+                    <th *ngIf="!Ledgershow">
+                      <i class="fa fa-caret-left" (click)=" Ledgershow = !Ledgershow"></i>
+                      Work Dairy Id
+                    </th>
+                    <th *ngIf="!Ledgershow">Unit of Measure</th>
+                    <th *ngIf="!Ledgershow">Currency</th>
+                    <th *ngIf="!Ledgershow">Rate Per Unit</th>
+                    <th *ngIf="!Ledgershow">Opening Stock</th>
+                    <th *ngIf="!Ledgershow">Supplied</th>
+                    <th *ngIf="!Ledgershow">Issued</th>
+                    <th *ngIf="!Ledgershow">Consumption</th>
+                    <th *ngIf="!Ledgershow">Stock on Transit</th>
+                    <th *ngIf="!Ledgershow">External Project Trans</th>
+                    <th *ngIf="!Ledgershow">Closing Stock</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                      <col style="width:8.3333%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let ledger of ledgerDetails">
+                        <td>{{ledger.displayNamesMap.deliveryDockDate}}</td>
+                        <td>{{userProjectMap[ledger.displayNamesMap.projId].displayNamesMap?userProjectMap[ledger.displayNamesMap.projId].displayNamesMap.ParentName:''}}</td>
+                        <td>{{userProjectMap[ledger.displayNamesMap.projId].name}}</td>
+                        <td>{{ledger.displayNamesMap.fromLocation}}</td>
+                        <td>{{classificationMap[ledger.displayNamesMap.classType].code}}</td>
+                        <td>{{classificationMap[ledger.displayNamesMap.classType].name}}</td>
+                        <td>{{companyMap[ledger.displayNamesMap.cmpId].code}}</td>
+                        <td>{{ledger.name}}</td>
+                        <td>{{ledger.code}}</td>
+                        <td>{{ledger.displayNamesMap['Delivery Docket']}}
+                        </td>
+                        <td>{{ledger.displayNamesMap.deliveryDockNo}}</td>
+                        <td>{{ledger.displayNamesMap.workDairyCode}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{classificationMap[ledger.displayNamesMap.classType]?classificationMap[ledger.displayNamesMap.classType].unitOfMeasure:''}}</td>
+                        <!-- <td>{{currencyMap[ledger.displayNamesMap.currencyId]?currencyMap[ledger.displayNamesMap.currencyId].name:''}}</td> -->
+                        <td></td>
+                        <td>{{ledger.displayNamesMap.unitOfRate}}</td>
+                        <td>{{ledger.displayNamesMap.openQty}}</td>
+                        <td>{{ledger.displayNamesMap.receivedQty}}</td>
+                        <td>{{ledger.displayNamesMap.issuedQty}}</td>
+                        <td>{{ledger.displayNamesMap.consumptionQty}}</td>
+                        <td>{{ledger.displayNamesMap.transsitQty}}</td>
+                        <td>{{ledger.displayNamesMap.transferQty}}</td>
+                        <td>{{ledger.displayNamesMap.closeQty}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                  <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Supply/Delivery Date</th>
+                    <th *ngIf="delsuppshow" colspan="11">Purchase order Details
+                      <i class="fa fa-caret-right" (click)=" delsuppshow = !delsuppshow"></i>
+                    </th>
+                    <th *ngIf="!delsuppshow" colspan="11">
+                      <i class="fa fa-caret-left" (click)=" delsuppshow = !delsuppshow"></i>
+                      SupplyDelivery Details
+                    </th>
+                  </tr>
+                  <tr *ngIf="delsuppshow">
+                    <th>EPS Name</th>
+                    <th>Project Name</th>
+                    <th>Location of Delivery</th>
+                    <th>Location Category</th>
+                    <th>Purchase Order Number</th>
+                    <th>Schedule Item</th>
+                    <th>Supplier</th>
+                    <th>Material Description</th>
+                    <th>Unit of Measure</th>
+                    <th>Rate per Unit</th>
+                  </tr>
+                  <tr *ngIf="!delsuppshow">
+                    <th>DeliveryDocket Date</th>
+                    <th>DeliveryDocket #</th>
+                    <th colspan="2">Docket wise- Quantity Received</th>
+                    <th colspan="2">Schedule Item wise Cumulative Qty received</th>
+                    <th>Received By</th>
+                    <th>Defects if Any</th>
+                    <th>Other Comments from Receiver</th>
+                    <th>Record of Delivery Dockets</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                      <col *ngIf="!delsuppshow" style="width:9.09%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let supply of materialProjDtlTOs">
+                        <td>{{supply.displayNamesMap.supplyDeliveryDate}}</td>
+                        <td *ngIf="delsuppshow">{{userProjMap[supply.displayNamesMap.projId].displayNamesMap['ParentName']}}</td>
+                        <td *ngIf="delsuppshow">{{userProjMap[supply.displayNamesMap.projId].name}}</td>
+                        <td *ngIf="delsuppshow">{{supply.displayNamesMap.deliveryPlace}}</td>
+                        <td *ngIf="delsuppshow">{{supply.displayNamesMap.deliveryCatagory}}</td>
+                        <td *ngIf="delsuppshow">{{supply.displayNamesMap.purCode}}</td>
+                        <td *ngIf="delsuppshow">{{supply.name}}</td>
+                        <td *ngIf="delsuppshow">{{supply.displayNamesMap.cmpName}}</td>
+                        <td *ngIf="delsuppshow">{{classificationMap[supply.displayNamesMap.classType].name}}</td>
+                        <td *ngIf="delsuppshow">{{classificationMap[supply.displayNamesMap.classType].unitOfMeasure}}</td>
+                        <td *ngIf="delsuppshow">{{supply.displayNamesMap.unitOfRate}}</td>
+
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.deliveryDockDate}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.deliveryDockNo}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.qty}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.schCummulativeQty}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.receivedBy}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.defectComments}}</td>
+                        <td *ngIf="!delsuppshow">{{supply.displayNamesMap.comments}}</td>
+                        <td *ngIf="!delsuppshow">
+                          <input type="button" class="btn btn-brown \ btn-sm" value="View Document" style="width: 115px !important;">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                  <col style="width:12.5%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Docket Date</th>
+                    <th>Project Docket #</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Materials Issued By</th>
+                    <th>Materials Received By</th>
+                    <th>Docket Status</th>
+                    <th>View Docket</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                      <col style="width:12.5%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let storedocket of materialProjDocketTOs">
+                        <td>{{storedocket.projdocketDate}}</td>
+                        <td>{{storedocket.projdocketNum}}</td>
+                        <td>{{userProjectMap[storedocket.fromProjLabelkeyTO.id]?userProjectMap[storedocket.fromProjLabelkeyTO.id].name:''}}</td>
+                        <td>{{userProjectMap[storedocket.toProjLabelkeyTO.id]?userProjectMap[storedocket.fromProjLabelkeyTO.id].name:''}}</td>
+                        <td>{{storedocket.issuedByLabelkeyTO.code}},{{storedocket.issuedByLabelkeyTO.name}}</td>
+                        <td>{{storedocket.receivedByLabelkeyTO.code}},{{storedocket.receivedByLabelkeyTO.name}}</td>
+                        <td>{{storedocket.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View/Edit Docket" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                  <col style="width:6.25%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th style="width:80px !important;">Date Of Issue</th>
+                    <th>Pre Approval Notification ID</th>
+                    <th>Project Docket</th>
+                    <th>Resource Name</th>
+                    <th>Resource Sub Group Name</th>
+                    <th>Origin Project</th>
+                    <th>Origin Store Stock Yard</th>
+                    <th>Destination Project</th>
+                    <th>Destination Store Stock Yard</th>
+                    <th>Supplier Name</th>
+                    <th>Issuer Employee Name</th>
+                    <th>Receiver Employee Name</th>
+                    <th>Unit Of Measure</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                      <col style="width:6.25%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let dailyissue of dailyIssueRecords">
+                        <td>{{dailyissue.displayNamesMap.consumptionDate}}</td>
+                        <td>{{dailyissue.displayNamesMap.notificationCode}}</td>
+                        <td>{{dailyissue.displayNamesMap.deliveryDockNo}}</td>
+                        <td>{{classificationMap[dailyissue.displayNamesMap.classType].name}}</td>
+                        <td>{{classificationMap[dailyissue.displayNamesMap.classType].code}}</td>
+                        <td>{{userProjectMap[dailyissue.displayNamesMap.projId].name}}</td>
+                        <td>{{dailyissue.displayNamesMap.fromLocation}}</td>
+                        <td>{{userProjectMap[dailyissue.displayNamesMap.toProjId]?userProjectMap[dailyissue.displayNamesMap.toProjId].name:''}}</td>
+                        <td>{{dailyissue.displayNamesMap.toLocation}}</td>
+                        <td>{{companyMap[dailyissue.displayNamesMap.cmpId].name}}</td>
+                        <td>{{dailyissue.displayNamesMap.issueEmpName}}</td>
+                        <td>{{dailyissue.displayNamesMap.receiveEmpName}}</td>
+                        <td>{{classificationMap[dailyissue.displayNamesMap.classType].unitOfMeasure}}</td>
+                        <td>{{dailyissue.displayNamesMap.issuedQty}}</td>
+                        <td>{{dailyissue.displayNamesMap.unitOfRate}}</td>
+                        <td>{{dailyissue.displayNamesMap.comments}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                  <col style="width:5.88%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>EPS Name</th>
+                    <th>Project Name</th>
+                    <th>Work Diary ID</th>
+                    <th>Supervisor Name</th>
+                    <th>Source of Materials</th>
+                    <th>Resource ID</th>
+                    <th>PO Schedule Item ID</th>
+                    <th>Purchase Order</th>
+                    <th>Type Of Docket</th>
+                    <th>Docket Number</th>
+                    <th>Docket Date</th>
+                    <th>Supplier</th>
+                    <th>Unit Of Measure</th>
+                    <th>Unit Of Rate</th>
+                    <th>Date Wise Consumption</th>
+                    <th>Cumulative Consumption- Docket Wise</th>
+                    <th>Cumulative Consumption- Schedule Item ID Wise</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                      <col style="width:5.88%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let consumption of dateWiseConsumptionDetails">
+                        <td>{{consumption.displayNamesMap.consumptionDate}}</td>
+                        <td>{{userProjectMap[consumption.displayNamesMap.projId].displayNamesMap.ParentName}}</td>
+                        <td>{{userProjectMap[consumption.displayNamesMap.projId].name}}</td>
+                        <td>{{consumption.displayNamesMap.workDairyCode}}</td>
+                        <td>{{consumption.displayNamesMap.reqUser}}</td>
+                        <td>{{consumption.displayNamesMap.SOURCE_TYPE}}</td>
+                        <td>{{classificationMap[consumption.displayNamesMap.classType].code}}</td>
+                        <td>{{consumption.code}}</td>
+                        <td>{{consumption.name}}</td>
+                        <td>{{consumption.displayNamesMap.deliveryDocket}}</td>
+                        <td>{{consumption.displayNamesMap.deliveryDockNo}}</td>
+                        <td>{{consumption.displayNamesMap.deliveryDockDate}}</td>
+                        <td>{{companyMap[consumption.displayNamesMap.cmpId].code}}</td>
+                        <td>{{classificationMap[consumption.displayNamesMap.classType].unitOfMeasure}}</td>
+                        <td>{{consumption.displayNamesMap.unitOfRate}}</td>
+                        <td>{{consumption.displayNamesMap.consumptionQty}}</td>
+                        <td>{{consumption.displayNamesMap.docketCummulativeQty}}</td>
+                        <td>{{consumption.displayNamesMap.schCummulativeQty}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                  <col style="width:5.55%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Date</th>
+                    <th rowspan="2">Project Docket</th>
+                    <th rowspan="2">Resource Name</th>
+                    <th rowspan="2">Resource Sub Group Name</th>
+                    <th rowspan="2">Origin Project</th>
+                    <th rowspan="2">Origin Store Stock Yard</th>
+                    <th rowspan="2">Destination Project</th>
+                    <th rowspan="2">Destination Store Stock Yard</th>
+                    <th rowspan="2">Supplier Name</th>
+                    <th rowspan="2">Issuer Employee Name</th>
+                    <th rowspan="2">Receiver Employee Name</th>
+                    <th rowspan="2">Unit Of Measure</th>
+                    <th rowspan="2">Rate</th>
+                    <th colspan="5" class="text-center">Quantity</th>
+                  </tr>
+                  <tr>
+                    <th>Opening Stock</th>
+                    <th>Issued</th>
+                    <th>date wise - Consumption</th>
+                    <th>Cumulative Consumption</th>
+                    <th>Closing Stock</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                      <col style="width:5.55%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let storestock of storeStockBalanceDetails">
+                        <td>{{storestock.displayNamesMap.deliveryDockDate}}</td>
+                        <td>{{storestock.displayNamesMap.deliveryDockNo}}</td>
+                        <td>{{classificationMap[storestock.displayNamesMap.classType].name}}</td>
+                        <td>{{classificationMap[storestock.displayNamesMap.classType].name}}</td>
+                        <td>{{userProjectMap[storestock.displayNamesMap.projId].name}}</td>
+                        <td>{{storestock.displayNamesMap.fromLocation}}</td>
+                        <td>{{userProjectMap[storestock.displayNamesMap.toProjId].name}}</td>
+                        <td>{{storestock.displayNamesMap.toLocation}}</td>
+                        <td>{{companyMap[storestock.displayNamesMap.cmpId].name}}</td>
+                        <td>{{storestock.displayNamesMap.issueEmpName}}</td>
+                        <td>{{storestock.displayNamesMap.receiveEmpName}}</td>
+                        <td>{{classificationMap[storestock.displayNamesMap.classType].unitOfMeasure}}</td>
+                        <td>{{storestock.displayNamesMap.unitOfRate}}</td>
+                        <td>{{storestock.displayNamesMap.openQty}}</td>
+                        <td>{{storestock.displayNamesMap.issuedQty}}</td>
+                        <td>{{storestock.displayNamesMap.consumptionQty}}</td>
+                        <td>{{storestock.displayNamesMap.schCummulativeQty}}</td>
+                        <td>{{storestock.displayNamesMap.closeQty}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                  <col style="width:4.761%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Date</th>
+                    <th rowspan="2">EPS Name</th>
+                    <th rowspan="2">Project Name</th>
+                    <th rowspan="2">Stock Piled Location</th>
+                    <th rowspan="2">Pre Approval Notification</th>
+                    <th rowspan="2">Project Docket</th>
+                    <th rowspan="2">Supplier Name</th>
+                    <th rowspan="2">Supplier Docket Date</th>
+                    <th rowspan="2">Supplier Docket</th>
+                    <th rowspan="2">Resource Name</th>
+                    <th rowspan="2">Resource Sub Group Name</th>
+                    <th rowspan="2">Stock Location(Place Of Delivery)</th>
+                    <th rowspan="2">Unit Of Measure</th>
+                    <th rowspan="2">Unit Of Rate</th>
+                    <th colspan="7" class="text-center">Quantity</th>
+                  </tr>
+                  <tr>
+                    <th>Opening Stock</th>
+                    <th>Date wise - Supply</th>
+                    <th>Cumulative Supply</th>
+                    <th>Date wise Consumption</th>
+                    <th>Cumulative Consumption</th>
+                    <th>Transfer to other Projects</th>
+                    <th>Closing Stock</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                      <col style="width:4.761%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let stock of stockPilesDetails">
+                        <td>{{stock.displayNamesMap.consumptionDate}}</td>
+                        <td>{{userProjectMap[stock.displayNamesMap.projId].displayNamesMap.ParentName}}</td>
+                        <td>{{userProjectMap[stock.displayNamesMap.projId].name}}</td>
+                        <td>{{stock.displayNamesMap.fromLocation}}</td>
+                        <td>{{stock.displayNamesMap.notificationCode}}</td>
+                        <td>{{stock.displayNamesMap.deliveryDockNo}}</td>
+                        <td>{{companyMap[stock.displayNamesMap.cmpId].name}}</td>
+                        <td>{{stock.displayNamesMap.deliveryDockDate}}</td>
+                        <td></td>
+                        <td>{{classificationMap[stock.displayNamesMap.classType].code}}</td>
+                        <td>{{classificationMap[stock.displayNamesMap.classType].name}}</td>
+                        <td>{{stock.displayNamesMap.toLocation}}</td>
+                        <td>{{classificationMap[stock.displayNamesMap.classType].unitOfMeasure}}</td>
+                        <td>{{stock.displayNamesMap.unitOfRate}}</td>
+                        <td>{{stock.displayNamesMap.openQty}}</td>
+                        <td>{{stock.displayNamesMap.dateWiseSupply}}</td>
+                        <td>{{stock.displayNamesMap.docketCummulativeQty}}</td>
+                        <td>{{stock.displayNamesMap.dateWiseConsumptionQuantity}}</td>
+                        <td>{{stock.displayNamesMap.schCummulativeQty}}</td>
+                        <td>{{stock.displayNamesMap.transfer}}</td>
+                        <td>{{stock.displayNamesMap.closeQty}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model1"></my-date-range-picker>
+                  </div>
+                </div>
+                <div class="col ">
+                  <span (click)="userType1=true">
+                    <input type="radio" name="request" [checked]="userType1" >Login User Records</span>
+                  <span (click)="userType1=false">
+                    <input type="radio" name="request" [checked]="!userType1" >All User Records</span>
+                </div>
+                <div class="col search_btn text-right col-2">
+                  <button>
+                    <i class="fa fa-search" (click)="getTransfer()"></i>
+                  </button>
+
+                </div>
+              </div>
+
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                  <col style="width:11.11%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Date of Request</th>
+                    <th>Requester</th>
+                    <th>Approver</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Requisition ID</th>
+                    <th>Notification ID</th>
+                    <th>Approval Status</th>
+                    <th>More Details</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let request of materialTransferReqApprTOs">
+                        <td>{{request.reqDate}}</td>
+                        <td>{{request.reqUserTO.empCode}}</td>
+                        <td>{{request.apprUserTO.empCode}}</td>
+                        <td>{{materialDataMap.userProjMap[request.fromProjId].name}}</td>
+                        <td>{{materialDataMap.userProjMap[request.toProjId].name}}</td>
+                        <td>{{request.reqCode}}</td>
+                        <td>{{request.notifyCode}}</td>
+                        <td>{{request.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View More" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="contact-tab">
+            <section id="layout_header">
+
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model2"></my-date-range-picker>
+                  </div>
+                </div>
+                <div class="col ">
+                  <span (click)="userType2=true">
+                    <input type="radio" name="request" [checked]="userType2">Login User Records</span>
+                  <span (click)="userType2=false">
+                    <input type="radio" name="request" [checked]="!userType2">All User Records</span>
+                </div>
+                <div class="col search_btn text-right col-2">
+                  <button>
+                    <i class="fa fa-search" (click)="approvalMaterial()"></i>
+                  </button>
+                </div>
+              </div>
+
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Date of Request </th>
+                    <th>Requester</th>
+                    <th>Approver</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Requisition ID</th>
+                    <th>Requisition Notification</th>
+                    <th>Approval Status</th>
+                    <th>More Details</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let request of materialTransferReqApprTOs1">
+                        <td>{{request.reqDate}}</td>
+                        <td>{{request.reqUserTO.empCode}}</td>
+                        <td>{{request.apprUserTO.empCode}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.fromProjId].name}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.toProjId].name}}</td>
+                        <td>{{request.reqCode}}</td>
+                        <td>{{request.notifyCode}}</td>
+                        <td>{{request.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View More" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

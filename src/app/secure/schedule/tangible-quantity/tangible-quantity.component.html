@@ -1,0 +1,112 @@
+<section id="layout_header">
+    <table class="table tbl_head">
+        <colgroup>
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+            <col style="width:7.143%;" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>SOW Item ID </th>
+                <th>SOW Item Description </th>
+                <th>Unit of Measure </th>
+                <th>Original Budget</th>
+                <th>Revised Budget</th>
+                <th>Actual Quantity to Previous Period </th>
+                <th>Actual Quantity to During the Period </th>
+                <th>Actual Update Quantity</th>
+                <th>Balance Quantitiy</th>
+                <th>Schedule Start</th>
+                <th>Schedule Finish</th>
+                <th>Actual Start</th>
+                <th>Actual Finish</th>
+                <th>Resource Curve</th>
+
+            </tr>
+        </thead>
+
+    </table>
+</section>
+<section id="main_content">
+    <div class="slimScroll">
+        <div class="table-responsive text-center">
+            <table class="table-striped table tbl_body">
+                <colgroup>
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                    <col style="width:7.143%;" />
+                </colgroup>
+                <tbody>
+                    <tr *ngFor="let coc of List| paginate: {id:'tq', itemsPerPage: records, currentPage: p } ;let i=index;" (click)="viewRecord(coc)">
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                        <td>14</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+    <div class="row ml-0 mr-0 pagination_block">
+        <div class="col col-sm-4 text-left">
+            <label>Total No OF Records :</label>
+            <select [(ngModel)]="records">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+        </select>
+        </div>
+        <div class="col col-sm-8 text-right" style="display: inline-block">
+            <div class="row">
+                <div class="col col-sm-12 text-right">
+                    <pagination-controls id="tq" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+                </div>
+                <!-- <div class="col col-sm-6 text-right">
+                <button type="button" class="btn btn-primary" [disabled]="!(selectedlist.length>0&&selectedlist.length<2)" (click)="edit()">Edit</button>
+                <button type="button" class="btn btn-danger">Deactivate</button>
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cccreate">Create</button>
+            </div> -->
+            </div>
+        </div>
+    </div>
+</div>

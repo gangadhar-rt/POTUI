@@ -1,0 +1,469 @@
+<section id="layout_header">
+  <app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+
+  <div class="row">
+    <div class="col col-sm-2">
+      <h2 class="ttl2">Employee Register</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.eps" required placeholder="epsname">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="projName">
+      </div>
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button title="Search" (click)="employeeSearch()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button title="Refresh">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+    </colgroup>
+    <colgroup>
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+      <col style="width:8.3333%;" />
+
+    </colgroup>
+    <thead>
+      <tr>
+        <th rowspan="2">Select</th>
+        <th rowspan="2">Employee ID</th>
+        <th rowspan="2">First Name</th>
+        <th rowspan="2">Last Name</th>
+        <th rowspan="2">Parent Company</th>
+        <th colspan="8" class="text-center" *ngIf="empDatamoreFlag==0">Employee Details
+          <span class="fa fa-caret-right" style="float: right; font-size: 20px; color: #337ab7 !important;" (click)="empDatamoreFlag=1"></span>
+        </th>
+        <th colspan="8" class="text-center" *ngIf="empDatamoreFlag==1">
+          <span class="fa fa-caret-left" style="float: left; font-size: 20px; color: #337ab7 !important;" (click)="empDatamoreFlag=0"></span>Current Status
+        </th>
+      </tr>
+      <tr *ngIf="empDatamoreFlag==0">
+        <th>Gender</th>
+        <th>Date Of Birth</th>
+        <th>Designation</th>
+        <th>Local or Non-Local</th>
+        <th>Existing or New Employee</th>
+        <th>Employment Type</th>
+        <th>Date of Enrollment</th>
+      </tr>
+      <tr *ngIf="empDatamoreFlag==1">
+        <th>EPS</th>
+        <th>Current/Last Project</th>
+        <th>Employee Current Status</th>
+        <th>Mobilization Date</th>
+        <th>Expected
+          <br>De-Mobilization Date
+        </th>
+        <th>Actual
+          <br>De-Mobilization Date
+        </th>
+        <th>Records of
+          <br>Employee Documents
+        </th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+        </colgroup>
+        <colgroup>
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+          <col style="width:8.3333%;" />
+
+        </colgroup>
+        <tbody>
+          <!-- <tr *ngFor="let plant of plantRegisterDtlTOs" (click)="selectedPlant=plant;getLedger()" [class.active_row]="selectedPlant.id=== plant.id"> -->
+          <tr *ngFor="let employee of empDetails" [class.active_row]="selectedEMployee.id=== employee.id">
+            <td>
+              <input type="checkbox" value="id" [(ngModel)]="employee.selected" (click)="empDeltailsRowSelect($index,empDetails)">
+            </td>
+            <td (click)="selectedEMployee=employee;">{{employee.code}}</td>
+            <td (click)="selectedEMployee=employee;">{{employee.firstName}}</td>
+            <td (click)="selectedEMployee=employee;">{{employee.lastName}}</td>
+            <td (click)="selectedEMployee=employee;">{{empDropDown.empCompanyMap[employee.cmpId]?empDropDown.empCompanyMap[employee.cmpId].name:''}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.gender}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.dob | date}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{empDropDown.empClassMap[employee.empClassId].name}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.location}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.empStatus}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.procurecatgId?empDropDown.emppocureMentCatgMap[employee.procurecatgId].name:''}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==0">{{employee.projEmpRegisterTO?employee.projEmpRegisterTO.enrollmentDate:''}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">{{empDropDown.userProjMap[employee.projEmpRegisterTO.projId].displayNamesMap['ParentName']}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">{{empDropDown.userProjMap[employee.projEmpRegisterTO.projId].name}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">{{employee.projEmpRegisterTO.empStatus}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">{{employee.projEmpRegisterTO.mobilaizationDate}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1">{{employee.projEmpRegisterTO.expecteddeMobilaizationDate}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">{{employee.projEmpRegisterTO.deMobilaizationDate}}</td>
+            <td (click)="selectedEMployee=employee;" *ngIf="empDatamoreFlag==1 ">View Documents</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+  <div class="tbl_footer btns text-right" id="layout_footer">
+    <div class="row ml-0 mr-0 pagination_block">
+      <div class="col col-sm-3 text-left">
+        <label>Total No OF Records :</label>
+        <select [(ngModel)]="records">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="25">25</option>
+          <option value="30">30</option>
+          <option value="35">35</option>
+          <option value="40">40</option>
+          <option value="45">45</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div class="col col-sm-9 text-right" style="display: inline-block">
+        <div class="row">
+          <div class="col col-sm-6 text-right">
+            <!-- <pagination-controls id="projectlist" maxSize="4" (pageChange)="p = $event"></pagination-controls> -->
+          </div>
+          <div class="col col-sm-6 text-right">
+            <!-- <button type="button" class="btn btn-primary" (click)="editRecord()">
+                  Edit</button> -->
+            <button type="button" class="btn btn-default">Edit</button>
+            <button type="button" class="btn btn-danger">Deactivate</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#empcreate">Create new</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="layoutTwo">
+  <div class="projects_grid">
+    <div class="verticalTabs row no-gutters">
+      <div class="col" style="max-width:180px; overflow: hidden;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true">Enrollment/Promotion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false">Employee Service History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false">Charge out Rates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="contact" aria-selected="false">Regular Payable Rates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="contact" aria-selected="false">Non Regular Payable Rates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="contact" aria-selected="false">Pay Deductions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab7" role="tab" aria-controls="contact" aria-selected="false">Bank Account Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab8" role="tab" aria-controls="contact" aria-selected="false">Super annuation / Provident fund</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab9" role="tab" aria-controls="contact" aria-selected="false">Medical History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab10" role="tab" aria-controls="contact" aria-selected="false">Leave and Attendance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab11" role="tab" aria-controls="contact" aria-selected="false">Employee Contact Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab12" role="tab" aria-controls="contact" aria-selected="false">NOK (Next of Kin) Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab13" role="tab" aria-controls="contact" aria-selected="false">Request for Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab14" role="tab" aria-controls="contact" aria-selected="false">Approval for Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab15" role="tab" aria-controls="contact" aria-selected="false">Leave Request</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab16" role="tab" aria-controls="contact" aria-selected="false">Leave Approval</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="home-tab">
+            <app-enrollment-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-enrollment-tab>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="profile-tab">
+            <app-emp-service-history-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-emp-service-history-tab>
+          </div>
+          <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
+            <app-charge-out-rates-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-charge-out-rates-tab>
+          </div>
+          <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="contact-tab">
+            <app-regular-payable-rates-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-regular-payable-rates-tab>
+          </div>
+          <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="contact-tab">
+            <app-non-regular-payable-rates-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-non-regular-payable-rates-tab>
+          </div>
+          <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="contact-tab">
+            <app-pay-deductions-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-pay-deductions-tab>
+          </div>
+          <div class="tab-pane fade" id="tab7" role="tabpanel" aria-labelledby="contact-tab">
+            <app-bank-account-details-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-bank-account-details-tab>
+          </div>
+          <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="contact-tab">
+            <app-super-provident-tab [ipData]="selectedEMployee" [empDropDown]="empDropDown"></app-super-provident-tab>
+          </div>
+          <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- <section id="layout_header">
+
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <my-date-range-picker class="cust-input" name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="model"></my-date-range-picker>
+                  </div>
+                </div>
+                <div class="col ">
+                  <input type="radio" name="request" [(ngModel)]="userType2" [value]="true">Login User Records
+                  <input type="radio" name="request" [(ngModel)]="userType2" [value]="false">All User Records
+                </div>
+                <div class="col search_btn text-right col-2">
+                  <button>
+                    <i class="fa fa-search" (click)="approvalMaterial()"></i>
+                  </button>
+                </div>
+              </div>
+
+              <table class="table tbl_head">
+                <colgroup>
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                  <col style="width:10%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Date of Request </th>
+                    <th>Requester</th>
+                    <th>Approver</th>
+                    <th>Origin Project</th>
+                    <th>Destination Project</th>
+                    <th>Requisition ID</th>
+                    <th>Requisition Notification</th>
+                    <th>Approval Status</th>
+                    <th>More Details</th>
+                  </tr>
+                </thead>
+              </table>
+            </section>
+            <section id="main_content">
+              <div class="slimScroll">
+                <div class="table-responsive text-center">
+                  <table class="table-striped table tbl_body">
+                    <colgroup>
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                      <col style="width:11.11%;" />
+                    </colgroup>
+                    <tbody>
+                      <tr *ngFor="let request of materialTransferReqApprTOs1">
+                        <td>{{request.reqDate}}</td>
+                        <td>{{request.reqUserTO.empCode}}</td>
+                        <td>{{request.apprUserTO.empCode}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.fromProjId].name}}</td>
+                        <td>{{materialDataMap1.userProjMap[request.toProjId].name}}</td>
+                        <td>{{request.reqCode}}</td>
+                        <td>{{request.notifyCode}}</td>
+                        <td>{{request.apprStatus}}</td>
+                        <td>
+                          <input type="button" class="btn bottomaligned btn-brown btn-sm" value="View More" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="modal fade" id="empcreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Employee Add/Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="employee_creation" (ngSubmit)="SaveEmployee(); ">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Employee ID
+                  <span style="color: red;">*</span>
+                </label>
+                <input type="text " formControlName="code" class="form-control form-input " #code id="companyid" required>
+                <app-error-messages [control]="employee_creation.controls['code']"></app-error-messages>
+                <span style="color:red" *ngIf="verifyCode()">Code should be unique</span>
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">First Name
+                  <span style="color: red;">*</span>
+                </label>
+                <input type="text " formControlName="firstName" class="form-control form-input " id="companyname" required>
+                <app-error-messages [control]="employee_creation.controls['firstName']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Last Name
+                  <span style="color: red;">*</span>
+                </label>
+                <input type="text " formControlName="lastName" class="form-control form-input " id="companyid" required>
+                <app-error-messages [control]="employee_creation.controls['lastName']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Company
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="empClassId" formControlName="cmpId">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let comp of companyList" [value]="comp.id">{{comp.cmpName}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['cmpId']"></app-error-messages>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Gender
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="empClassId" formControlName="gender">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let gender of empDropDown.genderList" [value]="gender">{{gender}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['gender']"></app-error-messages>
+              </div>
+
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Date of Birth
+                  <span style="color: red;">*</span>
+                </label>
+                <input type="text " formControlName="dob" class="form-control form-input " id="companyid" (click)="dp.toggleCalendar()" ngx-mydatepicker
+                  name="myDate" [options]="myOptions" #dp="ngx-mydatepicker">
+                <app-error-messages [control]="employee_creation.controls['dob']"></app-error-messages>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Designation
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="empClassId" formControlName="empClassId">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let desig of designationList" [value]="desig.id">{{desig.dispName}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['empClassId']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Local/Non-Local
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="empClassId" formControlName="location">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let locality of empDropDown.empLocalityList" [value]="locality">{{locality}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['location']"></app-error-messages>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Employment Type
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="businesscategory" formControlName="procureLabelKeyTO">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let type of empDropDown.emppocureMentCatgMap|objectPipe" [value]="type.id">{{type.name}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['procureLabelKeyTO']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="businesscategory" class="form-label">Existing or New
+                  <span style="color: red;">*</span>
+                </label>
+                <select class="form-control" id="businesscategory" formControlName="empStatus">
+                  <option value="">--Select --</option>
+                  <option *ngFor="let type of empDropDown.employeeTypeList" [value]="type">{{type}}</option>
+                </select>
+                <app-error-messages [control]="employee_creation.controls['empStatus']"></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="employee_creation.invalid || verifyCode()">Save</button>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

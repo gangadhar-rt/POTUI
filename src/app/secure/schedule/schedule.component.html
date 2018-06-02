@@ -1,0 +1,134 @@
+<section id="layout_header">
+  <app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Project Schedules</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input type="search" class="request.eps" (click)="getpop=true" class="form-control cust-input" [(ngModel)]="request.eps"
+          placeholder="EPS Name">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input type="search" class="request.project" (click)="getpop=true" class="form-control cust-input" [(ngModel)]="request.project"
+          placeholder="Project Name">
+      </div>
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button>
+        <i title="Search" class="fa fa-search" (click)="request.id && getList();"></i>
+      </button>
+      <button>
+        <i title="Refresh" class="fa fa-refresh" (click)="reset();"></i>
+      </button>
+    </div>
+  </div>
+
+</section>
+<!-- fixed header layout -->
+
+<!-- fixed content layout -->
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="projects_grid">
+      <div class="verticalTabs row no-gutters">
+        <div class="col" style="max-width:180px; overflow: hidden;">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true" (click)="tab=0">Materials</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false" (click)="tab=1">Man Power</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false" (click)="tab=2">Plant & Equipment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tab6" role="tab" aria-controls="tab6" aria-selected="false" (click)="tab=3">Cost Budget</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false" (click)="tab=4">Tangible Quantity</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tab5" role="tab" aria-controls="tab5" aria-selected="false" (click)="tab=5">Summary Activity</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="tab-content" id="myTabContent">
+            <div>
+              <div class="head-optns row no-gutters">
+                <div class="col">
+                  <input class="form-control" type="button" value="Create Baseline">
+                </div>
+                <div class="col">
+                  <select class="form-control" [(ngModel)]="selectedBase">
+                    <option value="" disabled>--Select--</option>
+                    <option *ngFor="let base of baseLineList" [value]="base.id">{{base.name}}-{{base.date}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <select class="form-control" [(ngModel)]="planned">
+                    <option value="0">Planned</option>
+                    <option value="1">Planned & Actual Planned</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <select class="form-control" [(ngModel)]="day">
+                    <option value="0">Weekly</option>
+                    <option value="1">Monthly</option>
+                    <option value="2">Yearly</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <input class="form-control" type="button" value="Get Curve" (click)="getCurve()">
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+              <app-material *ngIf="tab===0" [projid]="projectid" (update)="getChartData($event)" [baseline]="selectedBase"></app-material>
+            </div>
+            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2">
+              <!-- <app-man-power *ngIf="tab===1" [projid]="projectid" [update]="getChartData()"></app-man-power> -->
+            </div>
+            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3">
+              <!-- <app-plant-equipment *ngIf="tab===2" [projid]="projectid" [update]="getChartData()"></app-plant-equipment> -->
+            </div>
+            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4">
+              <!-- <app-tangible-quantity *ngIf="tab===4" [projid]="projectid" [update]="getChartData()"></app-tangible-quantity> -->
+            </div>
+            <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="tab5">
+              <!-- <app-summary-activity *ngIf="tab===5" [projid]="projectid" [update]="getChartData()"></app-summary-activity> -->
+            </div>
+            <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="tab6">
+              <!-- <app-const-budget *ngIf="tab===3" [projid]="projectid" [update]="getChartData()"></app-const-budget> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- fixed content layout -->
+
+<div class="modal fade" id="curveinfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Curve</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tenantDetails">
+          <canvas id="combochart" #charts></canvas>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

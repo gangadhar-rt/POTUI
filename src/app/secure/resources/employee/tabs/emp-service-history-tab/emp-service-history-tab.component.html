@@ -1,0 +1,92 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+      <col style="width:6.666%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Project Posting</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Designation as per Pay Roll</th>
+        <th>Designation as per Project Contract</th>
+        <th>Designation as per Trade Union</th>
+        <th>Category</th>
+        <th>Actual Mobilization Date</th>
+        <th>Expected De-mobilization Date</th>
+        <th>Actual De-mobilization Date</th>
+        <th>Employee Tax File Number</th>
+        <th>Responsibilities in Brief</th>
+        <th>Post De-mobilization Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+          <col style="width:6.666%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let servicehistory of employeeProjDtlTOs">
+
+            <td>
+              <input type="checkbox" value="id" [(ngModel)]="servicehistory.selected"*ngIf="servicehistory.latest=='Y'" (click)="empServiceHistoryRowSelect(servicehistory)">
+            </td>
+            <td>{{servicehistory.deploymentId}}</td>
+            <td>{{empDropDown.userProjMap[servicehistory.projId].displayNamesMap['ParentName']}}</td>
+            <td>{{empDropDown.userProjMap[servicehistory.projId].name}}</td>
+            <td>{{empDropDown.empClassMap[servicehistory.empClassifyId].name}}</td>
+            <td>{{empDropDown.empProjClassMap[servicehistory.empClassifyId+'#'+servicehistory.projId].displayNamesMap.empContractName}}</td>
+            <td>{{empDropDown.empProjClassMap[servicehistory.empClassifyId+'#'+servicehistory.projId].displayNamesMap.empWorkUnionName}}</td>
+            <td>{{empDropDown.empProjClassMap[servicehistory.empClassifyId+'#'+servicehistory.projId].displayNamesMap.empCatgName}}</td>
+            <td>{{servicehistory.mobilaizationDate}}</td>
+            <td>{{servicehistory.expecteddeMobilaizationDate}}</td>
+            <td>{{servicehistory.deMobilaizationDate}}</td>
+            <td>{{servicehistory.taxFileNum}}</td>
+            <td>{{servicehistory.workType}}</td>
+            <td>{{servicehistory.empStatus}}</td>
+            <td>{{servicehistory.notes}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn  btn-default">Create</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

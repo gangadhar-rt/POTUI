@@ -1,0 +1,107 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555%;" />
+      <col style="width:5.555;" />
+      <col style="width:5.555%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Project Posting</th>
+        <th>Effective From</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Parent Company Name</th>
+        <th>Charge out unit</th>
+        <th>Currency</th>
+        <th>Rate per Unit Normal Time</th>
+        <th>Rate per unit-Idle Time</th>
+        <th>Paid Leave-Rate per day</th>
+        <th>Paid Leave-Cost Code ID</th>
+        <th>Mobilization Cost code</th>
+        <th>Mobilization Rate</th>
+        <th>De-Mobilization Cost Code</th>
+        <th>De-Mobilization Rate</th>
+        <th>Post DeMobilization Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555%;" />
+          <col style="width:5.555;" />
+          <col style="width:5.555%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let chargeOutRate of empChargeOutRateTOs">
+            <td>
+              <input type="checkbox" value="id" *ngIf="chargeOutRate.latest || empChargeOutRateTOs.length ==1" [(ngModel)]="chargeOutRate.select"
+                (click)="empChargeOutRowSelect(chargeOutRate)">
+            </td>
+            <td>{{chargeOutRate.projEmpRegisterTO.deploymentId}}</td>
+            <td>{{chargeOutRate.fromDate}}</td>
+            <td>{{empDropDown.userProjMap[chargeOutRate.projEmpRegisterTO.projId].displayNamesMap['ParentName']}}</td>
+            <td>{{empDropDown.userProjMap[chargeOutRate.projEmpRegisterTO.projId].name}}</td>
+
+            <td>{{empDropDown.empCompanyMap[empDropDown.cmpId]?empDropDown.empCompanyMap[empDropDown.cmpId].name:''}}</td>
+            <td>{{measureId}}</td>
+
+            <td>{{projGeneralLabelTO.displayNamesMap['currency']}}</td>
+            <td>{{chargeOutRate.normalRate}}</td>
+            <td>{{chargeOutRate.idleRate}}</td>
+            <td>{{chargeOutRate.paidLeaveRate}}</td>
+            <td>{{projCostItemMap[chargeOutRate.leaveCostItemId]?projCostItemMap[chargeOutRate.leaveCostItemId].code:''}}</td>
+            <td>{{projCostItemMap[chargeOutRate.mobCostItemId]?projCostItemMap[chargeOutRate.mobCostItemId].code:''}}</td>
+            <td>{{chargeOutRate.mobRate}}</td>
+            <td>{{projCostItemMap[chargeOutRate.deMobCostItemId]?projCostItemMap[chargeOutRate.deMobCostItemId].code:''}}</td>
+            <td>{{chargeOutRate.deMobRate}}</td>
+            <td>{{chargeOutRate.projEmpRegisterTO.empStatus}}</td>
+            <!-- <td>{{chargeOutRate.comments}}</td> -->
+            <td class="text-left"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn  btn-default">Edit</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

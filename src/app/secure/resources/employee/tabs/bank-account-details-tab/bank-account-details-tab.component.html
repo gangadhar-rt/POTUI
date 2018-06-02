@@ -1,0 +1,73 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Effective From</th>
+        <th>Name of Bank / Financial Institute</th>
+        <th>Bank Street Address</th>
+        <th>Bank / Financial Institute Code</th>
+        <th>Account Holder Name</th>
+        <th>Account Holder Number</th>
+        <th>Type of Account</th>
+        <th>Account Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let account of empBankAccountDtlTOs">
+            <td>
+              <input type="checkbox" [(ngModel)]="account.selected" (click)="backAccountRowSelect(account)">
+            </td>
+            <td>{{account.fromDate | date}}</td>
+            <td>{{account.bankName}}</td>
+            <td>{{account.address}}</td>
+            <td>{{account.ifscCode}}</td>
+            <td>{{account.accName}}</td>
+            <td>{{account.accNumber}}</td>
+            <td>{{account.accType}}</td>
+            <td>{{account.accStatus}}</td>
+            <td>{{account.accComments}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn btn-brown btn-sm">Create</button>
+            <button type="button" class="btn btn-brown btn-sm">Edit</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+

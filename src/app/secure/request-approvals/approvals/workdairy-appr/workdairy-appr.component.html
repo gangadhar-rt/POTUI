@@ -1,0 +1,103 @@
+<section id="layout_header">
+  <app-projects-pop [projid]="getpop" (update)="updateValues($event)" (projshow)="getpop=$event.selectedProj"></app-projects-pop>
+  <div class="row">
+    <div class="col col-sm-3">
+      <h2 class="ttl2">Employee Request Transfer</h2>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.eps" required placeholder="epsname">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="projName">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <select class="form-control cust-input">
+          <option value="Head-Company">Head-Company</option>
+          <option value="Sub-Contract">Sub-Contract</option>
+        </select>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp.toggleCalendar()" ngx-mydatepicker
+          name="myDate" [options]="myOptions" #dp="ngx-mydatepicker" />
+        <span class="col0-md-4 col " style="padding: 0px;">
+          <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp.clearDate()">
+            <i class="fa fa-times "></i>
+          </button>
+          <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+            <i class="fa fa-calendar"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="Crew Name">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="Work Dairy Id">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="Work Shift">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" type="text" (click)="getpop=true" [(ngModel)]="request.project" required placeholder="Weather">
+      </div>
+    </div>
+    <div class="col">
+      <input type="radio" name="request" [(ngModel)]="userType" [value]="true">Login User Records
+      <input type="radio" name="request" [(ngModel)]="userType" [value]="false">All User Records
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button>
+        <i class="fa fa-search" (click)="getData()"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Date of Request </th>
+        <th>Requester</th>
+        <th>Approver</th>
+        <th>Origin Project</th>
+        <th>Destination Project</th>
+        <th>Requisition ID</th>
+        <th>Requisition Notification</th>
+        <th>Approval Status</th>
+        <th>More Details</th>
+      </tr>
+    </thead>
+  </table>
+</section>

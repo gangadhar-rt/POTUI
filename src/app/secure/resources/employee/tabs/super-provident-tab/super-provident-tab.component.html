@@ -1,0 +1,92 @@
+<section id="layout_header">
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+      <col style="width:8.333%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Project Posting#</th>
+        <th>Effective From</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Parent Company Name</th>
+        <th>Employee Tax File Number</th>
+        <th>Currency</th>
+        <th>Unit of Pay Rate</th>
+        <th>Credit Cycle
+          <span style="color: red; font-size: '60px'">*</span>
+        </th>
+        <th>Pay Roll Status</th>
+        <th>Employee Declarations & Tax payDeduction Codes</th>
+        <th>Employee Documents</th>
+      </tr>
+    </thead>
+  </table>
+</section>
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+          <col style="width:8.333%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let providentfund of empProvidentFundTOs ">
+            <td>
+              <input type="checkbox" value="id" [(ngModel)]="providentfund.select" [disabled]="providentfund.latest==false" (click)="providentFoundRowSelect(providentfund)">
+            </td>
+            <td>{{providentfund.fromDate|date}}</td>
+            <td>{{providentfund.toDate |date}}</td>
+            <td>{{providentfund.projEmpRegisterTO.deploymentId}}</td>
+            <td>{{empDropDown.userProjMap[providentfund.projEmpRegisterTO.projId]?empDropDown.userProjMap[providentfund.projEmpRegisterTO.projId].displayNamesMap['ParentName']:''}}</td>
+            <td>{{empDropDown.userProjMap[providentfund.projEmpRegisterTO.projId]?empDropDown.userProjMap[providentfund.projEmpRegisterTO.projId].name:''}}</td>
+            <td>{{empDropDown.empCompanyMap[empDropDown.cmpId]?empDropDown.empCompanyMap[empDropDown.cmpId].name:'-'}}</td>
+            <td>{{providentfund.projEmpRegisterTO.taxFileNum}}</td>
+            <td>
+              <select [(ngModel)]="providentfund.payCycle" [disabled]="!providentfund.latest && providentfund.id!=null">
+                <option *ngFor="let payCycle of payCycles" [value]="payCycle">{{payCycle}}</option>
+              </select>
+            </td>
+            <td>{{projGeneralLabelTO.displayNamesMap['currency']}}</td>
+            <td>
+              <input type="button" class="btn btn-brown btn-sm" (click)="getProvidentFundDetails(providentfund);" value="Edit" *ngIf="providentfund.latest || providentfund.id==null"
+              />
+              <input type="button" class="btn btn-brown btn-sm" (click)="getProvidentFundDetails(providentfund);" value="View" *ngIf="!providentfund.latest || providentfund.id==null"
+              />
+            </td>
+            <td>
+              <input type="file" value="Upload" [disabled]="!providentfund.latest  && providentfund.id!=null" />
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div>
+            <button type="button" class="btn  btn-default">Edit</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
