@@ -43,6 +43,22 @@ export class ApiService {
       .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
+  PostServiceWithMultipart(body, Url) {
+      const headers = new Headers();
+      headers.append('pragma', 'no-cache');
+       
+       const token = localStorage.getItem('token');
+      if (token !== undefined) {
+        headers.append('pottoken', localStorage.getItem('token'));
+    }
+            
+    let options = new RequestOptions({ headers: headers });
+    
+    return this._http.post(this.baseUrll + Url, body, options)
+    .map((res: Response) => res.json())
+    .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   GetService(url, prams) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -53,6 +69,12 @@ export class ApiService {
       .catch((error) => {
         return 'seomething gone wrong';
       });
+  }
+
+  getExternalService(url, params) {
+    return this._http.get(url + params)
+    .map((response: Response) => response.json())
+    .catch((error) => Observable.throw(error.json().error || 'Server error'));
   }
 
 }

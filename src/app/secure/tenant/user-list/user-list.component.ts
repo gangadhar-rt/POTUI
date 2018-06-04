@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class UserListComponent implements OnInit {
 
   togggled: any = false;
-  List: any;
+  List: any = [];
   selectedlist = [];
   mStatus = '';
   saveDeps: any;
@@ -27,6 +27,8 @@ export class UserListComponent implements OnInit {
   roles;
   isAdmin: any = '';
   request = { "userName": null, "empCode": null, "status": "1" };
+  registeredUsers = JSON.parse(localStorage.getItem('uzrData')).registeredUsers;
+
   constructor(private fb: FormBuilder, private _service: ApiService, private _route: Router) {
   }
   getUsers() {
@@ -184,15 +186,16 @@ export class UserListComponent implements OnInit {
   CreateNew(edit?) {
     if (edit) {
       this.isEdit = true;
-    }
-    else {
+    } else if (this.List.length === this.registeredUsers) {
+        $('#regUsersExceeded').modal('show');
+        return;
+    } else {
       this.UserList_creation.reset();
       this.selectedlist = [];
-
     }
     this.getEmpCodes(edit);
     this.getRoles(edit);
-    $('.modal').modal('show');
+    $('#tanantInfo').modal('show');
   }
 
   saveDetails() {

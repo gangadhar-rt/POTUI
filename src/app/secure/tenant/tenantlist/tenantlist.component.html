@@ -131,11 +131,11 @@
 
 
 
-<div class="modal fade" id="tenantmdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="tenantmdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tenant Create/Edit</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Company Create/Edit</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -175,7 +175,7 @@
                 <app-error-messages [control]="tenantForm.controls['password']"></app-error-messages>
               </div>
               <div class="form-group col-md-4 col">
-                <label for="companyname" class="form-label"> Tenant Code </label>
+                <label for="companyname" class="form-label"> Company Code </label>
                 <input type="text " formControlName="code" class="form-control form-input " id="companyname">
                 <app-error-messages [control]="tenantForm.controls['code']"></app-error-messages>
               </div>
@@ -183,7 +183,7 @@
             </div>
             <div class="row">
               <div class="form-group col-md-4 col ">
-                <label for="companyid" class="form-label">Tenant Name</label>
+                <label for="companyid" class="form-label">Company Name</label>
                 <input type="text " formControlName="name" class="form-control form-input ">
                 <app-error-messages [control]="tenantForm.controls['name']"></app-error-messages>
 
@@ -235,38 +235,22 @@
                   </span>
                 </div>
                 <app-error-messages [control]="tenantForm.controls['licence']"></app-error-messages>
-
               </div>
               <div class="form-group col-md-4 col">
-                <label for="companyname" class="form-label">maxActiveUsers</label>
-                <input type="text " formControlName="maxActiveUsers" class="form-control form-input " id="companyname">
-                <app-error-messages [control]="tenantForm.controls[ 'maxActiveUsers']"></app-error-messages>
-              </div>
-              <div class="form-group col-md-4 col">
-                <label for="companyname" class="form-label">Max EPSLevel</label>
-                <input type="text " formControlName="maxEPSLevel" class="form-control form-input " id="companyname">
-                <app-error-messages [control]="tenantForm.controls['maxEPSLevel']"></app-error-messages>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="form-group col-md-4 col ">
-                <label for="companyid" class="form-label">Max Login Attempts</label>
-                <input type="text " formControlName="maxLoginAttempts" class="form-control form-input ">
-                <app-error-messages [control]="tenantForm.controls['maxLoginAttempts']"></app-error-messages>
-
-              </div>
-              <div class="form-group col-md-4 col">
-                <label for="companyname" class="form-label">Mail Template</label>
-                <input type="file" formControlName="mailTemplate" class="form-control form-input " id="companyname">
+                <label for="companyname" class="form-label">Company Details Document</label>
+                <input type="file" (change)="onInputFileChange($event)" 
+                accept=".doc,.docx,.pdf,.xlsx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  class="form-control form-input " id="companyname">
                 <app-error-messages [control]="tenantForm.controls['mailTemplate']"></app-error-messages>
               </div>
               <div class="form-group col-md-4 col">
                 <label for="companyname" class="form-label">Country</label>
-                <input type="text " formControlName="country" class="form-control form-input " id="companyname">
+                <select class="form-control" id="country" formControlName="country">
+                  <option value="" disabled>--Select--</option>
+                  <option *ngFor="let country of countries ||[]" [ngValue]="country.name">{{country.name}}</option>
+                </select>
                 <app-error-messages [control]="tenantForm.controls['country']"></app-error-messages>
               </div>
-
             </div>
             <div class="row">
               <div class="form-group col-md-4 col ">

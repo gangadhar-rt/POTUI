@@ -199,10 +199,10 @@ export class SupplierListComponent implements OnInit {
   saveTenent() {
     this.company_list_creation.value.status = 1;
     this.company_list_creation.value.businessCategoryTO = this.supplierdata.businessCatgResp.businessCatagoryTOs.filter(elm => {
-      return elm.id === this.company_list_creation.value.businessCategoryTO;
+      return elm.id == this.company_list_creation.value.businessCategoryTO;
     })[0];
     this.company_list_creation.value.companyCatagoryTO = this.supplierdata.companyCatgResp.companyCatagoryTOs.filter(elm => {
-      return elm.id === this.company_list_creation.value.catgId;
+      return elm.id == this.company_list_creation.value.catgId;
     })[0];
     console.log(this.company_list_creation.value);
     this._service.PostService({ companyTOs: [this.company_list_creation.value] }, '/centrallib/saveCompany')

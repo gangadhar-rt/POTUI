@@ -20,6 +20,7 @@ export class TenantlistComponent implements OnInit {
   };
   togggled: any = false;
   tenantList: any;
+  countries: any;
   records = 10;
   tenantForm: FormGroup;
   selectedlist: any = [];
@@ -68,9 +69,9 @@ export class TenantlistComponent implements OnInit {
       'phone': [null, [Validators.required, FormsValidationService.numberOnly, Validators.minLength(4), Validators.maxLength(14)]],
       'remarks': [null, Validators.required],
       'maxRegUsers': [null, [FormsValidationService.numberOnly]],
-      'maxActiveUsers': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
-      'maxEPSLevel': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
-      'maxLoginAttempts': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
+      // 'maxActiveUsers': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
+      // 'maxEPSLevel': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
+      // 'maxLoginAttempts': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
       'mailTemplate': [null, Validators.compose([Validators.nullValidator])],
       'country': [null, [Validators.required, Validators.maxLength(20)]],
       'webSiteURL': [null, [Validators.required, FormsValidationService.url]],
@@ -81,7 +82,20 @@ export class TenantlistComponent implements OnInit {
       'address': [null, Validators.required],
     });
     this.getTenantList();
+    this.getCountries();
   }
+
+  getCountries() {
+    this._service.getExternalService('https://restcountries.eu/rest/v2/all', '')
+      .subscribe(data => {
+        this.countries = data;
+      },
+      error => {
+        console.log(error);
+      })
+  }
+
+
   createTenant() {
     this.tenantForm.reset();
     $('#tenantmdl').modal('show');
@@ -111,10 +125,6 @@ export class TenantlistComponent implements OnInit {
             'saveFlag': true,
             'remarks': this.tenantForm.value.remarks,
             'maxRegUsers': this.tenantForm.value.maxRegUsers,
-            'maxActiveUsers': this.tenantForm.value.maxActiveUsers,
-            'maxEPSLevel': this.tenantForm.value.maxEPSLevel,
-            'maxLoginAttempts': this.tenantForm.value.maxLoginAttempts,
-            'mailTemplate': this.tenantForm.value.mailTemplate, 'status': 1,
             'country': this.tenantForm.value.country,
             'webSiteURL': this.tenantForm.value.webSiteURL,
             'creditCardDetails': this.tenantForm.value.creditCardDetails,
@@ -140,10 +150,6 @@ export class TenantlistComponent implements OnInit {
       requestData.clientRegTO.phone = this.tenantForm.value.phone;
       requestData.clientRegTO.remarks = this.tenantForm.value.remarks;
       requestData.clientRegTO.maxRegUsers = this.tenantForm.value.maxRegUsers;
-      requestData.clientRegTO.maxActiveUsers = this.tenantForm.value.maxActiveUsers;
-      requestData.clientRegTO.maxEPSLevel = this.tenantForm.value.maxEPSLevel;
-      requestData.clientRegTO.maxLoginAttempts = this.tenantForm.value.maxLoginAttempts;
-      requestData.clientRegTO.mailTemplate = this.tenantForm.value.mailTemplate;
       requestData.clientRegTO.country = this.tenantForm.value.country;
       requestData.clientRegTO.webSiteURL = this.tenantForm.value.webSiteURL;
       requestData.clientRegTO.creditCardDetails = this.tenantForm.value.creditCardDetails;
@@ -156,7 +162,14 @@ export class TenantlistComponent implements OnInit {
     if (typeof requestData.clientRegTO.licence === 'object') {
       requestData.clientRegTO.licence = requestData.clientRegTO.licence.formatted;
     }
-    this._service.PostService(requestData, '/user/saveClient')
+    let formdata: FormData = new FormData();
+    formdata.append('file', this.tenantForm.value.mailTemplate);
+    // const blob = new Blob([JSON.stringify(requestData)], {
+    //   type: 'application/json',
+    // });
+    formdata.append('clientRegReq', JSON.stringify(requestData));
+ 
+    this._service.PostServiceWithMultipart(formdata, '/user/saveClient')
       .subscribe(data => {
         this.disableSave = false;
         $('#tenantmdl').modal('hide');
@@ -165,6 +178,13 @@ export class TenantlistComponent implements OnInit {
           this.disableSave = false;
           console.log(error);
         });
+  }
+
+  onInputFileChange(event) {
+    let eventObj: MSInputMethodContext = <MSInputMethodContext> event;
+    let target: HTMLInputElement = <HTMLInputElement> eventObj.target;
+    let files: FileList = target.files;
+    this.tenantForm.get('mailTemplate').setValue(files[0]);
   }
 
   selectedRecords(code, e) {
