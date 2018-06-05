@@ -166,6 +166,13 @@ export class TenantlistComponent implements OnInit {
  
     this._service.PostServiceWithMultipart(formdata, '/user/saveClient')
       .subscribe(data => {
+        if (!this.isedit) {
+          this.tenantList = data.clientRegTOs;
+          this.tenantList.forEach(element => {
+            element.checked = false;
+            element.userTO.password = element.userTO.password || 'No Password';
+          });
+        }
         this.disableSave = false;
         $('#tenantmdl').modal('hide');
       },
