@@ -7,6 +7,7 @@ import { AppRoutesModule } from './app-routes.modulee';
 import { HttpModule } from '@angular/http';
 import { Error404Component } from './shared';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +20,8 @@ import { SharedModule } from './shared/shared.module';
     ReactiveFormsModule,
     AppRoutesModule,
     HttpModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [{ provide: 'Window', useValue: window }, { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent], schemas: [CUSTOM_ELEMENTS_SCHEMA]
