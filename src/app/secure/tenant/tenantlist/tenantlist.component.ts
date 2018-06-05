@@ -69,9 +69,6 @@ export class TenantlistComponent implements OnInit {
       'phone': [null, [Validators.required, FormsValidationService.numberOnly, Validators.minLength(4), Validators.maxLength(14)]],
       'remarks': [null, Validators.required],
       'maxRegUsers': [null, [FormsValidationService.numberOnly]],
-      // 'maxActiveUsers': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
-      // 'maxEPSLevel': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
-      // 'maxLoginAttempts': [null, [Validators.required, FormsValidationService.numberOnly, Validators.maxLength(4)]],
       'mailTemplate': [null, Validators.compose([Validators.nullValidator])],
       'country': [null, [Validators.required, Validators.maxLength(20)]],
       'webSiteURL': [null, [Validators.required, FormsValidationService.url]],
@@ -97,6 +94,7 @@ export class TenantlistComponent implements OnInit {
 
 
   createTenant() {
+    this.disableSave = false;
     this.tenantForm.reset();
     $('#tenantmdl').modal('show');
   }
@@ -164,9 +162,6 @@ export class TenantlistComponent implements OnInit {
     }
     let formdata: FormData = new FormData();
     formdata.append('file', this.tenantForm.value.mailTemplate);
-    // const blob = new Blob([JSON.stringify(requestData)], {
-    //   type: 'application/json',
-    // });
     formdata.append('clientRegReq', JSON.stringify(requestData));
  
     this._service.PostServiceWithMultipart(formdata, '/user/saveClient')
@@ -198,6 +193,7 @@ export class TenantlistComponent implements OnInit {
     }
   }
   edit() {
+    this.disableSave = false;
     let d = new Date();
     if (this.selectedlist[0].licence) {
       d = new Date(this.selectedlist[0].licence)
