@@ -3,45 +3,44 @@
   "project": {
     "name": "project-on-track"
   },
-  "apps": [
-    {
-      "root": "src",
-      "outDir": "dist",
-      "assets": [
-        "assets",
-        "favicon.ico",
-        "config.json"
-      ],
-      "index": "index.html",
-      "main": "main.ts",
-      "polyfills": "polyfills.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.app.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
-      "styles": [
-        "../node_modules/font-awesome/css/font-awesome.min.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "styles.less"
-      ],
-      "scripts": [
-       "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.min.js"
-      ],
-      "environmentSource": "environments/environment.ts",
-      "environments": {
-        "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
-      }
+  "apps": [{
+    "root": "src",
+    "outDir": "dist",
+    "assets": [
+      "assets",
+      "favicon.ico",
+      "config.json"
+    ],
+    "index": "index.html",
+    "main": "main.ts",
+    "polyfills": "polyfills.ts",
+    "test": "test.ts",
+    "tsconfig": "tsconfig.app.json",
+    "testTsconfig": "tsconfig.spec.json",
+    "prefix": "app",
+    "styles": [
+      "../node_modules/font-awesome/css/font-awesome.min.css",
+      "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+      "styles.less"
+    ],
+    "scripts": [
+      "../node_modules/jquery/dist/jquery.min.js",
+      "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+      "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"
+    ],
+    "environmentSource": "environments/environment.ts",
+    "environments": {
+      "dev": "environments/environment.ts",
+      "prod": "environments/environment.prod.ts"
     }
-  ],
+  }],
   "e2e": {
     "protractor": {
       "config": "./protractor.conf.js"
     }
   },
-  "lint": [
-    {
+  "lint": [{
       "project": "src/tsconfig.app.json",
       "exclude": "**/node_modules/**"
     },
@@ -61,7 +60,6 @@
   },
   "defaults": {
     "styleExt": "less",
-    "component": {
-    }
+    "component": {}
   }
 }

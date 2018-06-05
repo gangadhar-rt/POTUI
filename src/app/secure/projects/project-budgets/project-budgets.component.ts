@@ -145,7 +145,7 @@ export class ProjectBudgetsComponent implements OnInit {
       }, (error) => alert('error fetching empclass'));
   }
   saveMp() {
-    let req = {
+    const req = {
       'projManpowerTOs': [
         {
           'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.mpForm.value.originalQty,
@@ -159,14 +159,14 @@ export class ProjectBudgetsComponent implements OnInit {
         }]
       , 'projId': this.selectedlist[0].projId
     };
-
+    console.log(req);
   }
   disableMpDates(val, date) {
-    let d: Date = new Date(date.jsdate.getTime());
+    const d: Date = new Date(date.jsdate.getTime());
     d.setDate(d.getDate() - 1);
     if (val === 'finish') {
       this.mpstartOpt.disableSince = date.date;
-      let copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.mpstartOpt));
+      const copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.mpstartOpt));
       copy.disableSince = {
         year: d.getFullYear(),
         month: d.getMonth() + 1,
@@ -174,7 +174,7 @@ export class ProjectBudgetsComponent implements OnInit {
       };
       this.mpstartOpt = copy;
     } else {
-      let copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.mpfinishOpt));
+      const copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.mpfinishOpt));
       copy.disableUntil = {
         year: d.getFullYear(),
         month: d.getMonth() + 1,
