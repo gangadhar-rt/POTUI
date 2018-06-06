@@ -23,7 +23,7 @@ export class ProjectBudgetsComponent implements OnInit {
   };
   List: any;
   editDetails: any;
-  records = 10;
+  records = 20;
   selectedlist: any = [{ projId: 0 }];
   selectedMp: any = [{ id: 0 }];
   manPowerList = [];
@@ -38,15 +38,17 @@ export class ProjectBudgetsComponent implements OnInit {
   mpForm: FormGroup;
   mpResources: any = [];
   editmp = false;
+  empCategories: any = [];
+  manMeasureList: any = [];
   constructor(private _service: ApiService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.getProjectList();
     this.mpForm = this.fb.group({
-      originalQty: ['', Validators.required],
-      revisedQty: ['', Validators.required],
-      actualQty: ['', Validators.required],
-      remainingQty: ['', Validators.required],
+      originalQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      revisedQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      actualQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      remainingQty: ['', [Validators.required, FormsValidationService.numberOnly]],
       empClassTO: ['', Validators.required],
       projEmpCatgTO: ['', Validators.required],
       measureId: ['', Validators.required],
@@ -129,37 +131,84 @@ export class ProjectBudgetsComponent implements OnInit {
     this._service.PostService(req, '/projsettings/getManpowerActualQty')
       .subscribe((data) => {
         this.manpowerBudgetMap = data.projectBudgetMap;
+        this.getCateggory();
       }, (error) => alert('error getting material quantity'));
-  }
-  getEmpClasses() {
 
+  }
+  getCateggory() {
+    const req = { 'status': 1 };
+    this._service.PostService(req, '/projectlib/getProjEmpTyFpes')
+      .subscribe((data) => {
+        this.empCategories = data.projEmpCatgTOs;
+      }, (error) => console.log(error));
+    const req1 = { 'status': 1, 'procureClassId': 1 };
+    this._service.PostService(req1, '/centrallib/getMeasuresByProcureType')
+      .subscribe((data) => this.manMeasureList = data.measureUnitTOs);
   }
   editMP() {
     this.editmp = true;
+    const d = new Date(this.selectedMp.startDate);
+    const d1 = new Date(this.selectedMp.finishDate);
+    this.mpForm = this.fb.group({
+      originalQty: [this.selectedMp.originalQty, [Validators.required, FormsValidationService.numberOnly]],
+      revisedQty: [this.selectedMp.revisedQty, [Validators.required, FormsValidationService.numberOnly]],
+      actualQty: [this.selectedMp.actualQty || 0, [Validators.required, FormsValidationService.numberOnly]],
+      remainingQty: [this.selectedMp.remainingQty, [Validators.required, FormsValidationService.numberOnly]],
+      empClassTO: [this.selectedMp.empClassTO.id, Validators.required],
+      projEmpCatgTO: [this.selectedMp.projEmpCatgTO.id, Validators.required],
+      measureId: [this.selectedMp.measureUnitTO.id, Validators.required],
+      startDate: [{ date: { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() }, formatted: this.selectedMp.startDate }, Validators.required],
+      finishDate: [{ date: { year: d1.getFullYear(), month: d1.getMonth() + 1, day: d1.getDate() }, formatted: this.selectedMp.finishDate }, Validators.required]
+    });
+    this.createMp();
   }
   createMp() {
-    $('#manPowerpop').modal('show');
     this._service.PostService({}, '/centrallib/getEmpClasses')
       .subscribe((data) => {
+        this.getCateggory();
+        $('#manPowerpop').modal('show');
         this.mpResources = data.empClassTOs;
       }, (error) => alert('error fetching empclass'));
   }
   saveMp() {
-    const req = {
-      'projManpowerTOs': [
-        {
-          'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.mpForm.value.originalQty,
-          'revisedQty': this.mpForm.value.revisedQty, 'actualQty': this.mpForm.value.actualQty,
-          'remainingQty': this.mpForm.value.remainingQty,
-          'empClassTO': this.mpResources.filter((data) => data.id === this.mpForm.value.empClassTO)
-          , 'projEmpCatgTO': '', 'measureUnitTO': '', 'estimateComplete': null,
-          'estimateCompletion': null, 'startDate': this.mpForm.value.startDate.formatted,
-          'finishDate': this.mpForm.value.finishDate.formatted, 'status': 1, 'duplicateFlag': false,
-          'measureId': this.mpForm.value.measureId
-        }]
-      , 'projId': this.selectedlist[0].projId
-    };
-    console.log(req);
+    let req: any;
+    if (this.editmp) {
+      req = this.selectedMp;
+      req.originalQty = this.mpForm.value.originalQty;
+      req.revisedQty = this.mpForm.value.revisedQty;
+      req.actualQty = this.mpForm.value.actualQty;
+      req.remainingQty = this.mpForm.value.remainingQty;
+      req.empClassTO = this.mpResources.filter((data) => data.id == this.mpForm.value.empClassTO)[0];
+      req.projEmpCatgTO = this.empCategories.filter((data) => data.id == this.mpForm.value.projEmpCatgTO)[0];
+      req.measureUnitTO = this.manMeasureList.filter((data) => data.id == this.mpForm.value.measureId)[0];
+      req.startDate = this.mpForm.value.startDate.formatted;
+      req.finishDate = this.mpForm.value.finishDate.formatted;
+    } else {
+      req = {
+        'projManpowerTOs': [
+          {
+            'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.mpForm.value.originalQty,
+            'revisedQty': this.mpForm.value.revisedQty, 'actualQty': null,
+            'remainingQty': this.mpForm.value.remainingQty,
+            'empClassTO': this.mpResources.filter((data) => data.id == this.mpForm.value.empClassTO)[0]
+            , 'projEmpCatgTO': this.empCategories.filter((data) => data.id == this.mpForm.value.projEmpCatgTO)[0],
+            'measureUnitTO': this.manMeasureList.filter((data) => data.id == this.mpForm.value.measureId)[0], 'estimateComplete': null,
+            'estimateCompletion': null, 'startDate': this.mpForm.value.startDate.formatted,
+            'finishDate': this.mpForm.value.finishDate.formatted, 'status': 1, 'duplicateFlag': false,
+            'measureId': this.mpForm.value.measureId
+          }]
+        , 'projId': this.selectedlist[0].projId
+      };
+    }
+    this._service.PostService(req, '/projsettings/saveProjManpowers')
+      .subscribe((data) => {
+        this.manPowerList = data.projManpowerTOs;
+        this.manPowerList.forEach(e => {
+          e.checked = false;
+        });
+        $('#manPowerpop').modal('hide');
+        this._service.showSuccessMessage(data.message);
+      }, (error) => this._service.showErrorMessage(error.message));
   }
   disableMpDates(val, date) {
     const d: Date = new Date(date.jsdate.getTime());

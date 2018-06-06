@@ -53,7 +53,7 @@ export class FormsValidationService {
     }
     static numberOnly(control) {
         const pattern = '^\\d+$';
-        let value = (typeof control.value == 'number') ? (control.value).toString() : control.value;
+        const value = (typeof control.value === 'number') ? (control.value).toString() : control.value;
         if (control.value === '' || control.value === null) {
             return null;
         } else if (value.match(pattern)) {

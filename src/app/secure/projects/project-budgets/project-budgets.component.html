@@ -299,8 +299,8 @@
             <section id="layout_footer" class="tbl_footer btns text-right">
               <div class="row ml-0 mr-0 pagination_block">
                 <div class="col col-sm-12 text-right">
-                  <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="editMP()">Edit</button>
-                  <button class="btn btn-success" type="button" (click)="createMp()">Create</button>
+                  <button type="button" class="btn btn-primary" [disabled]="!selectedlist[0].projId || !selectedMp.id" (click)="editMP()">Edit</button>
+                  <button class="btn btn-success" type="button" [disabled]="!selectedlist[0].projId" (click)="createMp()">Create</button>
                 </div>
               </div>
             </section>
@@ -609,10 +609,11 @@
 
               </div>
               <div class="form-group col-md-6 col">
+                <label for="companyid" class="form-label">Employee Category</label>
                 <select formControlName="projEmpCatgTO" class="form-control form-input " id="categoryid">
                   <option value="">--select--</option>
-                  <option *ngFor="let resource of mpResources" [value]="resource.id">
-                    {{resource.dispName}}
+                  <option *ngFor="let category of empCategories" [value]="category.id">
+                    {{category.name}}
                   </option>
                 </select>
                 <app-error-messages [control]="mpForm.controls[ 'projEmpCatgTO']"></app-error-messages>
@@ -625,8 +626,8 @@
                 <select formControlName="measureId" class="form-control form-input " id="measureid">
                   <option *ngIf="!resourceid.value" value="">--select resource--</option>
                   <option *ngIf="resourceid.value" value="">--select--</option>
-                  <option *ngFor="let resource of mpResources" [value]="resource.id">
-                    {{resource.dispName}}
+                  <option *ngFor="let measure of manMeasureList" [value]="measure.id">
+                    {{measure.name}}
                   </option>
                 </select>
                 <app-error-messages [control]="mpForm.controls['measureId']"></app-error-messages>
@@ -634,40 +635,38 @@
               </div>
               <div class="form-group col-md-6 col">
                 <label for="companyname" class="form-label">Original Budget Quantity</label>
-                <input type="text " formControlName="originalQty" class="form-control form-input " id="companyname" required>
-                <app-error-messages [control]="mpForm.controls[ 'originalQty']"></app-error-messages>
+                <input type="text " formControlName="originalQty" class="form-control form-input " id="originalquantity" required>
+                <app-error-messages [control]="mpForm.controls['originalQty']"></app-error-messages>
               </div>
 
             </div>
             <div class="row">
               <div class="form-group col-md-6 col ">
                 <label for="companyid" class="form-label">Revised Budget Quantity</label>
-                <input type="text " formControlName="revisedQty" class="form-control form-input " (keyup)="verifyCode(code.value)" #code
-                  id="companyid" required>
-                <app-error-messages [control]="mpForm.controls[ 'revisedQty']"></app-error-messages>
+                <input type="text " formControlName="revisedQty" class="form-control form-input " id="revisedquantity" required>
+                <app-error-messages [control]="mpForm.controls['revisedQty']"></app-error-messages>
 
               </div>
               <div class="form-group col-md-6 col">
                 <label for="companyname" class="form-label">Actual Quantity to Date</label>
-                <input type="text " formControlName="actualQty" class="form-control form-input " id="companyname" required>
-                <app-error-messages [control]="mpForm.controls[ 'actualQty']"></app-error-messages>
+                <input type="text " formControlName="actualQty" class="form-control form-input " id="actualquantity" required>
+                <app-error-messages [control]="mpForm.controls['actualQty']"></app-error-messages>
               </div>
 
             </div>
             <div class="row">
               <div class="form-group col-md-6 col ">
                 <label for="companyid" class="form-label">Remaining Quantity</label>
-                <input type="text " formControlName="remainingQty" class="form-control form-input " (keyup)="verifyCode(code.value)" #code
-                  id="companyid" required>
-                <app-error-messages [control]="mpForm.controls[ 'remainingQty']"></app-error-messages>
+                <input type="text " formControlName="remainingQty" class="form-control form-input " id="remainaingquantity" required>
+                <app-error-messages [control]="mpForm.controls['remainingQty']"></app-error-messages>
 
               </div>
               <div class="form-group col-md-6 col">
                 <label for="companyname" class="form-label">Schedule Start</label>
                 <div class="row" style="padding:5px;">
                   <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp.toggleCalendar()" ngx-mydatepicker
-                    name="myDate" formControlName="startDate" [options]="mpstartOpt" #dp="ngx-mydatepicker" (dateChanged)="disableMpDates('start',$event)"
-                  />
+                    name="myDate" formControlName="startDate" [options]="mpstartOpt" id="startDate" #dp="ngx-mydatepicker"
+                    (dateChanged)="disableMpDates('start',$event)" />
                   <span class="col0-md-4 col " style="padding: 0px;">
                     <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp.clearDate()">
                       <i class="fa fa-times "></i>
@@ -686,8 +685,8 @@
                 <label for="companyid" class="form-label">Schedule Finish</label>
                 <div class="row" style="padding:5px;">
                   <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp1.toggleCalendar()" ngx-mydatepicker
-                    name="myDate" formControlName="finishDate" [options]="mpfinishOpt" #dp1="ngx-mydatepicker" (dateChanged)="disableMpDates('finish',$event)"
-                  />
+                    name="myDate" formControlName="finishDate" [options]="mpfinishOpt" id="finishdate" #dp1="ngx-mydatepicker"
+                    (dateChanged)="disableMpDates('finish',$event)" />
                   <span class="col0-md-4 col " style="padding: 0px;">
                     <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp1.clearDate()">
                       <i class="fa fa-times "></i>

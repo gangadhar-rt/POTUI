@@ -203,7 +203,7 @@ export class TenantlistComponent implements OnInit {
     this.disableSave = false;
     let d = new Date();
     if (this.selectedlist[0].licence) {
-      d = new Date(this.selectedlist[0].licence)
+      d = new Date(this.selectedlist[0].licence);
     }
     this.tenantForm = this.fb.group({
       'firstName': [this.selectedlist[0].userTO.firstName, [Validators.required, FormsValidationService.OneAlpha, Validators.maxLength(50)]],
