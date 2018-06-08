@@ -1,0 +1,570 @@
+<form class="form_block" non-validate [formGroup]="searchRequest" (ngSubmit)="getLatestPreContracts(); ">
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <input type="text" formControlName="epsName" readonly (click)="getEPSUserProjects()" class="form-control cust-input" #epsName
+          required placeholder="EPS Name">
+
+        <!-- <input type="text "  class="form-control form-input " #code required> -->
+        <app-error-messages [control]="searchRequest.controls[ 'epsName']"></app-error-messages>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input type="text" (click)="getEPSUserProjects()" readonly formControlName="projectName" class="form-control cust-input"
+          #projectName required placeholder="Project Name">
+        <app-error-messages [control]="searchRequest.controls[ 'projectName']"></app-error-messages>
+
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <select class="form-control cust-input" style="float:none" formControlName="approveStatus">
+          <option value="" disabled>--Select--</option>
+          <option *ngFor="let status of getWorkFlowStatusList ; let idx = index" [attr.selected]="idx === 0" [ngValue]="status.value">{{status.desc}}</option>
+        </select>
+        <app-error-messages [control]="searchRequest.controls[ 'approveStatus']"></app-error-messages>
+
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" style="float:none" formControlName="fromDate" placeholder="From Date" #fromDate required
+          (click)="dp1.toggleCalendar()" ngx-mydatepicker name="myDate" [options]="myOptions" #dp1="ngx-mydatepicker" />
+        <app-error-messages [control]="searchRequest.controls[ 'fromDate']"></app-error-messages>
+
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <input class="form-control cust-input" style="float:none" formControlName="toDate" placeholder="To Date" #toDate required
+          (click)="dp2.toggleCalendar()" ngx-mydatepicker name="myDate" [options]="myOptions" #dp2="ngx-mydatepicker" />
+        <app-error-messages [control]="searchRequest.controls[ 'toDate']"></app-error-messages>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <div class="pull-right">
+          <input type="radio" checked="true" formControlName="loginUser" name="loginUser" [value]="true"> Login User Records
+          <input type="radio" name="loginUser" formControlName="loginUser" [value]="false"> All User Records
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col search_btn text-right col-2">
+      <button type="submit" [disabled]="searchRequest.invalid">
+        <i title="Search" class="fa fa-search"></i>
+      </button>
+      <button type="reset" (click)="resetSearch()">
+        <i title="Refresh" class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+</form>
+
+
+
+
+<!-- tabel -->
+<section id="layout_header">
+  <!-- <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">contract Information</h2>
+    </div>
+  </div> -->
+
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+      <col style="width:7%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>EPS Name</th>
+        <th>Project Name</th>
+        <th>Pre-Contract ID</th>
+        <th>Pre-Contract Description</th>
+        <th>Requisition ID</th>
+        <th>Approver Response ID</th>
+        <th>Requester</th>
+        <th>Approver</th>
+        <th>Pre-Contract Type</th>
+        <th>Schedule Items</th>
+        <th>Response Status</th>
+        <th>Approve Details</th>
+        <th>Reference Documents</th>
+      </tr>
+    </thead>
+
+  </table>
+</section>
+
+
+<section id="main_content">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+          <col style="width:7%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let req of preContracts?.preContractTOs | paginate: { itemsPerPage: records, currentPage: p }; let i=index">
+            <td>
+              <div class="cust-check" (click)="selectedRecords(req,$event)">
+                <input type="checkbox" [checked]="req.checked==true" />
+                <label></label>
+              </div>
+            </td>
+            <td>{{preContracts?.userProjMap[req.projId]?.code}}</td>
+            <td>{{preContracts?.userProjMap[req.projId]?.name}}</td>
+            <td>{{req?.code}}</td>
+            <td>{{req?.desc}}</td>
+            <td>{{req?.preContractReqApprTO?.reqCode}}</td>
+            <td>{{req?.preContractReqApprTO?.apprCode}}</td>
+            <td>{{preContracts?.usersMap[req?.preContractReqApprTO?.reqUserLabelkeyTO?.id]?.name}}</td>
+            <td>{{preContracts?.usersMap[req?.preContractReqApprTO?.apprUserLabelkeyTO?.id]?.name}}</td>
+            <td>{{req?.preContractTypeTO?.code}}</td>
+            <button type="button" class="btn btn-primary" (click)="RefDoc(req)">View/Edit</button>
+            <td>{{req?.workFlowStatusTO?.desc}}</td>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="getPreContractReqApprs(req.id)">view</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="RefDoc(req)">Ref Document</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<div class="tbl_footer btns text-right" id="layout_footer">
+  <div class="row  pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+
+
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <button type="button" class="btn btn-primary" (click)="create()">Create</button>
+          <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- //tabel -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade modal2" id="Enrollment-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Enterprise Projects</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="contractDetails">
+          <section id="main_content">
+            <div class="slimScroll">
+              <div class="table-responsive">
+                <div class="tree_table">
+                  <ul class="tree">
+                    <li class="parent">
+                      <header class="row">
+                        <div class="cust-check col col-sm-1">
+                          <input type="checkbox" [(ngModel)]="selectAll" (change)="checkAll(selectAll)">
+                          <label></label>
+                        </div>
+                      </header>
+                    </li>
+                  </ul>
+                  <ul class="tree">
+                    <li class="parent" *ngFor="let material of EPSUserProjects | slice:0:2 ;let i=index">
+                      <header class="row" *ngIf="material.projName!==null">
+                        <span class="col addicon col col-sm-4">
+                          <i class="fa  icon "></i> {{material.projCode}}</span>
+                        <span class="col col-sm-6"> {{material.projName}}</span>
+
+                      </header>
+                      <!-- level 1 -->
+                      <ul *ngFor=" let sub1 of material.childProjs " style="display: block;">
+                        <li *ngIf="sub1.childProjs.length>0">
+                          <header class="row">
+                            <span class="col addicon col-sm-4">
+                              <i class="fa icon "></i> {{sub1.projCode}}</span>
+                            <span class="col col-sm-4">{{sub1.projName}}</span>
+                          </header>
+                        </li>
+                        <li *ngIf="sub1.childProjs.length===0">
+                          <header class="row">
+                            <div class="cust-check col col-sm-1">
+                              <input type="checkbox" [checked]="material.checked" (change)="selectedProjRecords(material,$event)">
+                              <label></label>
+                            </div>
+                            <span class="col addicon col-sm-4">
+                              <i class="fa fa-circle"></i>{{sub1.projCode}}</span>
+                            <span class="col col-sm-4"> {{sub1.projName}}</span>
+                          </header>
+                        </li>
+
+                      </ul>
+                    </li>
+                    <!-- end li -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- create/edit popup -->
+
+
+<div class="modal fade" id="epsProjects" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-llg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add PreContract List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-sm">
+        <div class="popup_align_form">
+
+          <form class="form_block" non-validate [formGroup]="createList" (ngSubmit)="saveDetails(); ">
+
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="id" class="form-label">EPS Name</label>
+                <input type="text " formControlName="eps_name" (click)="getEPSUserProjects(true)" class="form-control form-input " #eps_name
+                  required>
+                <app-error-messages [control]="createList.controls[ 'eps_name']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-6 col">
+
+
+
+                <label for="id" class="form-label">Project Name</label>
+                <input type="text " formControlName="project_name" (click)="getEPSUserProjects(true)" class="form-control form-input " #project_name
+                  required>
+                <app-error-messages [control]="createList.controls[ 'project_name']"></app-error-messages>
+
+
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="id" class="form-label">Contract Type</label>
+                <select class="form-control" id="preContractTOs" formControlName="preContractTOs">
+                  <option value="" disabled selected>--Select--</option>
+                  <option *ngFor="let preContract of popupMapData?.preContractTypeTOs" [selected]="preContract===createList.value.preContractTOs"
+                    [ngValue]="preContract">{{preContract.code}}</option>
+                </select>
+                <app-error-messages [control]="createList.controls[ 'preContractTOs']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col">
+                <label for="id" class="form-label">Contract Description</label>
+                <input type="text " formControlName="Description" class="form-control form-input " #Description required>
+                <app-error-messages [control]="createList.controls[ 'Description']"></app-error-messages>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="id" class="form-label">Currency</label>
+                <select class="form-control" id="currencyTO" formControlName="currencyTO">
+                  <option value="" disabled>--Select--</option>
+                  <option *ngFor="let currency of popupMapData?.currencyTOs" [ngValue]="currency" [selected]="currency===createList.value.currencyTO">{{currency.code}}</option>
+                </select>
+                <app-error-messages [control]="createList.controls[ 'currencyTO']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col">
+              </div>
+            </div>
+            <hr>
+            <div class="btns text-right" id="layout_footer">
+              <button class="btn btn-primary" type="button" [disabled]="createList.invalid" (click)="saveDetails()">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- //create/edit popup -->
+
+
+
+<!-- eps popup -->
+
+
+
+<div class="modal fade modal2" id="preContractReqAppr-popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Enterprise Projects</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tenantDetails">
+          <section id="main_content" style="min-height: 200px;">
+            <div class="slimScroll">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Requester</th>
+                      <th>Requester Comments</th>
+                      <th>Date Of Request</th>
+                      <th>Approver</th>
+                      <th>Approver Comments</th>
+                      <th>Date Of Response</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let reqApprObj of preContractReqAppr?.preContractReqApprTOs">
+                      <td>{{preContractReqAppr?.userMap[reqApprObj?.reqUserLabelkeyTO?.id]?.name}}</td>
+                      <td>{{reqApprObj.reqComments}}</td>
+                      <td>{{reqApprObj?.reqDate}}</td>
+                      <td>{{preContractReqAppr?.userMap[reqApprObj?.apprUserLabelkeyTO?.id]?.name}}</td>
+                      <td>{{reqApprObj?.apprComments}}</td>
+                      <td>{{reqApprObj?.apprDate}}</td>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+
+
+
+
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- //eps popup -->
+
+
+
+
+
+<!-- ref docu popup -->
+
+
+
+<div class="modal fade" id="refDocc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-llg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Referance Document</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-sm">
+        <div class="popup_align_form">
+          <div class="row">
+            <div class="form-group col ">
+              <label for="id" class="form-label" style="font-weight: bold;">Pre-Contract ID </label>
+              <label for="id" class="form-control" style="border:none;">{{selectedRefDoc?.code}}</label>
+            </div>
+            <div class="form-group col ">
+              <label for="id" class="form-label" style="font-weight: bold;">Contract Description</label>
+              <label for="id" class="form-control" style="border:none;">{{selectedRefDoc?.desc}}</label>
+            </div>
+
+          </div>
+          <div class="row">
+
+          </div>
+          <!-- <form class="form_block" non-validate (ngSubmit)="saveDetails(); "> -->
+          <form name="referenceDocForm" validate>
+            <div class="">
+              <table class="table-striped tbl_head table  mb-0">
+                <colgroup>
+                  <col style="width:10%" />
+                  <col style="width:10%" />
+                  <col style="width:10%" />
+                  <col style="width:10%" />
+                  <col style="width:20%" />
+                  <col style="width:10%" />
+                  <col style="width:10%" />
+                  <col style="width:10%" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Document ID</th>
+                    <th>Description</th>
+                    <th>Version</th>
+                    <th>Upload / View File</th>
+                    <th>Type of File</th>
+                    <th>Size of File</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+              </table>
+              <section id="main_content">
+                <div class="slimScroll ss_sm">
+                  <div class="table-responsive text-center">
+                    <table class="table-striped tbl_body table  mb-0">
+                      <colgroup>
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                        <col style="width:20%" />
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                      </colgroup>
+                      <tbody>
+                        <tr *ngFor="let reference of refDocData?.preContractDocsTOs">
+                          <!-- <td>
+                              <input type="checkbox" [(ngModel)]="reference.select" ng-click="referencerowSelect(reference)" ng-disabled="reference.id>0"
+                              />
+                            </td> -->
+
+                          <td>
+                            <input type="text" class="form-control form-input " name="date_{{i}}" [(ngModel)]="reference.date" placeholder="Auto Generate"
+                              readonly="readonly">
+                          </td>
+                          <td>
+                            <input type="text" class="form-control form-input " name="code_{{i}}" [(ngModel)]="reference.code" placeholder="Auto Generate"
+                              readonly="readonly">
+                          </td>
+
+
+                          <td class="input-width2">
+                            <input type="text" class="form-control form-input " name="description_{{i}}" [(ngModel)]="reference.name" placeholder="description"
+                              required="required" maxlength="50">
+                          </td>
+
+                          <td class="input-width2">
+                            <input type="text" class="form-control form-input " name="version_{{i}}" [(ngModel)]="reference.version" placeholder="version"
+                              required="required" maxlength="3">
+                          </td>
+                          <td class="input-width3">
+                            <input type="file" name="doc_{{i}}" [(ngModel)]="reference.doc" tabindex="-1" placeholder="Doc" style="display: inline !important;">
+                          </td>
+
+                          <td class="input-width2">
+                            <input type="text" class="form-control form-input " name="typeofFile_{{i}}" [(ngModel)]="reference.typeofFile" placeholder="Typeof File"
+                              readonly="readonly">
+                          </td>
+
+                          <td class="input-width2">
+                            <input type="text" class="form-control form-input " name="sizeofFile_{{i}}" [(ngModel)]="reference.sizeofFile" placeholder="Sizeof File"
+                              readonly="readonly">
+                          </td>
+
+                          <td class="input-width2">
+                            <span>{{reference.version >1 ? 'Superseded' : 'Current'}}</span>
+                          </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <hr>
+            <div class="btns text-right" id="layout_footer">
+              <button class="btn btn-primary" type="button" (click)="addRef()">add</button>
+              <!-- <button class="btn btn-primary" type="button" (click)="closeRef()">delete</button> -->
+              <button class="btn btn-primary" type="submit" (click)="saveRefDetails()">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- /ref docu popup -->

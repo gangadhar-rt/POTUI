@@ -1,132 +1,132 @@
 <section id="layout_header">
 
-    <div class="row">
-        <div class="col col-sm-4">
-            <h2 class="ttl2">Project Plant Classifications</h2>
-        </div>
-        <div class="col">
-            <div class="form-group" style="position:relative">
-                <select class="form-control cust-input" [(ngModel)]="selectedProj">
-                    <ng-container *ngFor="let pro of ProjectList">
-                        <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
-                            <ng-container *ngFor="let spro of pro.childProjs">
-                                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
-                                    <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
-                                </ng-container>
-                                <ng-container #opt1 *ngIf="spro.proj">
-                                    <option [value]="spro.projId">{{spro.projCode}}</option>
-                                </ng-container>
-                            </ng-container>
-                        </optgroup>
-                        <ng-container #opt *ngIf="pro.proj">
-                            <option [value]="pro.projId"> {{pro.projCode}}</option>
-                        </ng-container>
-                    </ng-container>
-                </select>
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Project Plant Classifications</h2>
+    </div>
+    <div class="col">
+      <div class="form-group" style="position:relative">
+        <select class="form-control cust-input" [(ngModel)]="selectedProj">
+          <ng-container *ngFor="let pro of ProjectList">
+            <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
+              <ng-container *ngFor="let spro of pro.childProjs">
+                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
+                  <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
+                </ng-container>
+                <ng-container #opt1 *ngIf="spro.proj">
+                  <option [value]="spro.projId">{{spro.projCode}}</option>
+                </ng-container>
+              </ng-container>
+            </optgroup>
+            <ng-container #opt *ngIf="pro.proj">
+              <option [value]="pro.projId"> {{pro.projCode}}</option>
+            </ng-container>
+          </ng-container>
+        </select>
 
-            </div>
-        </div>
-
-        <div class="col search_btn text-right col-2">
-            <button (click)="getData()">
-                <i class="fa fa-search"></i>
-            </button>
-            <button>
-                <i class="fa fa-refresh"></i>
-            </button>
-        </div>
+      </div>
     </div>
 
-    <table class="table tbl_head">
-        <colgroup>
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Resource Code </th>
-                <th>Resource Name</th>
-                <th>Plant Name As Per Contract</th>
-                <th>Unit Of Measure </th>
-                <th>Status</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="col search_btn text-right col-2">
+      <button (click)="getData()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Resource Code </th>
+        <th>Resource Name</th>
+        <th>Plant Name As Per Contract</th>
+        <th>Unit Of Measure </th>
+        <th>Status</th>
+      </tr>
+    </thead>
+  </table>
 </section>
 <!-- fixed header layout -->
 
 <!-- fixed content layout -->
 <section id="main_content">
-    <div class="slimScroll">
-        <div class="table-responsive text-center">
-            <table class="table-striped table tbl_body">
-                <colgroup>
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                </colgroup>
-                <tbody>
-                    <tr *ngFor="let plants of List | paginate: {id:'plantsclasification', itemsPerPage: records, currentPage: p };
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let plants of List | paginate: {id:'plantsclasification', itemsPerPage: records, currentPage: p };
               let i=index;">
-                        <td>
-                            <!-- <div class="cust-check" (click)="selectedRecords(employee,$event)">
+            <td>
+              <!-- <div class="cust-check" (click)="selectedRecords(employee,$event)">
                                 <input type="checkbox" [checked]="employee.checked==true" />
                                 <label></label>
                             </div> -->
-                            {{plants.plantClassTO.code}}
+              {{plants.plantClassTO.code}}
 
-                        </td>
-                        <td>{{plants.plantClassTO.name}}</td>
-                        <td>
-                            <input type="Text" [(ngModel)]="plants.plantContrName" class="form-control form-input " />
-                        </td>
-                        <td>{{plants.plantClassTO.measureUnitTO.name}}</td>
-                        <td>{{plants.status}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            </td>
+            <td>{{plants.plantClassTO.name}}</td>
+            <td>
+              <input type="Text" [(ngModel)]="plants.plantContrName" class="form-control form-input " />
+            </td>
+            <td>{{plants.plantClassTO.measureUnitTO.name}}</td>
+            <td>{{plants.status}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </section>
 <!-- fixed content layout -->
 
 <!-- fixed footer layout -->
 <div class="tbl_footer btns text-right" id="layout_footer">
-    <div class="row ml-0 mr-0 pagination_block">
-        <div class="col col-sm-3 text-left">
-            <label>Total No OF Records :</label>
-            <select [(ngModel)]="records">
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-                <option value="35">35</option>
-                <option value="40">40</option>
-                <option value="45">45</option>
-                <option value="50">50</option>
-            </select>
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select [(ngModel)]="records">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="plantsclasification" maxSize="4" (pageChange)="p = $event"></pagination-controls>
         </div>
-        <div class="col col-sm-9 text-right" style="display: inline-block">
-            <div class="row">
-                <div class="col col-sm-6 text-right">
-                    <pagination-controls id="plantsclasification" maxSize="4" (pageChange)="p = $event"></pagination-controls>
-                </div>
-                <div class="col col-sm-6 text-right">
-                    <button type="submit" class="btn btn-primary">Save</button>
+        <div class="col col-sm-6 text-right">
+          <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
 
-                    <!-- <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
+          <!-- <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
                     <button type="button" class="btn btn-danger">Deactivate</button>
                     <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target="#empclasification">Create</button> -->
-                </div>
-            </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 

@@ -1,202 +1,202 @@
 <section id="layout_header">
-    <div class="row">
-        <div class="col col-sm-4">
-            <h2 class="ttl2">Project Material Transfer Restriction List</h2>
-        </div>
-        <div class="col">
-            <div class="form-group" style="position:relative">
-                <select class="form-control cust-input" [(ngModel)]="selectedProj">
-                    <ng-container *ngFor="let pro of ProjectList">
-                        <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
-                            <ng-container *ngFor="let spro of pro.childProjs">
-                                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
-                                    <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
-                                </ng-container>
-                                <ng-container #opt1 *ngIf="spro.proj">
-                                    <option [value]="spro.projId">{{spro.projCode}}</option>
-                                </ng-container>
-                            </ng-container>
-                        </optgroup>
-                        <ng-container #opt *ngIf="pro.proj">
-                            <option [value]="pro.projId"> {{pro.projCode}}</option>
-                        </ng-container>
-                    </ng-container>
-                </select>
-            </div>
-        </div>
-        <div class="col search_btn text-right col-2">
-            <button (click)="getData()">
-                <i class="fa fa-search"></i>
-            </button>
-            <button>
-                <i class="fa fa-refresh"></i>
-            </button>
-        </div>
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Project Material Transfer Restriction List</h2>
     </div>
-    <div class="tree_table tbl_head">
-        <div class="tree_tbl_head row ml-0 mr-0">
-            <div class="col _th col-sm-2"> Resource ID </div>
-            <div class="col _th col-sm-3"> Resource Name </div>
-            <div class="col _th col-sm-3"> Unit Of Measure </div>
-            <div class="col _th col-sm-2"> Internal Project Transfer </div>
-            <div class="col _th col-sm-2"> External Project Transfer </div>
-        </div>
+    <div class="col">
+      <div class="form-group" style="position:relative">
+        <select class="form-control cust-input" [(ngModel)]="selectedProj">
+          <ng-container *ngFor="let pro of ProjectList">
+            <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
+              <ng-container *ngFor="let spro of pro.childProjs">
+                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
+                  <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
+                </ng-container>
+                <ng-container #opt1 *ngIf="spro.proj">
+                  <option [value]="spro.projId">{{spro.projCode}}</option>
+                </ng-container>
+              </ng-container>
+            </optgroup>
+            <ng-container #opt *ngIf="pro.proj">
+              <option [value]="pro.projId"> {{pro.projCode}}</option>
+            </ng-container>
+          </ng-container>
+        </select>
+      </div>
     </div>
+    <div class="col search_btn text-right col-2">
+      <button (click)="getData()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="tree_table tbl_head">
+    <div class="tree_tbl_head row ml-0 mr-0">
+      <div class="col _th col-sm-2"> Resource ID </div>
+      <div class="col _th col-sm-3"> Resource Name </div>
+      <div class="col _th col-sm-3"> Unit Of Measure </div>
+      <div class="col _th col-sm-2"> Internal Project Transfer </div>
+      <div class="col _th col-sm-2"> External Project Transfer </div>
+    </div>
+  </div>
 </section>
 
 <!-- fixed content layout -->
 
 <section id="main_content">
-    <div class="slimScroll">
-        <div class="table-responsive">
-            <div class="tree_table">
+  <div class="slimScroll">
+    <div class="table-responsive">
+      <div class="tree_table">
 
-                <ul class="tree">
-                    <li class="parent" *ngFor="let material of List | paginate: {id:'materials', itemsPerPage: records, currentPage: p } ;let i=index">
-                        <header class="row" *ngIf="material.projName!==null">
-                            <!-- <div class="cust-check col col-sm-1" (click)="selectedRecords(material,$event)">
+        <ul class="tree">
+          <li class="parent" *ngFor="let material of List | paginate: {id:'materials', itemsPerPage: records, currentPage: p } ;let i=index">
+            <header class="row" *ngIf="material.projName!==null">
+              <!-- <div class="cust-check col col-sm-1" (click)="selectedRecords(material,$event)">
                                 <input type="checkbox" [checked]="material.checked==true">
                                 <label></label>
                             </div> -->
-                            <span class="col addicon col col-sm-2">
-                                <i class="fa  icon "></i> {{material.code}}</span>
-                            <span class="col col-sm-3"> {{material.name}}</span>
+              <span class="col addicon col col-sm-2">
+                <i class="fa  icon "></i> {{material.code}}</span>
+              <span class="col col-sm-3"> {{material.name}}</span>
 
+            </header>
+            <!-- level 1 -->
+            <ul *ngFor=" let sub1 of material.projMaterialClassTOs">
+              <li *ngIf="sub1.projMaterialClassTOs.length>0">
+                <header class="row">
+                  <div class="cust-check col col-sm-1">
+
+                  </div>
+                  <span class="col addicon col-sm-4">
+                    <i class="fa icon "></i> {{sub1.code}}</span>
+                  <span class="col col-sm-4">{{sub1.name}}</span>
+                </header>
+                <!-- level 2 -->
+
+                <ul *ngFor="let sub2 of sub1.projMaterialClassTOs">
+                  <li *ngIf="sub2.projMaterialClassTOs.length>0">
+                    <header class="row">
+                      <div class="cust-check col col-sm-1">
+
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa icon "></i> {{sub2.code}}</span>
+                      <span class="col col-sm-4">{{sub2.name}}</span>
+                    </header>
+                    <!-- level 3 -->
+
+                    <ul *ngFor="let sub3 of sub2.projMaterialClassTOs">
+                      <li *ngIf="sub3.projMaterialClassTOs.length>0">
+                        <header class="row">
+                          <div class="cust-check col col-sm-1">
+
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa icon "></i> {{sub3.code}}</span>
+                          <span class="col col-sm-2">{{sub3.name}}</span>
                         </header>
-                        <!-- level 1 -->
-                        <ul *ngFor=" let sub1 of material.projMaterialClassTOs">
-                            <li *ngIf="sub1.projMaterialClassTOs.length>0">
-                                <header class="row">
-                                    <div class="cust-check col col-sm-1">
+                        <!-- level 4 -->
 
-                                    </div>
-                                    <span class="col addicon col-sm-4">
-                                        <i class="fa icon "></i> {{sub1.code}}</span>
-                                    <span class="col col-sm-4">{{sub1.name}}</span>
-                                </header>
-                                <!-- level 2 -->
+                        <ul *ngFor="let sub4 of sub3.projMaterialClassTOs">
+                          <li>
+                            <header class="row">
+                              <div class="cust-check col col-sm-1">
 
-                                <ul *ngFor="let sub2 of sub1.projMaterialClassTOs">
-                                    <li *ngIf="sub2.projMaterialClassTOs.length>0">
-                                        <header class="row">
-                                            <div class="cust-check col col-sm-1">
-
-                                            </div>
-                                            <span class="col addicon col-sm-4">
-                                                <i class="fa icon "></i> {{sub2.code}}</span>
-                                            <span class="col col-sm-4">{{sub2.name}}</span>
-                                        </header>
-                                        <!-- level 3 -->
-
-                                        <ul *ngFor="let sub3 of sub2.projMaterialClassTOs">
-                                            <li *ngIf="sub3.projMaterialClassTOs.length>0">
-                                                <header class="row">
-                                                    <div class="cust-check col col-sm-1">
-
-                                                    </div>
-                                                    <span class="col addicon col-sm-4">
-                                                        <i class="fa icon "></i> {{sub3.code}}</span>
-                                                    <span class="col col-sm-2">{{sub3.name}}</span>
-                                                </header>
-                                                <!-- level 4 -->
-
-                                                <ul *ngFor="let sub4 of sub3.projMaterialClassTOs">
-                                                    <li>
-                                                        <header class="row">
-                                                            <div class="cust-check col col-sm-1">
-
-                                                            </div>
-                                                            <span class="col addicon col-sm-3">
-                                                                <i class="fa fa-circle"></i> {{sub4.code}}</span>
-                                                            <span class="col col-sm-3"> {{sub4.name}}</span>
-                                                        </header>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li *ngIf="sub3.projMaterialClassTOs.length===0">
-                                                <header class="row">
-                                                    <div class="cust-check col col-sm-1">
-
-                                                    </div>
-                                                    <span class="col addicon col-sm-4">
-                                                        <i class="fa fa-circle"></i>{{sub3.code}}</span>
-                                                    <span class="col col-sm-4"> {{sub3.name}}</span>
-                                                </header>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li *ngIf="sub2.projMaterialClassTOs.length===0">
-                                        <header class="row">
-                                            <div class="cust-check col col-sm-1">
-
-                                            </div>
-                                            <span class="col addicon col-sm-4">
-                                                <i class="fa fa-circle"></i>{{sub2.code}}</span>
-                                            <span class="col col-sm-4"> {{sub2.name}}</span>
-                                        </header>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li *ngIf="sub1.projMaterialClassTOs.length===0">
-                                <header class="row">
-                                    <div class="cust-check col col-sm-1">
-
-                                    </div>
-                                    <span class="col addicon col-sm-2">
-                                        <i class="fa fa-circle"></i>{{sub1.code}}</span>
-                                    <span class="col col-sm-3"> {{sub1.name}}</span>
-                                    <span class="col col-sm-2"> {{sub1.measureUnitTO?sub1.measureUnitTO.name:''}}</span>
-                                    <span class="col col-sm-2" (click)="sub1.internalApproved===1?sub1.internalApproved=0:sub1.internalApproved=1">
-                                        <input type="checkbox" [disabled]="sub1.internalApproved===2" [checked]="sub1.internalApproved===1?true:false">
-                                    </span>
-                                    <span class="col col-sm-2" (click)="sub1.externalApproved===1?sub1.externalApproved=0:sub1.externalApproved=1">
-                                        <input type="checkbox" [disabled]="sub1.externalApproved===2" [checked]="sub1.externalApproved===1?true:false">
-                                    </span>
-                                </header>
-                            </li>
-
+                              </div>
+                              <span class="col addicon col-sm-3">
+                                <i class="fa fa-circle"></i> {{sub4.code}}</span>
+                              <span class="col col-sm-3"> {{sub4.name}}</span>
+                            </header>
+                          </li>
                         </ul>
-                    </li>
-                    <!-- end li -->
+                      </li>
+                      <li *ngIf="sub3.projMaterialClassTOs.length===0">
+                        <header class="row">
+                          <div class="cust-check col col-sm-1">
+
+                          </div>
+                          <span class="col addicon col-sm-4">
+                            <i class="fa fa-circle"></i>{{sub3.code}}</span>
+                          <span class="col col-sm-4"> {{sub3.name}}</span>
+                        </header>
+                      </li>
+                    </ul>
+                  </li>
+                  <li *ngIf="sub2.projMaterialClassTOs.length===0">
+                    <header class="row">
+                      <div class="cust-check col col-sm-1">
+
+                      </div>
+                      <span class="col addicon col-sm-4">
+                        <i class="fa fa-circle"></i>{{sub2.code}}</span>
+                      <span class="col col-sm-4"> {{sub2.name}}</span>
+                    </header>
+                  </li>
                 </ul>
-            </div>
-        </div>
+              </li>
+              <li *ngIf="sub1.projMaterialClassTOs.length===0">
+                <header class="row">
+                  <div class="cust-check col col-sm-1">
+
+                  </div>
+                  <span class="col addicon col-sm-2">
+                    <i class="fa fa-circle"></i>{{sub1.code}}</span>
+                  <span class="col col-sm-3"> {{sub1.name}}</span>
+                  <span class="col col-sm-2"> {{sub1.measureUnitTO?sub1.measureUnitTO.name:''}}</span>
+                  <span class="col col-sm-2" (click)="sub1.internalApproved===1?sub1.internalApproved=0:sub1.internalApproved=1;selectMaterial(sub1)">
+                    <input type="checkbox" [checked]="sub1.internalApproved===1?true:false">
+                  </span>
+                  <span class="col col-sm-2" (click)="sub1.externalApproved===1?sub1.externalApproved=0:sub1.externalApproved=1;selectMaterial(sub1)">
+                    <input type="checkbox" [checked]="sub1.externalApproved===1?true:false">
+                  </span>
+                </header>
+              </li>
+
+            </ul>
+          </li>
+          <!-- end li -->
+        </ul>
+      </div>
     </div>
+  </div>
 </section>
 
 
 <!-- fixed footer layout -->
 <div class="tbl_footer btns text-right" id="layout_footer">
-    <div class="row ml-0 mr-0 pagination_block">
-        <div class="col col-sm-3 text-left">
-            <label>Total No OF Records :</label>
-            <!-- <select [(ngModel)]="records"> -->
-            <select>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-                <option value="35">35</option>
-                <option value="40">40</option>
-                <option value="45">45</option>
-                <option value="50">50</option>
-            </select>
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <!-- <select [(ngModel)]="records"> -->
+      <select>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="materials" maxSize="4" (pageChange)="p = $event"></pagination-controls>
         </div>
-        <div class="col col-sm-9 text-right" style="display: inline-block">
-            <div class="row">
-                <div class="col col-sm-6 text-right">
-                    <pagination-controls id="materials" maxSize="4" (pageChange)="p = $event"></pagination-controls>
-                </div>
-                <div class="col col-sm-6 text-right">
-                    <button type="button" class="btn btn-primary" (click)="save()">save</button>
-                </div>
-                <!-- <div class="col col-sm-6 text-right">
+        <div class="col col-sm-6 text-right">
+          <button type="button" class="btn btn-primary" (click)="save()">save</button>
+        </div>
+        <!-- <div class="col col-sm-6 text-right">
                     <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
                     <button type="button" class="btn btn-danger">Deactivate</button>
                     <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target="#empclasification">Create</button>
                 </div> -->
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 </div>

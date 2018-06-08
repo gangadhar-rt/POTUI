@@ -22,29 +22,34 @@ export class PlantClassificationComponent implements OnInit {
     this.getprojects();
   }
   getprojects() {
-    const request = { "status": 1 }
+    const request = { 'status': 1 };
     this.service.PostService(request, '/projectlib/getEPSUserProjects')
       .subscribe(data => {
         console.log(data);
         this.ProjectList = data.epsProjs;
       },
-      error => console.log(error))
+        error => console.log(error));
   }
   getProjs() {
     this.showProjs = !this.showProjs;
   }
   getData() {
-    const request = { "projId": this.selectedProj, "status": "1" }
+    const request = { 'projId': this.selectedProj, 'status': '1' };
     console.log(this.selectedProj);
     this.service.PostService(request, '/projectlib/getProjPlantClasses')
       .subscribe(data => {
         console.log(data);
         this.List = data.projPlantClassTOs;
       },
-      error => console.log(error))
+        error => console.log(error));
 
   }
-  save(){
-    console.log("saved");
+  save() {
+    const req = { projId: this.selectedProj, projPlantClassTOs: this.List };
+    this.service.PostService(req, '/projectlib/saveProjPlantClasses')
+      .subscribe((data) => {
+        this.List = data.projPlantClassTOs;
+        this.service.showSuccessMessage(data.message);
+      }, (error) => this.service.showErrorMessage(error.message));
   }
 }

@@ -14,7 +14,9 @@ export class FormsValidationService {
             'passwordmatch': 'Password Dosent match',
             'numberonly': 'Only Numbers are Allowed',
             'onealpha': 'Atleast one aphabet is mandatory',
-            'percent': 'Total Should be equal to 100'
+            'percent': 'Total Should be equal to 100',
+            'hours': 'Hours should not exceed 24',
+            'minutes': 'Minutes should not exceed 59'
         };
 
         return config[validatorName];
@@ -100,6 +102,24 @@ export class FormsValidationService {
             return null;
         } else {
             return { 'onealpha': true };
+        }
+    }
+    static Hours(control) {
+        if (control.value === '' || control.value === null) {
+            return null;
+        } else if (control.value < 24) {
+            return null;
+        } else {
+            return { 'hours': true };
+        }
+    }
+    static Minutes(control) {
+        if (control.value === '' || control.value === null) {
+            return null;
+        } else if (control.value < 60) {
+            return null;
+        } else {
+            return { 'minutes': true };
         }
     }
 }

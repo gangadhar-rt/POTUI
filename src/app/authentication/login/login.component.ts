@@ -17,9 +17,9 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = fb.group({
       // 'username': [null, Validators.compose([Validators.required, CustomValidators.email])],
-      'username': ['E-108A', Validators.required],
-      'password': ['e108a', Validators.required],
-      'clientcode': ['RajuTech1', Validators.nullValidator]
+      'username': ['E-204', Validators.required],
+      'password': ['e-204', Validators.required],
+      'clientcode': ['Raju Tech India Pvt Ltd1', Validators.nullValidator]
     });
 
   }

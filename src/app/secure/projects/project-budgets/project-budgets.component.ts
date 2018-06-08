@@ -12,20 +12,23 @@ import { INgxMyDpOptions, IMyDateModel } from 'ngx-mydatepicker';
 })
 export class ProjectBudgetsComponent implements OnInit {
   mpstartOpt: INgxMyDpOptions = {
-    // other options...
     dateFormat: 'dd-mmm-yyyy',
-    // disableUntil: { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() },
   };
   mpfinishOpt: INgxMyDpOptions = {
-    // other options...
     dateFormat: 'dd-mmm-yyyy',
-    // disableUntil: { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() },
+  };
+  plntstartOpt: INgxMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+  plntfinishOpt: INgxMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
   };
   List: any;
   editDetails: any;
   records = 20;
   selectedlist: any = [{ projId: 0 }];
   selectedMp: any = [{ id: 0 }];
+  selectedplnt: any = [{ id: 0 }];
   manPowerList = [];
   plantList = [];
   materialList = [];
@@ -40,6 +43,10 @@ export class ProjectBudgetsComponent implements OnInit {
   editmp = false;
   empCategories: any = [];
   manMeasureList: any = [];
+  plntForm: FormGroup;
+  plntResources: any = [];
+  editplnt = false;
+  plntMeasureList: any = [];
   constructor(private _service: ApiService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -51,6 +58,16 @@ export class ProjectBudgetsComponent implements OnInit {
       remainingQty: ['', [Validators.required, FormsValidationService.numberOnly]],
       empClassTO: ['', Validators.required],
       projEmpCatgTO: ['', Validators.required],
+      measureId: ['', Validators.required],
+      startDate: ['', Validators.required],
+      finishDate: ['', Validators.required]
+    });
+    this.plntForm = this.fb.group({
+      originalQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      revisedQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      actualQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      remainingQty: ['', [Validators.required, FormsValidationService.numberOnly]],
+      plantClassTO: ['', Validators.required],
       measureId: ['', Validators.required],
       startDate: ['', Validators.required],
       finishDate: ['', Validators.required]
@@ -85,6 +102,10 @@ export class ProjectBudgetsComponent implements OnInit {
   selectedRecords1(code, e) {
     e.stopPropagation();
     this.selectedMp = code;
+  }
+  selectedRecords2(code, e) {
+    e.stopPropagation();
+    this.selectedplnt = code;
   }
   getManPower() {
     const req = { 'status': '1', 'projId': this.selectedlist[0].projId };
@@ -185,27 +206,27 @@ export class ProjectBudgetsComponent implements OnInit {
       req.finishDate = this.mpForm.value.finishDate.formatted;
     } else {
       req = {
-        'projManpowerTOs': [
-          {
-            'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.mpForm.value.originalQty,
-            'revisedQty': this.mpForm.value.revisedQty, 'actualQty': null,
-            'remainingQty': this.mpForm.value.remainingQty,
-            'empClassTO': this.mpResources.filter((data) => data.id == this.mpForm.value.empClassTO)[0]
-            , 'projEmpCatgTO': this.empCategories.filter((data) => data.id == this.mpForm.value.projEmpCatgTO)[0],
-            'measureUnitTO': this.manMeasureList.filter((data) => data.id == this.mpForm.value.measureId)[0], 'estimateComplete': null,
-            'estimateCompletion': null, 'startDate': this.mpForm.value.startDate.formatted,
-            'finishDate': this.mpForm.value.finishDate.formatted, 'status': 1, 'duplicateFlag': false,
-            'measureId': this.mpForm.value.measureId
-          }]
-        , 'projId': this.selectedlist[0].projId
+        'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.mpForm.value.originalQty,
+        'revisedQty': this.mpForm.value.revisedQty, 'actualQty': null,
+        'remainingQty': this.mpForm.value.remainingQty,
+        'empClassTO': this.mpResources.filter((data) => data.id == this.mpForm.value.empClassTO)[0]
+        , 'projEmpCatgTO': this.empCategories.filter((data) => data.id == this.mpForm.value.projEmpCatgTO)[0],
+        'measureUnitTO': this.manMeasureList.filter((data) => data.id == this.mpForm.value.measureId)[0], 'estimateComplete': null,
+        'estimateCompletion': null, 'startDate': this.mpForm.value.startDate.formatted,
+        'finishDate': this.mpForm.value.finishDate.formatted, 'status': 1, 'duplicateFlag': false,
+        'measureId': this.mpForm.value.measureId
       };
     }
-    this._service.PostService(req, '/projsettings/saveProjManpowers')
+    this._service.PostService({
+      'projManpowerTOs': [req]
+      , 'projId': this.selectedlist[0].projId
+    }, '/projsettings/saveProjManpowers')
       .subscribe((data) => {
         this.manPowerList = data.projManpowerTOs;
         this.manPowerList.forEach(e => {
           e.checked = false;
         });
+        this.mpForm.reset();
         $('#manPowerpop').modal('hide');
         this._service.showSuccessMessage(data.message);
       }, (error) => this._service.showErrorMessage(error.message));
@@ -233,13 +254,99 @@ export class ProjectBudgetsComponent implements OnInit {
     }
 
   }
-  editP() {
-
+  editPlnt() {
+    this.editplnt = true;
+    const d = new Date(this.selectedplnt.startDate);
+    const d1 = new Date(this.selectedplnt.finishDate);
+    this.plntForm = this.fb.group({
+      originalQty: [this.selectedplnt.originalQty, [Validators.required, FormsValidationService.numberOnly]],
+      revisedQty: [this.selectedplnt.revisedQty, [Validators.required, FormsValidationService.numberOnly]],
+      actualQty: [this.selectedplnt.actualQty || 0, [Validators.required, FormsValidationService.numberOnly]],
+      remainingQty: [this.selectedplnt.remainingQty || '', [Validators.required, FormsValidationService.numberOnly]],
+      plantClassTO: [this.selectedplnt.plantClassTO ? this.selectedplnt.plantClassTO.id : '', Validators.required],
+      measureId: [this.selectedplnt.measureUnitTO.id || '', Validators.required],
+      startDate: [{ date: { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() }, formatted: this.selectedplnt.startDate }, Validators.required],
+      finishDate: [{ date: { year: d1.getFullYear(), month: d1.getMonth() + 1, day: d1.getDate() }, formatted: this.selectedplnt.finishDate }, Validators.required]
+    });
+    this.createPlnt();
   }
-  createp() {
-
+  createPlnt() {
+    this._service.PostService({}, '/centrallib/getPlantClasses')
+      .subscribe((data) => {
+        this.getPlantmeasure();
+        $('#plantrpop').modal('show');
+        this.plntResources = data.plantClassTOs;
+      }, (error) => alert('error fetching empclass'));
   }
-  savep() {
-
+  getPlantmeasure() {
+    const req = { 'status': 1, 'procureClassId': 2 };
+    this._service.PostService(req, '/centrallib/getMeasuresByProcureType')
+      .subscribe((data) => {
+        this.plntMeasureList = data.measureUnitTOs;
+      }, (error) => console.log(error));
   }
+  saveplnt() {
+    let req: any;
+    if (this.editplnt) {
+      req = this.selectedplnt;
+      req.originalQty = this.plntForm.value.originalQty;
+      req.revisedQty = this.plntForm.value.revisedQty;
+      req.actualQty = this.plntForm.value.actualQty;
+      req.remainingQty = this.plntForm.value.remainingQty;
+      req.plantClassTO = this.plntResources.filter((data) => data.id == this.plntForm.value.plantClassTO)[0];
+      req.measureUnitTO = this.plntMeasureList.filter((data) => data.id == this.plntForm.value.measureId)[0];
+      req.startDate = this.plntForm.value.startDate.formatted;
+      req.finishDate = this.plntForm.value.finishDate.formatted;
+    } else {
+      req =
+        {
+          'selected': false, 'projId': this.selectedlist[0].projId, 'originalQty': this.plntForm.value.originalQty,
+          'revisedQty': this.plntForm.value.revisedQty, 'actualQty': null,
+          'remainingQty': this.plntForm.value.remainingQty,
+          'plantClassTO': this.plntResources.filter((data) => data.id == this.plntForm.value.plantClassTO)[0],
+          'measureUnitTO': this.plntMeasureList.filter((data) => data.id == this.plntForm.value.measureId)[0], 'estimateComplete': null,
+          'estimateCompletion': null, 'startDate': this.plntForm.value.startDate.formatted,
+          'finishDate': this.plntForm.value.finishDate.formatted, 'status': 1, 'duplicateFlag': false,
+          'measureId': this.plntForm.value.measureId
+        };
+    }
+    debugger;
+    this._service.PostService({
+      'projectPlantsDtlTOs': [req]
+      , 'projId': this.selectedlist[0].projId
+    }, '/projsettings/saveProjectPlants')
+      .subscribe((data) => {
+        this.plantList = data.projectPlantsDtlTOs;
+        this.plantList.forEach(e => {
+          e.checked = false;
+        });
+        this.plntForm.reset();
+        this.editplnt = false;
+        $('#plantrpop').modal('hide');
+        this._service.showSuccessMessage(data.message);
+      }, (error) => this._service.showErrorMessage(error.message));
+  }
+  disablePlntDates(val, date) {
+    const d: Date = new Date(date.jsdate.getTime());
+    d.setDate(d.getDate() - 1);
+    if (val === 'finish') {
+      this.plntstartOpt.disableSince = date.date;
+      const copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.plntstartOpt));
+      copy.disableSince = {
+        year: d.getFullYear(),
+        month: d.getMonth() + 1,
+        day: d.getDate() + 1
+      };
+      this.plntstartOpt = copy;
+    } else {
+      const copy: INgxMyDpOptions = JSON.parse(JSON.stringify(this.plntfinishOpt));
+      copy.disableUntil = {
+        year: d.getFullYear(),
+        month: d.getMonth() + 1,
+        day: d.getDate() + 1
+      };
+      this.plntfinishOpt = copy;
+    }
+  }
+
 }

@@ -361,43 +361,37 @@
                     <tbody>
                       <tr *ngFor="let pllst of plantList">
                         <td>
-                          <div class="cust-check" (click)="selectedRecords1(pllst,$event)">
-                            <input type="checkbox" [checked]="pllst.checked==true" />
+                          <div class="cust-check" (click)="selectedRecords2(pllst,$event)">
+                            <input type="checkbox" [checked]="pllst.checked==selectedplnt.id" />
                             <label></label>
                           </div>
                         </td>
-                        <td>{{pllst.plantClassTO.code}}</td>
-                        <td>{{pllst.plantClassTO.name}}</td>
-                        <td>{{pllst.measureUnitTO.name}}</td>
-                        <td>{{pllst.originalQty}}</td>
-                        <td>{{pllst.revisedQty}}</td>
+                        <td>{{pllst.plantClassTO?pllst.plantClassTO.code:''}}</td>
+                        <td>{{pllst.plantClassTO?pllst.plantClassTO.name:''}}</td>
+                        <td>{{pllst.measureUnitTO?pllst.measureUnitTO.name:''}}</td>
+                        <td>{{pllst.originalQty||''}}</td>
+                        <td>{{pllst.revisedQty||''}}</td>
                         <td>{{'0.00'}}</td>
-                        <td>{{pllst.remainingQty}}</td>
-                        <td>{{pllst.estimateComplete}}</td>
-                        <td>{{pllst.estimateCompletion}}</td>
-                        <td>{{pllst.startDate}}</td>
-                        <td>{{pllst.finishDate}}</td>
+                        <td>{{pllst.remainingQty||''}}</td>
+                        <td>{{pllst.estimateComplete||''}}</td>
+                        <td>{{pllst.estimateCompletion||''}}</td>
+                        <td>{{pllst.startDate||''}}</td>
+                        <td>{{pllst.finishDate||''}}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </section>
-            <!-- <section id="layout_footer" class="tbl_footer btns text-right">
+            <section id="layout_footer" class="tbl_footer btns text-right">
               <div class="row ml-0 mr-0 pagination_block">
-                <div class="col col-sm-3 text-left">
-
-                </div>
-                <div class="col col-sm-9 text-right">
-                  <div class="row">
-                    <div class="col col-sm-6 text-right">
-                      <button type="button" class="btn btn-primary" [disabled]="selectedlist.length!==1" (click)="edit()">Edit</button>
-                      <button class="btn btn-success" type="button" (click)="resetForm({})" data-toggle="modal" data-target="#cccreate">Create</button>
-                    </div>
-                  </div>
+                <div class="col col-sm-12 text-right">
+                  <button type="button" class="btn btn-primary" [disabled]="!selectedlist[0].projId || !selectedplnt.id" (click)="editPlnt()">Edit</button>
+                  <button class="btn btn-success" type="button" [disabled]="!selectedlist[0].projId" (click)="createPlnt()">Create</button>
                 </div>
               </div>
-            </section> -->
+            </section>
+
           </div>
           <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="contact-tab">
             <section id="layout_header">
@@ -704,6 +698,115 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" [disabled]="mpForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="plantrpop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create/Edit Plant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="editplnt = false;plntForm.reset()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="plntForm" (ngSubmit)="saveplnt()">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Resource</label>
+                <select formControlName="plantClassTO" class="form-control form-input " #resourceid id="ResourceId">
+                  <option value="">--select--</option>
+                  <option *ngFor="let resource of plntResources" [value]="resource.id">
+                    {{resource.dispName}}
+                  </option>
+                </select>
+                <app-error-messages [control]="plntForm.controls[ 'plantClassTO']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Unit of Measure</label>
+                <select formControlName="measureId" class="form-control form-input " id="measureid">
+                  <option *ngIf="!resourceid.value" value="">--select resource--</option>
+                  <option *ngIf="resourceid.value" value="">--select--</option>
+                  <option *ngFor="let measure of plntMeasureList" [value]="measure.id">
+                    {{measure.name}}
+                  </option>
+                </select>
+                <app-error-messages [control]="plntForm.controls['measureId']"></app-error-messages>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Original Budget Quantity</label>
+                <input type="text " formControlName="originalQty" class="form-control form-input " id="originalquantity" required>
+                <app-error-messages [control]="plntForm.controls['originalQty']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Revised Budget Quantity</label>
+                <input type="text " formControlName="revisedQty" class="form-control form-input " id="revisedquantity" required>
+                <app-error-messages [control]="plntForm.controls['revisedQty']"></app-error-messages>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Actual Quantity to Date</label>
+                <input type="text " formControlName="actualQty" class="form-control form-input " id="actualquantity" required>
+                <app-error-messages [control]="plntForm.controls['actualQty']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Remaining Quantity</label>
+                <input type="text " formControlName="remainingQty" class="form-control form-input " id="remainaingquantity" required>
+                <app-error-messages [control]="plntForm.controls['remainingQty']"></app-error-messages>
+
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="form-group col-md-6 col">
+                <label for="companyname" class="form-label">Schedule Start</label>
+                <div class="row" style="padding:5px;">
+                  <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp2.toggleCalendar()" ngx-mydatepicker
+                    name="myDate" formControlName="startDate" [options]="mpstartOpt" id="startDate" #dp2="ngx-mydatepicker"
+                    (dateChanged)="disablePlntDates('start',$event)" />
+                  <span class="col0-md-4 col " style="padding: 0px;">
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp2.clearDate()">
+                      <i class="fa fa-times "></i>
+                    </button>
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp2.toggleCalendar()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+                <app-error-messages [control]="plntForm.controls[ 'startDate']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-6 col ">
+                <label for="companyid" class="form-label">Schedule Finish</label>
+                <div class="row" style="padding:5px;">
+                  <input class=" col-md-8 colform-control" style="float:none" placeholder="Select a date" (click)="dp3.toggleCalendar()" ngx-mydatepicker
+                    name="myDate" formControlName="finishDate" [options]="plntfinishOpt" id="finishdate" #dp3="ngx-mydatepicker"
+                    (dateChanged)="disablePlntDates('finish',$event)" />
+                  <span class="col0-md-4 col " style="padding: 0px;">
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp3.clearDate()">
+                      <i class="fa fa-times "></i>
+                    </button>
+                    <button style="border-radius: 2px;width:auto;min-width:0" type="button" class="btn btn-default" (click)="dp3.toggleCalendar()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+                <app-error-messages [control]="plntForm.controls[ 'finishDate']"></app-error-messages>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="plntForm.invalid">Save</button>
         </div>
       </form>
     </div>

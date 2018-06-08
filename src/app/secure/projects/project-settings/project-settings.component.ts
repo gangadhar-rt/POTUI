@@ -10,7 +10,7 @@ import { ApiService, SettingsService, FormsValidationService } from '../../../sh
 export class ProjectSettingsComponent implements OnInit {
   List: any;
   editDetails: any;
-  records = 10;
+  records = 20;
   userDetails: any;
   selectedlist: any = [];
   attendanceData: any = {};

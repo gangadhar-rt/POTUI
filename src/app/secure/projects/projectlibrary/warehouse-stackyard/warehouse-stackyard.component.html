@@ -1,32 +1,32 @@
 <section id="layout_header">
 
-    <div class="row">
-        <div class="col col-sm-4">
-            <h2 class="ttl2">Ware House and Stock Yard List</h2>
-        </div>
-        <div class="col">
-            <div class="form-group" style="position:relative">
-                <select class="form-control cust-input" [(ngModel)]="selectedProj">
-                    <ng-container *ngFor="let pro of ProjectList">
-                        <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
-                            <ng-container *ngFor="let spro of pro.childProjs">
-                                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
-                                    <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
-                                </ng-container>
-                                <ng-container #opt1 *ngIf="spro.proj">
-                                    <option [value]="spro.projId">{{spro.projCode}}</option>
-                                </ng-container>
-                            </ng-container>
-                        </optgroup>
-                        <ng-container #opt *ngIf="pro.proj">
-                            <option [value]="pro.projId"> {{pro.projCode}}</option>
-                        </ng-container>
-                    </ng-container>
-                </select>
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Ware House and Stock Yard List</h2>
+    </div>
+    <div class="col">
+      <div class="form-group" style="position:relative">
+        <select class="form-control cust-input" [(ngModel)]="selectedProj">
+          <ng-container *ngFor="let pro of ProjectList">
+            <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
+              <ng-container *ngFor="let spro of pro.childProjs">
+                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
+                  <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
+                </ng-container>
+                <ng-container #opt1 *ngIf="spro.proj">
+                  <option [value]="spro.projId">{{spro.projCode}}</option>
+                </ng-container>
+              </ng-container>
+            </optgroup>
+            <ng-container #opt *ngIf="pro.proj">
+              <option [value]="pro.projId"> {{pro.projCode}}</option>
+            </ng-container>
+          </ng-container>
+        </select>
 
-            </div>
-        </div>
-        <!-- <div class="col">
+      </div>
+    </div>
+    <!-- <div class="col">
             <div class="form-group">
                 <input class="form-control cust-input" type="text" required placeholder="Search for EPS ID/Name">
             </div>
@@ -36,112 +36,112 @@
                 <input class="form-control cust-input" type="text" required placeholder="Search for Project ID/Name">
             </div>
         </div> -->
-        <div class="col">
-            <div class="form-group">
-                <select class="form-control cust-input">
-                    <option value="">Status</option>
-                    <option value="1">Active</option>
-                    <option value="0">InActive</option>
-                </select>
-            </div>
-        </div>
-        <div class="col search_btn text-right col-2">
-            <button>
-                <i class="fa fa-search" (click)="getData()"></i>
-            </button>
-            <button>
-                <i class="fa fa-refresh"></i>
-            </button>
-        </div>
+    <div class="col">
+      <div class="form-group">
+        <select class="form-control cust-input">
+          <option value="">Status</option>
+          <option value="1">Active</option>
+          <option value="0">InActive</option>
+        </select>
+      </div>
     </div>
+    <div class="col search_btn text-right col-2">
+      <button>
+        <i class="fa fa-search" (click)="getData()"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
 
-    <table class="table tbl_head">
-        <colgroup>
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th> Store/Location ID</th>
-                <th>Store/Location Description</th>
-                <th>Category </th>
-                <th>Status</th>
-            </tr>
-        </thead>
-    </table>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th> Store/Location ID</th>
+        <th>Store/Location Description</th>
+        <th>Category </th>
+        <th>Status</th>
+      </tr>
+    </thead>
+  </table>
 </section>
 <!-- fixed header layout -->
 
 <!-- fixed content layout -->
 <section id="main_content">
-    <div class="slimScroll">
-        <div class="table-responsive text-center">
-            <table class="table-striped table tbl_body">
-                <colgroup>
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                </colgroup>
-                <tbody>
-                    <tr *ngFor="let warehouse of List | paginate: {id:'warehouse', itemsPerPage: records, currentPage: p };
-              let i=index;">
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let warehouse of List | paginate: {id:'warehouse', itemsPerPage: records, currentPage: p };
+              let i=index;" (click)="selectedRecord=warehouse" [class.active_row]="selectedRecord==warehouse">
 
-                        <td>
-                            <div class="cust-check">
-                                <input type="checkbox" [checked]="selectedRecord==warehouse" (click)="selectedRecord=warehouse" />
-                                <label></label>
-                            </div>
+            <td>
+              <div class="cust-check" (click)="selectRecord(warehouse.id)">
+                <input type="checkbox" [checked]="" />
+                <label></label>
+              </div>
 
-                        </td>
-                        <td>{{warehouse.code}}</td>
-                        <td>{{warehouse.desc}}</td>
-                        <td>{{warehouse.category}}</td>
-                        <td>{{warehouse.status| status}}</td>
+            </td>
+            <td>{{warehouse.code}}</td>
+            <td>{{warehouse.desc}}</td>
+            <td>{{warehouse.category}}</td>
+            <td>{{warehouse.status| status}}</td>
 
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </section>
 <!-- fixed content layout -->
 
 <!-- fixed footer layout -->
 <div class="tbl_footer btns text-right" id="layout_footer">
-    <div class="row ml-0 mr-0 pagination_block">
-        <div class="col col-sm-3 text-left">
-            <label>Total No OF Records :</label>
-            <select>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-                <option value="35">35</option>
-                <option value="40">40</option>
-                <option value="45">45</option>
-                <option value="50">50</option>
-            </select>
-        </div>
-        <div class="col col-sm-9 text-right" style="display: inline-block">
-            <div class="row">
-                <div class="col col-sm-6 text-right">
-                    <pagination-controls id="warehouse" maxSize="4" (pageChange)="p = $event"></pagination-controls>
-                </div>
-                <div class="col col-sm-6 text-right">
-                    <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target="#empclasification">Create</button>
-                    <button type="button" class="btn btn-primary" (click)="edit()">Edit</button>
-                    <button type="button" class="btn btn-danger">Deactivate</button>
-                </div>
-            </div>
-        </div>
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <label>Total No OF Records :</label>
+      <select>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+      </select>
     </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <div class="col col-sm-6 text-right">
+          <pagination-controls id="warehouse" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="col col-sm-6 text-right">
+          <button class="btn btn-primary pull-right" type="button" [disabled]="!selectedProj" data-toggle="modal" data-target="#empclasification">Create</button>
+          <button type="button" class="btn btn-primary" [disabled]="!selectedProj || !selectedRecord.id" (click)="edit()">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="deactive()" [disabled]="!selectedProj || !deleteList.length">Deactivate</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -149,45 +149,45 @@
 <!-- new one -->
 
 <div class="modal fade" id="empclasification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ware House and Stock Yard List</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ware House and Stock Yard List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form_block" non-validate [formGroup]="stokyard" (ngSubmit)="create();">
+        <div class="modal-body">
+          <div class="tenantDetails">
+            <div class="row">
+              <div class="form-group col-md-4 col ">
+                <label for="companyid" class="form-label">Store/Location ID </label>
+                <input type="text " formControlName="code" class="form-control form-input ">
+                <app-error-messages [control]="stokyard.controls['code']"></app-error-messages>
+
+              </div>
+              <div class="form-group col-md-4 col">
+                <label for="companyname" class="form-label">Store/Location Description </label>
+                <input type="text " formControlName="desc" class="form-control form-input ">
+                <app-error-messages [control]="stokyard.controls[ 'desc']"></app-error-messages>
+              </div>
+              <div class="form-group col-md-4 col">
+                <label for="companyname" class="form-label">Category</label>
+                <select class="form-control form-input " formControlName="category">
+                  <option value="">--select--</option>
+                  <option *ngFor="let cat of categoryList" [value]="cat">{{cat}}</option>
+                </select>
+                <app-error-messages [control]="stokyard.controls['category']"></app-error-messages>
+              </div>
+
             </div>
-            <form class="form_block" non-validate [formGroup]="stokyard" (ngSubmit)="create();">
-                <div class="modal-body">
-                    <div class="tenantDetails">
-                        <div class="row">
-                            <div class="form-group col-md-4 col ">
-                                <label for="companyid" class="form-label">Store/Location ID </label>
-                                <input type="text " formControlName="code" class="form-control form-input ">
-                                <app-error-messages [control]="stokyard.controls['code']"></app-error-messages>
-
-                            </div>
-                            <div class="form-group col-md-4 col">
-                                <label for="companyname" class="form-label">Store/Location Description </label>
-                                <input type="text " formControlName="desc" class="form-control form-input ">
-                                <app-error-messages [control]="stokyard.controls[ 'desc']"></app-error-messages>
-                            </div>
-                            <div class="form-group col-md-4 col">
-                                <label for="companyname" class="form-label">Category</label>
-                                <select class="form-control form-input " formControlName="category">
-                                    <option></option>
-                                    <option></option>
-                                </select>
-                                <app-error-messages [control]="stokyard.controls['category']"></app-error-messages>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

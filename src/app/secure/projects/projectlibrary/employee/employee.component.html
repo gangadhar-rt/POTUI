@@ -1,95 +1,94 @@
 <section id="layout_header">
 
-    <div class="row">
-        <div class="col col-sm-4">
-            <h2 class="ttl2">Project Employee Classification</h2>
-        </div>
-        <div class="col">
-            <div class="form-group" style="position:relative">
-                <select class="form-control cust-input" [(ngModel)]="selectedProj">
-                    <ng-container *ngFor="let pro of ProjectList">
-                        <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
-                            <ng-container *ngFor="let spro of pro.childProjs">
-                                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
-                                    <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
-                                </ng-container>
-                                <ng-container #opt1 *ngIf="spro.proj">
-                                    <option [value]="spro.projId">{{spro.projCode}}</option>
-                                </ng-container>
-                            </ng-container>
-                        </optgroup>
-                        <ng-container #opt *ngIf="pro.proj">
-                            <option [value]="pro.projId"> {{pro.projCode}}</option>
-                        </ng-container>
-                    </ng-container>
-                </select>
+  <div class="row">
+    <div class="col col-sm-4">
+      <h2 class="ttl2">Project Employee Classification</h2>
+    </div>
+    <div class="col">
+      <div class="form-group" style="position:relative">
+        <select class="form-control cust-input" [(ngModel)]="selectedProj">
+          <ng-container *ngFor="let pro of ProjectList">
+            <optgroup *ngIf="(pro.childProjs.length>0 && !pro.proj);else opt" label="{{pro.projCode}}">
+              <ng-container *ngFor="let spro of pro.childProjs">
+                <ng-container *ngIf="(spro.childProjs.length>0 && !spro.proj);else opt1">
+                  <option *ngFor="let sspro of spro.childProjs" [value]="sspro.projId">{{sspro.projCode}}</option>
+                </ng-container>
+                <ng-container #opt1 *ngIf="spro.proj">
+                  <option [value]="spro.projId">{{spro.projCode}}</option>
+                </ng-container>
+              </ng-container>
+            </optgroup>
+            <ng-container #opt *ngIf="pro.proj">
+              <option [value]="pro.projId"> {{pro.projCode}}</option>
+            </ng-container>
+          </ng-container>
+        </select>
 
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <!-- <input class="form-control cust-input" type="text" required placeholder="Search for Project ID/Name"> -->
-            </div>
-        </div>
-        <!-- <div class="col">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <!-- <input class="form-control cust-input" type="text" required placeholder="Search for Project ID/Name"> -->
+      </div>
+    </div>
+    <!-- <div class="col">
             <div class="form-group">
 
             </select>
             </div>
         </div> -->
-        <div class="col search_btn text-right col-2">
-            <button (click)="getData()">
-                <i class="fa fa-search"></i>
-            </button>
-            <button>
-                <i class="fa fa-refresh"></i>
-            </button>
-        </div>
+    <div class="col search_btn text-right col-2">
+      <button (click)="getData()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button>
+        <i class="fa fa-refresh"></i>
+      </button>
     </div>
+  </div>
 
-    <table class="table tbl_head">
-        <colgroup>
-            <col style="width:10%;" />
-            <col style="width:10%;" />
-            <col style="width:15%;" />
-            <col style="width:15%;" />
-            <col style="width:20%;" />
-            <col style="width:20%;" />
-            <col style="width:10%;" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Resource ID</th>
-                <th>Resource Name</th>
-                <th>Employee Category</th>
-                <th>Equivalent name as per Project Contract</th>
-                <th> Equivalent Name as per Worker Union</th>
-                <th>Unit Of Measure</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-    </table>
+  <table class="table tbl_head">
+    <colgroup>
+      <col style="width:10%;" />
+      <col style="width:10%;" />
+      <col style="width:15%;" />
+      <col style="width:15%;" />
+      <col style="width:20%;" />
+      <col style="width:20%;" />
+      <col style="width:10%;" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Resource ID</th>
+        <th>Resource Name</th>
+        <th>Employee Category</th>
+        <th>Equivalent name as per Project Contract</th>
+        <th> Equivalent Name as per Worker Union</th>
+        <th>Unit Of Measure</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+  </table>
 </section>
 <!-- fixed header layout -->
 
 <!-- fixed content layout -->
 <section id="main_content">
-    <div class="slimScroll">
-        <div class="table-responsive text-center">
-            <table class="table-striped table tbl_body">
-                <colgroup>
-                    <col style="width:10%;" />
-                    <col style="width:10%;" />
-                    <col style="width:15%;" />
-                    <col style="width:15%;" />
-                    <col style="width:20%;" />
-                    <col style="width:20%;" />
-                    <col style="width:10%;" />
-                </colgroup>
-                <tbody>
-                    <tr *ngFor="let employee of List | paginate: {id:'empclassification', itemsPerPage: records, currentPage: p };
-              let i=index;">
-                        <!-- <td>
+  <div class="slimScroll">
+    <div class="table-responsive text-center">
+      <table class="table-striped table tbl_body">
+        <colgroup>
+          <col style="width:10%;" />
+          <col style="width:10%;" />
+          <col style="width:15%;" />
+          <col style="width:15%;" />
+          <col style="width:20%;" />
+          <col style="width:20%;" />
+          <col style="width:10%;" />
+        </colgroup>
+        <tbody>
+          <tr *ngFor="let employee of List ;let i=index;">
+            <!-- <td>
               <div class="cust-check" (click)="selectedRecords(employee,$event)">
                 <input type="checkbox" [checked]="employee.checked==true" />
                 <label></label>
@@ -97,36 +96,36 @@
 
             </td> -->
 
-                        <td>{{employee.empClassTO.code}}</td>
-                        <td>{{employee.empClassTO.name}}</td>
-                        <td>
-                            <select [(ngModel)]="employee.projEmpCatgTO.name" class="form-control form-input ">
-                                <option value="DIRECT">Direct</option>
-                                <option value="IN-DIRECT">In Direct</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="Text" [(ngModel)]="employee.tradeContrName" class="form-control form-input " />
-                        </td>
-                        <td>
-                            <input type="Text" [(ngModel)]="employee.unionWorkerName" class="form-control form-input " />
-                        </td>
-                        <td>{{employee.empClassTO.measureUnitTO.name}}</td>
-                        <td>{{employee.empClassTO.status}}</td>
-                    </tr>
+            <td>{{employee.empClassTO.code}}</td>
+            <td>{{employee.empClassTO.name}}</td>
+            <td>
+              <select [(ngModel)]="employee.projEmpCatgTO.id" class="form-control form-input ">
+                <option *ngFor="let empcat of projEmpCatgList" [value]="empcat.id">{{empcat.name}}</option>
+       
+              </select>
+            </td>
+            <td>
+              <input type="Text" [(ngModel)]="employee.tradeContrName" class="form-control form-input " />
+            </td>
+            <td>
+              <input type="Text" [(ngModel)]="employee.unionWorkerName" class="form-control form-input " />
+            </td>
+            <td>{{employee.empClassTO.measureUnitTO.name}}</td>
+            <td>{{employee.empClassTO.status}}</td>
+          </tr>
 
-                </tbody>
-            </table>
-        </div>
+        </tbody>
+      </table>
     </div>
+  </div>
 </section>
 <!-- fixed content layout -->
 
 <!-- fixed footer layout -->
 <div class="tbl_footer btns text-right" id="layout_footer">
-    <div class="row ml-0 mr-0 pagination_block">
-        <div class="col col-sm-3 text-left">
-            <label>Total No OF Records :</label>
+  <div class="row ml-0 mr-0 pagination_block">
+    <div class="col col-sm-3 text-left">
+      <!-- <label>Total No OF Records :</label>
             <select>
                 <option value="10">10</option>
                 <option value="15">15</option>
@@ -137,20 +136,20 @@
                 <option value="40">40</option>
                 <option value="45">45</option>
                 <option value="50">50</option>
-            </select>
-        </div>
-        <div class="col col-sm-9 text-right" style="display: inline-block">
-            <div class="row">
-                <div class="col col-sm-6 text-right">
-                    <pagination-controls id="empclassification" maxSize="4" (pageChange)="p = $event"></pagination-controls>
-                </div>
-                <div class="col col-sm-6 text-right">
-                    <button type="button" class="btn btn-primary" (click)="save()">save</button>
-                </div>
-
-            </div>
-        </div>
+            </select> -->
     </div>
+    <div class="col col-sm-9 text-right" style="display: inline-block">
+      <div class="row">
+        <!-- <div class="col col-sm-6 text-right">
+                    <pagination-controls id="empclassification" maxSize="4" (pageChange)="p = $event"></pagination-controls>
+                </div> -->
+        <div class="col col-sm-6 text-right">
+          <button type="button" class="btn btn-primary" (click)="save()">save</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
 
