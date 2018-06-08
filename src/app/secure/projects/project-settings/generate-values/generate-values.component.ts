@@ -25,7 +25,10 @@ export class GenerateValuesComponent implements OnInit, OnChanges {
     if (this.projid) {
       this.getDetails();
     } else {
-      this.GeneralValues = { calenderTO: {}, countryTO: { provisionTO: { timeZoneTO: {} } }, resourceCurveTO: {}, profitCentreTO: {} };
+      this.GeneralValues = {
+        calenderTO: {}, countryTO: { provisionTO: { timeZoneTO: {} } }, companyTO: {},
+        resourceCurveTO: {}, profitCentreTO: {}
+      };
     }
   }
   ngOnInit() {
@@ -46,21 +49,26 @@ export class GenerateValuesComponent implements OnInit, OnChanges {
           this.getProfit(element);
         });
         console.log(data);
-        this.getCalenders();
+        this.getCalenders(false);
         this.getCurrencycode();
         this.getProvinance();
         this.isReady = true;
       },
-      error => { console.log(error); });
+        error => { console.log(error); });
   }
-  getCalenders() {
-    const req = { 'status': 1 };
+  getCalenders(isproj) {
+    let req: any;
+    if (isproj) {
+      req = { 'status': 1, projId: this.projid };
+    } else {
+      req = { 'status': 1 };
+    }
     this._service.PostService(req, '/calendar/getCalendars')
       .subscribe(data => {
         this.calenders = data.calenderTOs;
         console.log(data);
       },
-      error => { console.log(error); });
+        error => { console.log(error); });
   }
   getCurrencycode() {
     if (this.countries.length > 0) {
@@ -93,39 +101,39 @@ export class GenerateValuesComponent implements OnInit, OnChanges {
   }
   saveDetails() {
     this.GeneralValues.calenderTO = this.calenders.filter(e => {
-      return e.code === this.GeneralValues.calenderTO.code;
+      return e.id == this.GeneralValues.calenderTO.id;
     })[0];
     const profitcenter = this.profitCenters.filter(e => {
-      return e.id === this.GeneralValues.profitCentreTO.id;
+      return e.id == this.GeneralValues.profitCentreTO.id;
     })[0];
     if (profitcenter) {
       this.GeneralValues.profitCentreTO = profitcenter;
     }
     this.GeneralValues.resourceCurveTO = this.resourceCurves.filter(e => {
-      return e.id === this.GeneralValues.resourceCurveTO.id;
+      return e.id == this.GeneralValues.resourceCurveTO.id;
     })[0];
     const userkey = this.users.filter(e => {
-      return e.id === this.GeneralValues.userId;
+      return e.id == this.GeneralValues.userId;
     })[0];
     if (userkey) {
       this.GeneralValues.userLabelKeyTO = userkey;
     }
     const company = this.companies.filter(e => {
-      return e.id === this.GeneralValues.companyId;
+      return e.id == this.GeneralValues.companyTO.id;
     })[0];
     if (company) {
       this.GeneralValues.companyTO = company;
     }
     this.GeneralValues.countryTO = this.countries.filter(e => {
-      return e.code === this.GeneralValues.countryTO.code;
+      return e.code == this.GeneralValues.countryTO.code;
     })[0];
     this.GeneralValues.countryTO.provisionTO = this.proviananceList.filter(e => {
-      return e.id === this.GeneralValues.countryTO.provisionTO.id;
+      return e.id == this.GeneralValues.countryTO.provisionTO.id;
     })[0];
 
-    this.GeneralValues.globalCalenderTO = this.GeneralValues.calenderTO;
+    // this.GeneralValues.globalCalenderTO = this.GeneralValues.calenderTO;
     this.GeneralValues.globalCalId = this.GeneralValues.calenderTO.id;
-    const request = { projGeneralMstrTO: this.GeneralValues };
+    const request = { projGeneralMstrTO: this.GeneralValues, dupicteFlag: false };
     console.log(request);
     this._service.PostService(request, '/projsettings/saveProjGenerals')
       .subscribe(data => {
@@ -139,7 +147,7 @@ export class GenerateValuesComponent implements OnInit, OnChanges {
           this.getProfit(element);
         });
         console.log(data);
-        this.getCalenders();
+        this.getCalenders(false);
         this.getCurrencycode();
         this.getProvinance();
         this.isReady = true;

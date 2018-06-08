@@ -10,12 +10,13 @@ import { ObjectPipePipe } from './pipes/object-pipe.pipe';
 import { ToastModule, ToastsManager, ToastOptions } from 'ng2-toastr/ng2-toastr';
 import { ErroralertComponent } from './components/erroralert/erroralert.component';
 import { ErroralertService } from './services/erroralert.service';
+import { ProjectspipePipe } from './pipes/projectspipe.pipe';
 @NgModule({
   imports: [
     CommonModule, NgxPaginationModule, NgxMyDatePickerModule.forRoot(), MyDateRangePickerModule, ToastModule
   ],
   declarations: [ErrorMessagesComponent, FilterPipePipe, StatusPipe, ObjectPipePipe,
-    ProjectsPopComponent, ObjectPipePipe, ErroralertComponent],
+    ProjectsPopComponent, ObjectPipePipe, ErroralertComponent, ProjectspipePipe],
   exports: [ErrorMessagesComponent, FilterPipePipe, NgxPaginationModule, StatusPipe, ObjectPipePipe, ToastModule,
     NgxMyDatePickerModule, MyDateRangePickerModule, ProjectsPopComponent, ErroralertComponent],
 })

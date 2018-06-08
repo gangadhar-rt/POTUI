@@ -4,14 +4,19 @@
       <label for="companyid" class="form-label">Responsible Manager</label>
       <select class="form-control form-input " [(ngModel)]="GeneralValues.userId" name="manager" id="manager">
         <option value="">--Select--</option>
-        <option *ngFor="let user of users" [value]="user.id">{{user.name}}</option>
+        <option *ngFor="let user of users" [value]="user.id">{{user.id}}{{user.name}}</option>
       </select>
     </div>
     <div class="form-group col-md-6 col">
-      <label for="companyname" class="form-label">Default Calender </label>
-      <select class="form-control form-input " [(ngModel)]="GeneralValues.calenderTO.code" name="manager" id="manager">
+      <label for="companyname" class="form-label">Default Calender
+        <input type="radio" name="calender" [disabled]="!projid" [value]="false" checked (click)="getCalenders(false)"> Global
+        <input type="radio" name="calender" [disabled]="!projid" [value]="true" (click)="getCalenders(true)"> Project
+      </label>
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.calenderTO.id" name="manager" id="manager">
         <option value="">--Select--</option>
-        <option *ngFor="let cal of calenders" [value]="cal.code">{{cal.code}}--{{cal.name}}</option>
+        <optgroup label="Global">
+          <option *ngFor="let cal of calenders" [value]="cal.id">{{cal.code}}--{{cal.name}}</option>
+        </optgroup>
       </select>
     </div>
 
@@ -61,7 +66,7 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6 col ">
-      <label for="companyid" class="form-label">Rexource Curve</label>
+      <label for="companyid" class="form-label">Resource Curve</label>
       <select class="form-control form-input " [(ngModel)]="GeneralValues.resourceCurveTO.id" name="manager" (change)="getCurrencycode()"
         id="manager">
         <option value="">--Select--</option>
@@ -71,7 +76,7 @@
     </div>
     <div class="form-group col-md-6 col">
       <label for="companyname" class="form-label">Project Owner</label>
-      <select class="form-control form-input " [(ngModel)]="GeneralValues.companyId" name="manager" (change)="getCurrencycode()"
+      <select class="form-control form-input " [(ngModel)]="GeneralValues.companyTO.id" name="manager" (change)="getCurrencycode()"
         id="manager">
         <option value="">--Select--</option>
         <option *ngFor="let con of companies" #conu [value]="con.id">{{con.cmpName}}</option>

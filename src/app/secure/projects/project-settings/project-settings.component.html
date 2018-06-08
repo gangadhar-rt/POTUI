@@ -243,12 +243,17 @@
                       <div class="row">
                         <div class="form-group col-md-6 col ">
                           <label for="companyid" class="form-label">Cut off Days</label>
-                          <input type="text " class="form-control form-input " [(ngModel)]="attendanceData.cutOffDays" id="companyid">
+                          <input type="text " class="form-control form-input " [(ngModel)]="attendanceData.cutOffDays" id="cutoffdays">
 
                         </div>
                         <div class="form-group col-md-6 col">
                           <label for="companyname" class="form-label">Cut Off Time</label>
-                          <input type="text " class="form-control form-input " [(ngModel)]="attendanceData.cutOffHours" id="companyname" required>
+                          <div class="row">
+                            <input type="text " class=" col-md-6 form-control form-input " placeholder="Hours" [(ngModel)]="attendanceData.cutOffHours"
+                              id="cutoffhours" required>
+                            <input type="text " class=" col-md-6 form-control form-input " placeholder="Minutes" [(ngModel)]="attendanceData.cutOffMinutes"
+                              id="cutoffminutes" required>
+                          </div>
                         </div>
 
                       </div>

@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let tab of epsData" (click)="tab.leaf && selectEPSProject(tab)" class="abc{{tab.level}}">
+          <tr *ngFor="let tab of epsData | projectspipe:itemId:isExpand" (click)="tab.leaf && selectEPSProject(tab)" class="abc{{tab.level}}">
             <td>
               <span *ngIf="tab.level > 0" class="xyz" style="padding-left: 30px;"></span>
               <span *ngIf="tab.level > 1" class="xyz" style="padding-left: 30px;"></span>
